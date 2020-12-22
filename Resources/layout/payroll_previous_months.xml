@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="PREVIOUS MONTH'S REMUNERATION:"
+        android:textSize="48px"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/previousMonthsRemuneration"
+        android:hint="Previous month’s remuneration"
+        android:textSize="40px"
+        android:inputType="numberDecimal"
+        android:maxLength="20"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/previousEPFContribution"
+        android:hint="Previous month’s EPF[up to RM4000]"
+        android:textSize="40px"
+        android:inputType="numberDecimal"
+        android:maxLength="20"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/previousBIK"
+        android:hint="Previous Benefit-In-Kind(BIK)"
+        android:textSize="40px"
+        android:inputType="numberDecimal"
+        android:maxLength="20"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/previousVOLA"
+        android:hint="Previous Value Of Living Accomodation(VOLA)"
+        android:textSize="40px"
+        android:inputType="numberDecimal"
+        android:maxLength="20"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/MTDPrevious"
+        android:hint="Accumulated PCB paid(+ PCB on additional remuneration)"
+        android:textSize="40px"
+        android:inputType="numberDecimal"
+        android:maxLength="20"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+    <Button
+        android:id="@+id/continuePayroll6"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:text="Continue"
+        android:textSize="23dp"
+        android:backgroundTint="@android:color/holo_green_dark"
+        android:textColor="@android:color/white"/>
+</LinearLayout>
