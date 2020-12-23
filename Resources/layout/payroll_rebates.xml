@@ -8,7 +8,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="CURRENT MONTH'S REBATES:"
-        android:textSize="48px"/>
+        android:textSize="48px"
+        android:textColor="@android:color/holo_purple"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -43,6 +44,6 @@
         android:layout_width="match_parent"
         android:text="Continue"
         android:textSize="23dp"
-        android:backgroundTint="@android:color/holo_green_dark"
+        android:backgroundTint="@android:color/holo_purple"
         android:textColor="@android:color/white"/>
 </LinearLayout>

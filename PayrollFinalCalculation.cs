@@ -91,7 +91,7 @@ namespace PayrollParrots
             KonfettiView konfettiView = (KonfettiView)FindViewById(Resource.Id.viewKonfetti);
             konfettiView
             .Build()
-            .AddColors(Color.Yellow, Color.Green, Color.Magenta, Color.Blue, Color.Lavender, Color.LightCyan)
+            .AddColors(Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.Blue, Color.Purple)
             .SetDirection(0.0, 359.0)
             .SetSpeed(5f, 10f)
             .SetFadeOutEnabled(true)

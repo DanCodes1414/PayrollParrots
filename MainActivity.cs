@@ -39,7 +39,6 @@ namespace PayrollParrots
             spinner.SetSelection(monthToday - 1);
 
             _txtLabel = FindViewById<TextView>(Resource.Id.noEmployees);
-            listJan = (ListView)FindViewById(Resource.Id.listPayroll);
             listfilter = (ListView)FindViewById(Resource.Id.filterList);
             _txtLabel.Visibility = ViewStates.Invisible;
 

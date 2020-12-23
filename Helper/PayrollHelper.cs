@@ -137,41 +137,5 @@ namespace PayrollParrots.Helper
             db.Close();
 
         }
-
-        public static Payroll SelectPayroll(Context context)
-        {
-            Payroll payroll;
-            SQLiteDatabase db = new DataStore(context).WritableDatabase;
-            string[] columns = new string[] { ColumnID, ColumnName, ColumnAge, ColumnMonth, ColumnPCB, ColumnEPF, ColumnSOCSO, ColumnEIS, ColumnGross, ColumnNet, ColumnEmployerEPF, ColumnEmployerSOCSO, ColumnEmployerEIS };
-
-
-            using (ICursor cursor = db.Query(TableName, columns, ColumnName + "=? AND " + ColumnAge + "=? AND " + ColumnMonth + "=? AND " + ColumnPCB + "=? AND " + ColumnEPF + "=? AND " + ColumnSOCSO + "=? AND " + ColumnEIS + "=? AND " + ColumnGross + "=? AND " + ColumnNet + "=? AND " + ColumnEmployerEPF + "=? AND " + ColumnEmployerSOCSO + "=? AND " + ColumnEmployerEIS + "=?", new string[] { }, null, null, null))
-            {
-                if (cursor.MoveToNext())
-                {
-                    payroll = new Payroll
-                    {
-                        Id = cursor.GetInt(cursor.GetColumnIndexOrThrow(ColumnID)),
-                        Name = cursor.GetString(cursor.GetColumnIndexOrThrow(ColumnName)),
-                        Age = cursor.GetString(cursor.GetColumnIndexOrThrow(ColumnAge)),
-                        Month = cursor.GetString(cursor.GetColumnIndexOrThrow(ColumnMonth)),
-                        PCB = cursor.GetString(cursor.GetColumnIndexOrThrow(ColumnPCB)),
-                        EPFMain = cursor.GetString(cursor.GetColumnIndexOrThrow(ColumnEPF)),
-                        SOCSO = cursor.GetString(cursor.GetColumnIndexOrThrow(ColumnSOCSO)),
-                        EIS = cursor.GetString(cursor.GetColumnIndexOrThrow(ColumnEIS)),
-                        GrossSalary = cursor.GetString(cursor.GetColumnIndexOrThrow(ColumnGross)),
-                        NetSalary = cursor.GetString(cursor.GetColumnIndexOrThrow(ColumnNet)),
-                        EmployerEPF = cursor.GetString(cursor.GetColumnIndexOrThrow(ColumnEmployerEPF)),
-                        EmployerEIS = cursor.GetString(cursor.GetColumnIndexOrThrow(ColumnEmployerSOCSO)),
-                        EmployerSOCSO = cursor.GetString(cursor.GetColumnIndexOrThrow(ColumnEmployerEIS))
-                    };
-                }
-                else
-                {
-                    payroll = null;
-                }
-            }
-            return payroll;
-        }
     }
 }

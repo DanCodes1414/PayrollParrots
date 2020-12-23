@@ -239,6 +239,6 @@
         android:layout_width="match_parent"
         android:text="Continue"
         android:textSize="23dp"
-        android:backgroundTint="@android:color/holo_green_dark"
+        android:backgroundTint="@android:color/holo_orange_dark"
         android:textColor="@android:color/white"/>
 </LinearLayout>

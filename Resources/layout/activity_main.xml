@@ -12,14 +12,14 @@
 		android:prompt="@string/month_prompt"/>
     <ListView
 		android:id="@+id/filterList"
-		android:textColor="@android:color/holo_green_dark"
+		android:textColor="#FF0000"
 		android:layout_width="match_parent"
         android:layout_height="wrap_content"
 		android:layout_weight="1"
 		android:drawSelectorOnTop="false"/>
    <TextView  
         android:id="@+id/noEmployees"
-        android:textColor="@android:color/holo_green_dark"
+        android:textColor="#FF0000"
         android:layout_width="match_parent"  
         android:layout_height="wrap_content" />  
     <Button
@@ -28,6 +28,6 @@
         android:layout_height="wrap_content"
         android:text="Start Calculation"
         android:textSize="23dp"
-        android:backgroundTint="@android:color/holo_green_dark"
+        android:backgroundTint="#FF0000"
         android:textColor="@android:color/white"/>
 </LinearLayout>
