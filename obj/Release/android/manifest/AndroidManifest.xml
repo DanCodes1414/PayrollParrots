@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.companyname.payrollparrots" android:installLocation="auto">
+  <uses-sdk android:minSdkVersion="26" android:targetSdkVersion="28" />
+  <application android:allowBackup="true" android:icon="@drawable/parrot_dap" android:label="@string/app_name" android:roundIcon="@mipmap/ic_launcher_round" android:supportsRtl="true" android:theme="@style/AppTheme" android:name="android.app.Application" android:extractNativeLibs="true">
+    <activity android:label="@string/app_name" android:theme="@style/AppTheme" android:name="crc642ab3dab37b1a36d6.MainActivity">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
+    <activity android:label="PayrollFamily" android:name="crc642ab3dab37b1a36d6.PayrollFamily" />
+    <activity android:label="PayrollDeductions" android:name="crc642ab3dab37b1a36d6.PayrollDeductions" />
+    <activity android:label="PayrollCurrentMonth" android:name="crc642ab3dab37b1a36d6.PayrollCurrentMonth" />
+    <activity android:label="PayrollAdditionalCurrentMonth" android:name="crc642ab3dab37b1a36d6.PayrollAdditionalCurrentMonth" />
+    <activity android:label="PayrollRebates" android:name="crc642ab3dab37b1a36d6.PayrollRebates" />
+    <activity android:label="PayrollPreviousMonths" android:name="crc642ab3dab37b1a36d6.PayrollPreviousMonths" />
+    <activity android:label="PayrollPreviousDeductions" android:name="crc642ab3dab37b1a36d6.PayrollPreviousDeductions" />
+    <activity android:label="PayrollPreviousRebates" android:name="crc642ab3dab37b1a36d6.PayrollPreviousRebates" />
+    <activity android:label="PayrollFinalCalculation" android:name="crc642ab3dab37b1a36d6.PayrollFinalCalculation" />
+    <activity android:label="PayrollReview" android:name="crc642ab3dab37b1a36d6.PayrollReview" />
+    <receiver android:enabled="true" android:exported="false" android:name="crc643f46942d9dd1fff9.PowerSaveModeBroadcastReceiver" />
+    <provider android:name="mono.MonoRuntimeProvider" android:exported="false" android:initOrder="1999999999" android:authorities="com.companyname.payrollparrots.mono.MonoRuntimeProvider.__mono_init__" />
+  </application>
+</manifest>

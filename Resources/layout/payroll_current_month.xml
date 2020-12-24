@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:text="CURRENT MONTH'S REMUNERATION:"
         android:textSize="48px"
-        android:textColor="#FFFF00"/>
+        android:textColor="#ffd700"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,6 +45,6 @@
         android:layout_width="match_parent"
         android:text="Continue"
         android:textSize="23dp"
-        android:backgroundTint="#FFFF00"
+        android:backgroundTint="#ffd700"
         android:textColor="@android:color/white"/>
 </LinearLayout>

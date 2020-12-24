@@ -36,7 +36,7 @@ namespace PayrollParrots
             age2.Text = "Age: " + payroll.Age;
             age2.SetTextColor(Color.Orange);
             finalPCB2.Text = "PCB: " + payroll.PCB;
-            finalPCB2.SetTextColor(Color.Yellow);
+            finalPCB2.SetTextColor(Color.Gold);
             finalEPF2.Text = "EPF: " + payroll.EPFMain;
             finalEPF2.SetTextColor(Color.Green);
             finalSOCSO2.Text = "SOCSO: " + payroll.SOCSO;
@@ -46,7 +46,7 @@ namespace PayrollParrots
             grossSalary2.Text = "Gross Salary: " + payroll.GrossSalary;
             grossSalary2.SetTextColor(Color.Violet);
             netSalary2.Text = "Net Salary: " + payroll.NetSalary;
-            netSalary2.SetTextColor(Color.Gold);
+            netSalary2.SetTextColor(Color.Goldenrod);
             employerEPF2.Text = "Employer EPF:" + payroll.EmployerEPF;
             employerSOCSO2.Text = "Employer SOCSO:" + payroll.EmployerSOCSO;
             employerEIS2.Text = "Employer EIS:" + payroll.EmployerEIS;

@@ -1037,7 +1037,7 @@ namespace PayrollParrots
             finalPCB.Text = "PCB: " + RoundedMTD;
             finalPCB.SetTextColor(Color.Orange);
             finalEPF.Text = "EPF: " + EPF;
-            finalEPF.SetTextColor(Color.Yellow);
+            finalEPF.SetTextColor(Color.Gold);
             finalSOCSO.Text = "SOCSO: " + _SOCSOContribution;
             finalSOCSO.SetTextColor(Color.Green);
             finalEIS.Text = "EIS: " + EIS;

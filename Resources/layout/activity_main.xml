@@ -7,7 +7,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:minWidth="50px"
-		android:minHeight="50px"
+		android:minHeight="70px"
 		android:id="@+id/monthSpinnerList"
 		android:prompt="@string/month_prompt"/>
     <ListView
@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
 		android:layout_weight="1"
 		android:drawSelectorOnTop="false"/>
-   <TextView  
+    <TextView  
         android:id="@+id/noEmployees"
         android:textColor="#FF0000"
         android:layout_width="match_parent"  
