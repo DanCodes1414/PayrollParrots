@@ -13,6 +13,30 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+		android:text=" EPF Contribution Rate:"
+		android:textSize="38px"
+		android:editable="false"
+		android:background="@null"/>
+	<RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:id="@+id/radiogrouprate">
+		<RadioButton
+			android:layout_width="180px"
+			android:layout_height="wrap_content"
+			android:id="@+id/radio9rate"
+			android:text="9%"/>
+		<RadioButton
+			android:layout_width="180px"
+			android:layout_height="wrap_content"
+			android:id="@+id/radio11rate"
+			android:text="11%"
+			android:checked="true"/>
+	</RadioGroup>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/currentMonthRemuneration"
         android:hint="Current month’s remuneration"
         android:textSize="40px"

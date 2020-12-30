@@ -25,6 +25,22 @@ public class DataStore
 	}
 
 
+	public DataStore (android.content.Context p0, java.lang.String p1, android.database.sqlite.SQLiteDatabase.CursorFactory p2, int p3, android.database.DatabaseErrorHandler p4)
+	{
+		super (p0, p1, p2, p3, p4);
+		if (getClass () == DataStore.class)
+			mono.android.TypeManager.Activate ("PayrollParrots.Helper.DataStore, PayrollParrots", "Android.Content.Context, Mono.Android:System.String, mscorlib:Android.Database.Sqlite.SQLiteDatabase+ICursorFactory, Mono.Android:System.Int32, mscorlib:Android.Database.IDatabaseErrorHandler, Mono.Android", this, new java.lang.Object[] { p0, p1, p2, p3, p4 });
+	}
+
+
+	public DataStore (android.content.Context p0, java.lang.String p1, int p2, android.database.sqlite.SQLiteDatabase.OpenParams p3)
+	{
+		super (p0, p1, p2, p3);
+		if (getClass () == DataStore.class)
+			mono.android.TypeManager.Activate ("PayrollParrots.Helper.DataStore, PayrollParrots", "Android.Content.Context, Mono.Android:System.String, mscorlib:System.Int32, mscorlib:Android.Database.Sqlite.SQLiteDatabase+OpenParams, Mono.Android", this, new java.lang.Object[] { p0, p1, p2, p3 });
+	}
+
+
 	public void onCreate (android.database.sqlite.SQLiteDatabase p0)
 	{
 		n_onCreate (p0);

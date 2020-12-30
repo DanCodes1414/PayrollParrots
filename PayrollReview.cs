@@ -53,8 +53,8 @@ namespace PayrollParrots
 
             Button _reviewBack = FindViewById<Button>(Resource.Id.reviewBack);
 
-            _reviewBack.Click += PlayButton_Click;
             _reviewBack.Click += (sender, e) => {
+                PlayButton_Click(sender, e);
                 var payrollReview = new Intent(this, typeof(MainActivity));
                 StartActivity(payrollReview);
             };

@@ -245,14 +245,12 @@ namespace PayrollParrots
                     case Resource.Id.radioSpouseDisabledFalse:
                         disabledSpouseDeduction = 0.00;
                         break;
-
-
                     default:
                         break;
                 }
             }
         }
-        private void EditText_TextChanged(object sender, TextChangedEventArgs e)
+        public void EditText_TextChanged(object sender, TextChangedEventArgs e)
         {
             EditText editText = sender as EditText;
             switch (editText.Id)
