@@ -59,6 +59,7 @@ namespace PayrollParrots
                 StartActivity(payrollReview);
             };
 
+            //button-click sound
             void PlayButton_Click(object sender, EventArgs e)
             {
                 MediaPlayer _player = MediaPlayer.Create(this, Resource.Drawable.buttonclick);

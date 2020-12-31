@@ -90,12 +90,15 @@ namespace PayrollParrots
                 StartActivity(intent);
             };
 
+            //button-click sound
             void PlayButton_Click(object sender, EventArgs e)
             {
                 MediaPlayer _player = MediaPlayer.Create(this, Resource.Drawable.buttonclick);
                 _player.Start();
             }
         }
+
+        //change epfrate
         private void RadioButton_CheckedChanged(object sender, CompoundButton.CheckedChangeEventArgs e)
         {
             RadioButton radioButton = sender as RadioButton;
@@ -114,6 +117,7 @@ namespace PayrollParrots
                 }
             }
         }
+
         public void EditText_TextChanged(object sender, AfterTextChangedEventArgs e, double _EPFRate)
         {
             EditText editText = sender as EditText;
@@ -200,6 +204,7 @@ namespace PayrollParrots
         }
     }
 
+    //class to limit decimal places
     public class DecimalDigitsInputFilter : Java.Lang.Object, IInputFilter
     {
         readonly string regexStr = string.Empty;

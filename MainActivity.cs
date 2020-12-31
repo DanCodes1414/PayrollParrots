@@ -29,6 +29,7 @@ namespace PayrollParrots
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.activity_main);
 
+            //get todays month
             DateTime dateToday = DateTime.Now;
             int monthToday = dateToday.Month;
 
@@ -42,7 +43,7 @@ namespace PayrollParrots
             listfilter = (ListView)FindViewById(Resource.Id.filterList);
             _txtLabel.Visibility = ViewStates.Invisible;
 
-            spinner.ItemSelected += BindDataFilterJan;
+            spinner.ItemSelected += BindDataFilter;
 
             Button _startPayroll = FindViewById<Button>(Resource.Id.startPayroll);
 
@@ -51,12 +52,15 @@ namespace PayrollParrots
                 StartActivity(new Intent(this, typeof(PayrollFamily)));
             };
 
+            //button-click sound
             void PlayButton_Click(object sender, EventArgs e)
             {
                 MediaPlayer _player = MediaPlayer.Create(this, Resource.Drawable.buttonclick);
                 _player.Start();
             }
         }
+
+        //pop-up when item in list is clicked
         private void List_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
         {
             Android.App.AlertDialog.Builder dialog = new Android.App.AlertDialog.Builder(this);
@@ -100,7 +104,7 @@ namespace PayrollParrots
             alert.Show();
         }
 
-        private void BindDataFilterJan(object sender, AdapterView.ItemSelectedEventArgs e)
+        private void BindDataFilter(object sender, AdapterView.ItemSelectedEventArgs e)
         {
             string month = "";
             if (((Spinner)sender).SelectedItem.ToString() == "January")

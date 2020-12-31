@@ -68,6 +68,7 @@ namespace PayrollParrots
             //additional EPF automatic calculation
             double _EPFAdditionalContribution = 0.00;
             double _EPFContribution = Intent.GetDoubleExtra("EPFContribution", 0.00);
+            //_EPFContribution2 = EPFContribution for both additional and normal remuneration 
             double _EPFContribution2 = 0.00;
             double _currentMonthRemuneration = Intent.GetDoubleExtra("currentMonthRemuneration", 0.00);
             double _EPFRate = Intent.GetDoubleExtra("EPFRate", 0.11);
@@ -95,18 +96,18 @@ namespace PayrollParrots
                         else if ((_currentMonthRemuneration + additionalRemuneration) > 20 && (_currentMonthRemuneration + additionalRemuneration) <= 5000)
                         {
                             double EPFWage1 = (Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.05)) * 20;
-                            _EPFContribution2 = Math.Ceiling(EPFWage1 * 0.11);
+                            _EPFContribution2 = Math.Ceiling(EPFWage1 * _EPFRate);
                             _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
                         }
                         else if ((_currentMonthRemuneration + additionalRemuneration) > 5000 && (_currentMonthRemuneration + additionalRemuneration) <= 20000)
                         {
                             double EPFWage2 = (Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.01)) * 100;
-                            _EPFContribution2 = Math.Ceiling(EPFWage2 * 0.11);
+                            _EPFContribution2 = Math.Ceiling(EPFWage2 * _EPFRate);
                             _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
                         }
                         else
                         {
-                            _EPFContribution2 = Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.11);
+                            _EPFContribution2 = Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * _EPFRate);
                             _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
                         }
                     }
@@ -127,18 +128,18 @@ namespace PayrollParrots
                         else if ((_currentMonthRemuneration + additionalRemuneration) > 20 && (_currentMonthRemuneration + additionalRemuneration) <= 5000)
                         {
                             double EPFWage1 = (Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.05)) * 20;
-                            _EPFContribution2 = Math.Ceiling(EPFWage1 * 0.09);
+                            _EPFContribution2 = Math.Ceiling(EPFWage1 * _EPFRate);
                             _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
                         }
                         else if ((_currentMonthRemuneration + additionalRemuneration) > 5000 && (_currentMonthRemuneration + additionalRemuneration) <= 20000)
                         {
                             double EPFWage2 = (Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.01)) * 100;
-                            _EPFContribution2 = Math.Ceiling(EPFWage2 * 0.09);
+                            _EPFContribution2 = Math.Ceiling(EPFWage2 * _EPFRate);
                             _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
                         }
                         else
                         {
-                            _EPFContribution2 = Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.09);
+                            _EPFContribution2 = Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * _EPFRate);
                             _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
                         }
                     }
@@ -187,6 +188,7 @@ namespace PayrollParrots
                 StartActivity(intent);
             };
 
+            //button-click sound
             void PlayButton_Click(object sender, EventArgs e)
             {
                 MediaPlayer _player = MediaPlayer.Create(this, Resource.Drawable.buttonclick);

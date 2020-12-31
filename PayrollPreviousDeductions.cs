@@ -330,12 +330,15 @@ namespace PayrollParrots
                 }
             };
 
+            //button-click sound
             void PlayButton_Click(object sender, EventArgs e)
             {
                 MediaPlayer _player = MediaPlayer.Create(this, Resource.Drawable.buttonclick);
                 _player.Start();
             }
         }
+
+        //check that deduction not greater than limit
         bool Validate(double name, double value, EditText editText)
         {
             if ((name > value) && editText.Hint == "Medical expenses for serious diseases[Up to RM6000]")
@@ -353,6 +356,8 @@ namespace PayrollParrots
                 return true;
             }
         }
+
+        //check mather + father + both parents relief not greather than limit
         bool Validate2(double name, double name2, EditText editText)
         {
             if ((name > 0) && (name2 > 0))

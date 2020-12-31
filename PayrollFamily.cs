@@ -50,6 +50,8 @@ namespace PayrollParrots
             var adapter = ArrayAdapter.CreateFromResource(this, Resource.Array.month_array, Android.Resource.Layout.SimpleSpinnerItem);
             adapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
             spinner.Adapter = adapter;
+
+            //month today
             DateTime dateToday = DateTime.Now;
             int monthToday = dateToday.Month;
             if (monthToday == 1)
@@ -199,11 +201,14 @@ namespace PayrollParrots
                 }
             };
 
+            //button-click sound
             void PlayButton_Click(object sender, EventArgs e)
             {
                 MediaPlayer _player = MediaPlayer.Create(this, Resource.Drawable.buttonclick);
                 _player.Start();
             }
+
+            //check if have spouse
             bool disabledSpouseCan()
             {
                 if ((spinner2.SelectedItem.ToString() == "Single" | spinner2.SelectedItem.ToString() == "Divorce/Widower/Widow") && (spouseDisabledTrue.Checked == true))
@@ -218,6 +223,7 @@ namespace PayrollParrots
                 }
             }
         }
+
         private void Spinner2_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
 
@@ -226,6 +232,7 @@ namespace PayrollParrots
                 spouseNoIncomeDeduction = 4000.00;
             }
         }
+
         private void RadioButton_CheckedChanged(object sender, CompoundButton.CheckedChangeEventArgs e)
         {
             RadioButton radioButton = sender as RadioButton;
@@ -250,6 +257,7 @@ namespace PayrollParrots
                 }
             }
         }
+
         public void EditText_TextChanged(object sender, TextChangedEventArgs e)
         {
             EditText editText = sender as EditText;
@@ -347,6 +355,7 @@ namespace PayrollParrots
                     break;
             }
         }
+
         private void SpinnerMonth_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
 
@@ -399,6 +408,8 @@ namespace PayrollParrots
                 monthsRemaining = 0;
             }
         }
+
+        //pop-up for if month changed
         private void MonthNotNow(object sender, AdapterView.ItemSelectedEventArgs e)
         {
             DateTime dateToday = DateTime.Now;

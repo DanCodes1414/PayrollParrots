@@ -82,6 +82,17 @@ namespace PayrollParrots
             int _employeeAge = Intent.GetIntExtra("employeeAge", 0);
             string _employeeName = Intent.GetStringExtra("employeeName");
 
+            EditText name = FindViewById<EditText>(Resource.Id.name);
+            EditText finalPCB = FindViewById<EditText>(Resource.Id.finalPCB);
+            EditText finalEPF = FindViewById<EditText>(Resource.Id.finalEPF);
+            EditText finalSOCSO = FindViewById<EditText>(Resource.Id.finalSOCSO);
+            EditText finalEIS = FindViewById<EditText>(Resource.Id.finalEIS);
+            EditText grossSalary = FindViewById<EditText>(Resource.Id.grossSalary);
+            EditText netSalary = FindViewById<EditText>(Resource.Id.netSalary);
+            EditText employerEPFView = FindViewById<EditText>(Resource.Id.employerEPF);
+            EditText employerSOCSOView = FindViewById<EditText>(Resource.Id.employerSOCSO);
+            EditText employerEISView = FindViewById<EditText>(Resource.Id.employerEIS);
+
             //confettti
             KonfettiView konfettiView = (KonfettiView)FindViewById(Resource.Id.viewKonfetti);
             konfettiView
@@ -105,17 +116,7 @@ namespace PayrollParrots
 
             int n = _monthsRemaining;
 
-            EditText name = FindViewById<EditText>(Resource.Id.name);
-            EditText finalPCB = FindViewById<EditText>(Resource.Id.finalPCB);
-            EditText finalEPF = FindViewById<EditText>(Resource.Id.finalEPF);
-            EditText finalSOCSO = FindViewById<EditText>(Resource.Id.finalSOCSO);
-            EditText finalEIS = FindViewById<EditText>(Resource.Id.finalEIS);
-            EditText grossSalary = FindViewById<EditText>(Resource.Id.grossSalary);
-            EditText netSalary = FindViewById<EditText>(Resource.Id.netSalary);
-            EditText employerEPFView = FindViewById<EditText>(Resource.Id.employerEPF);
-            EditText employerSOCSOView = FindViewById<EditText>(Resource.Id.employerSOCSO);
-            EditText employerEISView = FindViewById<EditText>(Resource.Id.employerEIS);
-
+            //EIS Calculation
             double EIS = 0;
             double WageEIS = _currentMonthRemuneration + _commission + _arrears + _others + _othersEPFNO;
             if (WageEIS <= 30)
@@ -325,10 +326,12 @@ namespace PayrollParrots
             double employerEIS = EIS;
             double additionalRemuneration = _bonus + _commission + _OthersEISNO + _others + _arrears;
             double addRemu = _commission + _OthersEISNO + _others + _arrears;
+            double employerEPFRate;
 
             //employer EPF
             if (_employeeAge < 60)
             {
+                employerEPFRate = 0.13;
                 if ((_currentMonthRemuneration + additionalRemuneration) <= 20)
                 {
                     if ((_currentMonthRemuneration + additionalRemuneration) <= 10)
@@ -343,25 +346,28 @@ namespace PayrollParrots
                 else if ((_currentMonthRemuneration + additionalRemuneration) > 20 && (_currentMonthRemuneration + additionalRemuneration) <= 5000)
                 {
                     double EPFWage1 = (Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.05)) * 20;
-                    employerEPF = Math.Ceiling(EPFWage1 * 0.13);
+                    employerEPF = Math.Ceiling(EPFWage1 * employerEPFRate);
                 }
                 else if (addRemu <= 5000 && additionalRemuneration > 5000)
                 {
                     double EPFWage1 = (Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.01)) * 100;
-                    employerEPF = Math.Ceiling(EPFWage1 * 0.13);
+                    employerEPF = Math.Ceiling(EPFWage1 * employerEPFRate);
                 }
                 else if ((_currentMonthRemuneration + additionalRemuneration) > 5000 && (_currentMonthRemuneration + additionalRemuneration) <= 20000)
                 {
+                    employerEPFRate = 0.12;
                     double EPFWage2 = (Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.01)) * 100;
-                    employerEPF = Math.Ceiling(EPFWage2 * 0.12);
+                    employerEPF = Math.Ceiling(EPFWage2 * employerEPFRate);
                 }
                 else
                 {
-                    employerEPF = Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.12);
+                    employerEPFRate = 0.12;
+                    employerEPF = Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * employerEPFRate);
                 }
             }
             else
             {
+                employerEPFRate = 0.04;
                 if ((_currentMonthRemuneration + additionalRemuneration) <= 20)
                 {
                     if ((_currentMonthRemuneration + additionalRemuneration) <= 10)
@@ -376,21 +382,21 @@ namespace PayrollParrots
                 else if ((_currentMonthRemuneration + additionalRemuneration) > 20 && (_currentMonthRemuneration + additionalRemuneration) <= 5000)
                 {
                     double EPFWage1 = (Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.05)) * 20;
-                    employerEPF = Math.Ceiling(EPFWage1 * 0.04);
+                    employerEPF = Math.Ceiling(EPFWage1 * employerEPFRate);
                 }
                 else if (addRemu <= 5000 && additionalRemuneration > 5000)
                 {
                     double EPFWage1 = (Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.01)) * 100;
-                    employerEPF = Math.Ceiling(EPFWage1 * 0.04);
+                    employerEPF = Math.Ceiling(EPFWage1 * employerEPFRate);
                 }
                 else if ((_currentMonthRemuneration + additionalRemuneration) > 5000 && (_currentMonthRemuneration + additionalRemuneration) <= 20000)
                 {
                     double EPFWage2 = (Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.01)) * 100;
-                    employerEPF = Math.Ceiling(EPFWage2 * 0.04);
+                    employerEPF = Math.Ceiling(EPFWage2 * employerEPFRate);
                 }
                 else
                 {
-                    employerEPF = Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.04);
+                    employerEPF = Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * employerEPFRate);
                 }
             }
 
@@ -763,6 +769,7 @@ namespace PayrollParrots
                 }
             }
 
+            //print to layout
             name.Text = "Name: " + _employeeName;
             name.SetTextColor(Color.Red);
             finalPCB.Text = "PCB: " + RoundedMTD;
@@ -847,12 +854,14 @@ namespace PayrollParrots
 
             _saveDetails.Click += PlayButton_Click;
             _saveDetails.Click += (sender, e) => {
+                //save to database
                 PayrollHelper.InsertPayrollData(this, payroll);
                 var payrollData = new Intent(this, typeof(MainActivity));
                 payrollData.PutExtra("payroll", JsonConvert.SerializeObject(payroll));
                 StartActivity(payrollData);
             };
 
+            //button-click sound
             void PlayButton_Click(object sender, EventArgs e)
             {
                 MediaPlayer _player = MediaPlayer.Create(this, Resource.Drawable.buttonclick);
