@@ -12,6 +12,7 @@ namespace PayrollParrots
     [Activity(Label = "PayrollAdditionalCurrentMonth")]
     public class PayrollAdditionalCurrentMonth : Activity
     {
+        public const double EmployeeMaxAgeForEPFContribution = 60;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -78,9 +79,9 @@ namespace PayrollParrots
             {
                 double additionalRemuneration = _bonus + _commission + _OthersEISNO + _others + _arrears;
                 double currentMonthNetRemuneration = _currentMonthRemuneration + additionalRemuneration;
-                if (_employeeAge < 60)
+                if (_employeeAge < EmployeeMaxAgeForEPFContribution)
                 {
-                    if (_EPFRate == 0.11)
+                    if (_EPFRate == (double)EPFRate.EPFElevenPercentRate)
                     {
                         if (currentMonthNetRemuneration <= 20)
                         {
@@ -102,8 +103,8 @@ namespace PayrollParrots
                         }
                         else if (currentMonthNetRemuneration > 5000 && currentMonthNetRemuneration <= 20000)
                         {
-                            double EPFWage2 = (Math.Ceiling(currentMonthNetRemuneration) * 0.01) * 100;
-                            _EPFContribution2 = Math.Ceiling(EPFWage2 * _EPFRate);
+                            double EPFWage1 = (Math.Ceiling(currentMonthNetRemuneration) * 0.01) * 100;
+                            _EPFContribution2 = Math.Ceiling(EPFWage1 * _EPFRate);
                             _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
                         }
                         else
@@ -112,7 +113,7 @@ namespace PayrollParrots
                             _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
                         }
                     }
-                    if (_EPFRate == 0.09)
+                    if (_EPFRate == (double)EPFRate.EPFNinePercentRate)
                     {
                         if (currentMonthNetRemuneration <= 20)
                         {
@@ -134,8 +135,8 @@ namespace PayrollParrots
                         }
                         else if (currentMonthNetRemuneration > 5000 && currentMonthNetRemuneration <= 20000)
                         {
-                            double EPFWage2 = (Math.Ceiling(currentMonthNetRemuneration * 0.01)) * 100;
-                            _EPFContribution2 = Math.Ceiling(EPFWage2 * _EPFRate);
+                            double EPFWage1 = (Math.Ceiling(currentMonthNetRemuneration * 0.01)) * 100;
+                            _EPFContribution2 = Math.Ceiling(EPFWage1 * _EPFRate);
                             _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
                         }
                         else

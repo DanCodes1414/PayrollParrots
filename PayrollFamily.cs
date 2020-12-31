@@ -54,51 +54,51 @@ namespace PayrollParrots
             //month today
             DateTime dateToday = DateTime.Now;
             int monthToday = dateToday.Month;
-            if (monthToday == 1)
+            if (monthToday == (int)Months.January)
             {
                 spinner.SetSelection(0);
             }
-            else if (monthToday == 2)
+            else if (monthToday == (int)Months.January)
             {
                 spinner.SetSelection(1);
             }
-            else if (monthToday == 3)
+            else if (monthToday == (int)Months.January)
             {
                 spinner.SetSelection(2);
             }
-            else if (monthToday == 4)
+            else if (monthToday == (int)Months.January)
             {
                 spinner.SetSelection(3);
             }
-            else if (monthToday == 5)
+            else if (monthToday == (int)Months.January)
             {
                 spinner.SetSelection(4);
             }
-            else if (monthToday == 6)
+            else if (monthToday == (int)Months.January)
             {
                 spinner.SetSelection(5);
             }
-            else if (monthToday == 7)
+            else if (monthToday == (int)Months.January)
             {
                 spinner.SetSelection(6);
             }
-            else if (monthToday == 8)
+            else if (monthToday == (int)Months.January)
             {
                 spinner.SetSelection(7);
             }
-            else if (monthToday == 9)
+            else if (monthToday == (int)Months.January)
             {
                 spinner.SetSelection(8);
             }
-            else if (monthToday == 10)
+            else if (monthToday == (int)Months.January)
             {
                 spinner.SetSelection(9);
             }
-            else if (monthToday == 11)
+            else if (monthToday == (int)Months.January)
             {
                 spinner.SetSelection(10);
             }
-            else if (monthToday == 12)
+            else if (monthToday == (int)Months.January)
             {
                 spinner.SetSelection(11);
             }

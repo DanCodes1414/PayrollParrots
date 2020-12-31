@@ -13,10 +13,10 @@ using Newtonsoft.Json;
 
 namespace PayrollParrots
 {
-    //#fix
     [Activity(Label = "PayrollFinalCalculation")]
     public class PayrollFinalCalculation : Activity
     {
+        public const double EmployeeMaxAgeForEPFContribution = 60;
         public Payroll payroll;
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -300,7 +300,7 @@ namespace PayrollParrots
                 EIS = 7.90;
             }
 
-            if (_employeeAge >= 60)
+            if (_employeeAge >= EmployeeMaxAgeForEPFContribution)
             {
                 EIS = 0;
             }
@@ -329,7 +329,7 @@ namespace PayrollParrots
             double employerEPFRate;
 
             //employer EPF
-            if (_employeeAge < 60)
+            if (_employeeAge < EmployeeMaxAgeForEPFContribution)
             {
                 employerEPFRate = 0.13;
                 if ((_currentMonthRemuneration + additionalRemuneration) <= 20)
@@ -402,7 +402,7 @@ namespace PayrollParrots
 
             //Employer SOCSO
             double SOCSOWage = _currentMonthRemuneration + _arrears + _commission + _othersEPFNO + _others;
-            if (_employeeAge < 60)
+            if (_employeeAge < EmployeeMaxAgeForEPFContribution)
             {
                 if (SOCSOWage <= 30)
                 {
@@ -792,51 +792,51 @@ namespace PayrollParrots
             payroll.Name = _employeeName.ToString();
             if (n == 11)
             {
-                payroll.Month = "January";
+                payroll.Month = Months.January.ToString();
             }
             else if (n == 10)
             {
-                payroll.Month = "Febuary";
+                payroll.Month = Months.Febuary.ToString();
             }
             else if (n == 9)
             {
-                payroll.Month = "March";
+                payroll.Month = Months.March.ToString();
             }
             else if (n == 8)
             {
-                payroll.Month = "April";
+                payroll.Month = Months.April.ToString();
             }
             else if (n == 7)
             {
-                payroll.Month = "May";
+                payroll.Month = Months.May.ToString();
             }
             else if (n == 6)
             {
-                payroll.Month = "June";
+                payroll.Month = Months.June.ToString();
             }
             else if (n == 5)
             {
-                payroll.Month = "July";
+                payroll.Month = Months.July.ToString();
             }
             else if (n == 4)
             {
-                payroll.Month = "August";
+                payroll.Month = Months.August.ToString();
             }
             else if (n == 3)
             {
-                payroll.Month = "September";
+                payroll.Month = Months.September.ToString();
             }
             else if (n == 2)
             {
-                payroll.Month = "October";
+                payroll.Month = Months.October.ToString();
             }
             else if (n == 1)
             {
-                payroll.Month = "November";
+                payroll.Month = Months.November.ToString();
             }
             else if (n == 0)
             {
-                payroll.Month = "December";
+                payroll.Month = Months.December.ToString();
             }
 
             payroll.Age = _employeeAge.ToString();
@@ -872,6 +872,9 @@ namespace PayrollParrots
 
     public class PCBCaluclation
     {
+        public const double SpouseNoIncomeDeduction = 4000;
+        public const double MTDMinimumAmmountToNotGoToZero = 10;
+
         public double FinalPCBCalculation(int _monthsRemaining, double _currentMonthRemuneration, double _BIK, double _VOLA, double _totalFamilyDeductions,
             double _bonus, double _arrears, double _commission, double _othersEPFNO, double _others, double _lifeStyleRelief, double _SOCSOContribution,
             double _lifeInsurance, double _basicEquipment, double _educationYourSelf, double _medicalExamintion, double _medicalDisease, double _smallKidEducation,
@@ -939,7 +942,7 @@ namespace PayrollParrots
             {
                 M = 5000;
                 R = 0.01;
-                if (spouseNoIncomeDeduction == 4000)
+                if (spouseNoIncomeDeduction == SpouseNoIncomeDeduction)
                 {
                     B = -800;
                 }
@@ -952,7 +955,7 @@ namespace PayrollParrots
             {
                 M = 20000;
                 R = 0.03;
-                if (spouseNoIncomeDeduction == 4000)
+                if (spouseNoIncomeDeduction == SpouseNoIncomeDeduction)
                 {
                     B = -650;
                 }
@@ -1023,7 +1026,7 @@ namespace PayrollParrots
             }
 
             double CurrentMonthMTD = Math.Floor((((P - M) * R) + B - (Z + X)) / (n + 1) * 100) * 0.01;
-            if (CurrentMonthMTD < 10.00)
+            if (CurrentMonthMTD < MTDMinimumAmmountToNotGoToZero)
             {
                 CurrentMonthMTD = 0;
             }
@@ -1057,7 +1060,7 @@ namespace PayrollParrots
             {
                 Madd = 5000;
                 Radd = 0.01;
-                if (spouseNoIncomeDeduction == 4000)
+                if (spouseNoIncomeDeduction == SpouseNoIncomeDeduction)
                 {
                     Badd = -800;
                 }
@@ -1070,7 +1073,7 @@ namespace PayrollParrots
             {
                 Madd = 20000;
                 Radd = 0.03;
-                if (spouseNoIncomeDeduction == 4000)
+                if (spouseNoIncomeDeduction == SpouseNoIncomeDeduction)
                 {
                     Badd = -650;
                 }
@@ -1135,7 +1138,7 @@ namespace PayrollParrots
             }
 
             double CS = Math.Floor(((PAdd - Madd) * Radd + Badd) * 100) * 0.01;
-            if (P < 35001.00 && spouseNoIncomeDeduction == 4000)
+            if (P < 35001.00 && spouseNoIncomeDeduction == SpouseNoIncomeDeduction)
             {
                 CS -= 800;
             }
@@ -1152,14 +1155,14 @@ namespace PayrollParrots
                 CS = 0;
             }
 
-            double ARMTD = CS - YearlyMTD - Z;
+            double additionalRemunerationMTD = CS - YearlyMTD - Z;
 
-            if (ARMTD < 10.00)
+            if (additionalRemunerationMTD < MTDMinimumAmmountToNotGoToZero)
             {
-                ARMTD = 0;
+                additionalRemunerationMTD = 0;
             }
 
-            double MTD = ARMTD + NetMTD;
+            double MTD = additionalRemunerationMTD + NetMTD;
 
             if (MTD < 0)
             {

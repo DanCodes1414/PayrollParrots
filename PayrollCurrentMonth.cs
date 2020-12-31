@@ -10,11 +10,17 @@ using static Android.Widget.TextView;
 
 namespace PayrollParrots
 {
+    public enum EPFRate
+    {
+        EPFElevenPercentRate,
+        EPFNinePercentRate
+    }
+
     [Activity(Label = "PayrollCurrentMonth")]
     public class PayrollCurrentMonth : Activity
     {
-        //#fix
-        double _EPFRate = 0.11;
+        public const double EmployeeMaxAgeForEPFContribution = 60;
+        double _EPFRate;
         double _currentMonthRemuneration = 0.00;
         double _EPFContribution = 0.00;
         int _employeeAge;
@@ -23,12 +29,17 @@ namespace PayrollParrots
             _employeeAge = Intent.GetIntExtra("employeeAge", 0);
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.payroll_current_month);
-
             //EPF rate
             RadioButton EPFRate9 = FindViewById<RadioButton>(Resource.Id.radio9rate);
-            EPFRate9.CheckedChange += RadioButton_CheckedChanged;
+            EPFRate9.CheckedChange += (sender, e) =>
+            {
+                double _EPFRate = RadioButton_CheckedChanged(sender, e);
+            };
             RadioButton EPFRate11 = FindViewById<RadioButton>(Resource.Id.radio11rate);
-            EPFRate11.CheckedChange += RadioButton_CheckedChanged;
+            EPFRate11.CheckedChange += (sender, e) =>
+            {
+                double _EPFRate = RadioButton_CheckedChanged(sender, e);
+            };
 
             //currentmonthremu
             EditText currentMonthRemuneration_ = FindViewById<EditText>(Resource.Id.currentMonthRemuneration);
@@ -99,7 +110,7 @@ namespace PayrollParrots
         }
 
         //change epfrate
-        private void RadioButton_CheckedChanged(object sender, CompoundButton.CheckedChangeEventArgs e)
+        private double RadioButton_CheckedChanged(object sender, CompoundButton.CheckedChangeEventArgs e)
         {
             RadioButton radioButton = sender as RadioButton;
             if (e.IsChecked)
@@ -115,7 +126,15 @@ namespace PayrollParrots
                     default:
                         break;
                 }
+
+                return _EPFRate switch
+                {
+                    (double)EPFRate.EPFElevenPercentRate => 0.11,
+                    (double)EPFRate.EPFNinePercentRate => 0.09,
+                    _ => throw new NotImplementedException(),
+                };
             }
+            return _EPFRate;
         }
 
         public void EditText_TextChanged(object sender, AfterTextChangedEventArgs e, double _EPFRate)
@@ -133,9 +152,9 @@ namespace PayrollParrots
                     else
                     {
                         _currentMonthRemuneration = double.Parse(editText.Text);
-                        if (_employeeAge < 60)
+                        if (_employeeAge < EmployeeMaxAgeForEPFContribution)
                         {
-                            if (_EPFRate == 0.11)
+                            if (_EPFRate == (double)EPFRate.EPFElevenPercentRate)
                             {
                                 if (_currentMonthRemuneration <= 20)
                                 {
@@ -163,7 +182,7 @@ namespace PayrollParrots
                                     _EPFContribution = Math.Ceiling(_currentMonthRemuneration * _EPFRate);
                                 }
                             }
-                            else if (_EPFRate == 0.09)
+                            else if (_EPFRate == (double)EPFRate.EPFNinePercentRate)
                             {
                                 if (_currentMonthRemuneration <= 20)
                                 {
