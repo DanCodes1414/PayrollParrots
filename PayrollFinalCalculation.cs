@@ -304,7 +304,8 @@ namespace PayrollParrots
                 EIS = 0;
             }
 
-            double RoundedMTD = FinalPCBCalculation(_monthsRemaining, _currentMonthRemuneration, _BIK, _VOLA, _totalFamilyDeductions,
+            PCBCaluclation pCBCaluclation = new PCBCaluclation();
+            double RoundedMTD = pCBCaluclation.FinalPCBCalculation(_monthsRemaining, _currentMonthRemuneration, _BIK, _VOLA, _totalFamilyDeductions,
             _bonus, _arrears, _commission, _othersEPFNO, _others, _lifeStyleRelief, _SOCSOContribution,
             _lifeInsurance, _basicEquipment, _educationYourSelf, _medicalExamintion, _medicalDisease, _smallKidEducation,
             _breastFeedingEquipment, _alimonyFormerWife, _EMInsurance, _fatherRelief, _motherRelief, _previousLifeStyleRelief,
@@ -842,11 +843,11 @@ namespace PayrollParrots
             payroll.EmployerSOCSO = employerSOCSO.ToString();
             payroll.EmployerEIS = employerEIS.ToString();
 
-            PayrollHelper.InsertPayrollData(this, payroll);
             Button _saveDetails = FindViewById<Button>(Resource.Id.saveDetails);
 
             _saveDetails.Click += PlayButton_Click;
             _saveDetails.Click += (sender, e) => {
+                PayrollHelper.InsertPayrollData(this, payroll);
                 var payrollData = new Intent(this, typeof(MainActivity));
                 payrollData.PutExtra("payroll", JsonConvert.SerializeObject(payroll));
                 StartActivity(payrollData);
@@ -858,7 +859,10 @@ namespace PayrollParrots
                 _player.Start();
             }
         }
+    }
 
+    public class PCBCaluclation
+    {
         public double FinalPCBCalculation(int _monthsRemaining, double _currentMonthRemuneration, double _BIK, double _VOLA, double _totalFamilyDeductions,
             double _bonus, double _arrears, double _commission, double _othersEPFNO, double _others, double _lifeStyleRelief, double _SOCSOContribution,
             double _lifeInsurance, double _basicEquipment, double _educationYourSelf, double _medicalExamintion, double _medicalDisease, double _smallKidEducation,

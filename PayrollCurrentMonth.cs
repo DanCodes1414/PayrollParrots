@@ -36,7 +36,7 @@ namespace PayrollParrots
             currentMonthRemuneration_.AfterTextChanged += (sender, args) =>
             {
                 //double.TryParse(currentMonthRemuneration_.Text, out _currentMonthRemuneration);
-                EditText_TextChanged(sender, args);
+                EditText_TextChanged(sender, args, _EPFRate);
             };
             //BIK
             EditText BIK_ = FindViewById<EditText>(Resource.Id.BIK);
@@ -114,7 +114,7 @@ namespace PayrollParrots
                 }
             }
         }
-        public void EditText_TextChanged(object sender, AfterTextChangedEventArgs e)
+        public void EditText_TextChanged(object sender, AfterTextChangedEventArgs e, double _EPFRate)
         {
             EditText editText = sender as EditText;
             _employeeAge = Intent.GetIntExtra("employeeAge", 0);
@@ -123,7 +123,7 @@ namespace PayrollParrots
                 case Resource.Id.currentMonthRemuneration:
                     if (editText.Length() == 0)
                     {
-                        editText.SetText("", BufferType.Editable);
+                        editText.SetText("0", BufferType.Editable);
                         editText.Text.Remove(0);
                     }
                     else
@@ -147,16 +147,16 @@ namespace PayrollParrots
                                 else if (_currentMonthRemuneration > 20 && _currentMonthRemuneration <= 5000)
                                 {
                                     double EPFWage1 = (Math.Ceiling(_currentMonthRemuneration * 0.05)) * 20;
-                                    _EPFContribution = Math.Ceiling(EPFWage1 * 0.11);
+                                    _EPFContribution = Math.Ceiling(EPFWage1 * _EPFRate);
                                 }
                                 else if (_currentMonthRemuneration > 5000 && _currentMonthRemuneration <= 20000)
                                 {
                                     double EPFWage2 = (Math.Ceiling(_currentMonthRemuneration * 0.01)) * 100;
-                                    _EPFContribution = Math.Ceiling(EPFWage2 * 0.11);
+                                    _EPFContribution = Math.Ceiling(EPFWage2 * _EPFRate);
                                 }
                                 else
                                 {
-                                    _EPFContribution = Math.Ceiling(_currentMonthRemuneration * 0.11);
+                                    _EPFContribution = Math.Ceiling(_currentMonthRemuneration * _EPFRate);
                                 }
                             }
                             else if (_EPFRate == 0.09)
@@ -175,16 +175,16 @@ namespace PayrollParrots
                                 else if (_currentMonthRemuneration > 20 && _currentMonthRemuneration <= 5000)
                                 {
                                     double EPFWage1 = (Math.Ceiling(_currentMonthRemuneration * 0.05)) * 20;
-                                    _EPFContribution = Math.Ceiling(EPFWage1 * 0.09);
+                                    _EPFContribution = Math.Ceiling(EPFWage1 * _EPFRate);
                                 }
                                 else if (_currentMonthRemuneration > 5000 && _currentMonthRemuneration <= 20000)
                                 {
                                     double EPFWage2 = (Math.Ceiling(_currentMonthRemuneration * 0.01)) * 100;
-                                    _EPFContribution = Math.Ceiling(EPFWage2 * 0.09);
+                                    _EPFContribution = Math.Ceiling(EPFWage2 * _EPFRate);
                                 }
                                 else
                                 {
-                                    _EPFContribution = Math.Ceiling(_currentMonthRemuneration * 0.09);
+                                    _EPFContribution = Math.Ceiling(_currentMonthRemuneration * _EPFRate);
                                 }
                             }
                         }

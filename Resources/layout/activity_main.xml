@@ -7,7 +7,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:minWidth="50px"
-		android:minHeight="80px"
+		android:minHeight="70px"
 		android:id="@+id/monthSpinnerList"
 		android:prompt="@string/month_prompt"/>
     <ListView

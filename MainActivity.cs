@@ -15,7 +15,6 @@ namespace PayrollParrots
 {
     //#fix
     //add REP, IRDA, N-R
-    //login/signups
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
     public class MainActivity : AppCompatActivity
     {
@@ -43,9 +42,10 @@ namespace PayrollParrots
             listfilter = (ListView)FindViewById(Resource.Id.filterList);
             _txtLabel.Visibility = ViewStates.Invisible;
 
-            spinner.ItemSelected += BindDataFilter;
+            spinner.ItemSelected += BindDataFilterJan;
 
             Button _startPayroll = FindViewById<Button>(Resource.Id.startPayroll);
+
             _startPayroll.Click += (sender, e) => {
                 PlayButton_Click(sender, e);
                 StartActivity(new Intent(this, typeof(PayrollFamily)));
@@ -100,10 +100,10 @@ namespace PayrollParrots
             alert.Show();
         }
 
-        private void BindDataFilter(object sender, AdapterView.ItemSelectedEventArgs e)
+        private void BindDataFilterJan(object sender, AdapterView.ItemSelectedEventArgs e)
         {
             string month = "";
-            if(((Spinner)sender).SelectedItem.ToString() == "January")
+            if (((Spinner)sender).SelectedItem.ToString() == "January")
             {
                 listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains("January")).ToArray();
                 month = "January";
