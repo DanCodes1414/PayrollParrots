@@ -77,69 +77,70 @@ namespace PayrollParrots
             _thirdContinue.Click += (sender, e) =>
             {
                 double additionalRemuneration = _bonus + _commission + _OthersEISNO + _others + _arrears;
+                double currentMonthNetRemuneration = _currentMonthRemuneration + additionalRemuneration;
                 if (_employeeAge < 60)
                 {
                     if (_EPFRate == 0.11)
                     {
-                        if ((_currentMonthRemuneration + additionalRemuneration) <= 20)
+                        if (currentMonthNetRemuneration <= 20)
                         {
-                            if ((_currentMonthRemuneration + additionalRemuneration) <= 10)
+                            if (currentMonthNetRemuneration <= 10)
                             {
                                 _EPFContribution2 = 0.00;
                             }
-                            else if ((_currentMonthRemuneration + additionalRemuneration) > 10 && (_currentMonthRemuneration + additionalRemuneration) <= 20)
+                            else if (currentMonthNetRemuneration > 10 && currentMonthNetRemuneration <= 20)
                             {
                                 _EPFContribution2 = 3.00;
                                 _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
                             }
                         }
-                        else if ((_currentMonthRemuneration + additionalRemuneration) > 20 && (_currentMonthRemuneration + additionalRemuneration) <= 5000)
+                        else if (currentMonthNetRemuneration > 20 && currentMonthNetRemuneration <= 5000)
                         {
-                            double EPFWage1 = (Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.05)) * 20;
+                            double EPFWage1 = (Math.Ceiling(currentMonthNetRemuneration) * 0.05) * 20;
                             _EPFContribution2 = Math.Ceiling(EPFWage1 * _EPFRate);
                             _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
                         }
-                        else if ((_currentMonthRemuneration + additionalRemuneration) > 5000 && (_currentMonthRemuneration + additionalRemuneration) <= 20000)
+                        else if (currentMonthNetRemuneration > 5000 && currentMonthNetRemuneration <= 20000)
                         {
-                            double EPFWage2 = (Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.01)) * 100;
+                            double EPFWage2 = (Math.Ceiling(currentMonthNetRemuneration) * 0.01) * 100;
                             _EPFContribution2 = Math.Ceiling(EPFWage2 * _EPFRate);
                             _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
                         }
                         else
                         {
-                            _EPFContribution2 = Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * _EPFRate);
+                            _EPFContribution2 = Math.Ceiling(currentMonthNetRemuneration * _EPFRate);
                             _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
                         }
                     }
                     if (_EPFRate == 0.09)
                     {
-                        if ((_currentMonthRemuneration + additionalRemuneration) <= 20)
+                        if (currentMonthNetRemuneration <= 20)
                         {
-                            if ((_currentMonthRemuneration + additionalRemuneration) <= 10)
+                            if (currentMonthNetRemuneration <= 10)
                             {
                                 _EPFContribution2 = 0.00;
                             }
-                            else if ((_currentMonthRemuneration + additionalRemuneration) > 10 && (_currentMonthRemuneration + additionalRemuneration) <= 20)
+                            else if (currentMonthNetRemuneration > 10 && currentMonthNetRemuneration <= 20)
                             {
                                 _EPFContribution2 = 2.00;
                                 _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
                             }
                         }
-                        else if ((_currentMonthRemuneration + additionalRemuneration) > 20 && (_currentMonthRemuneration + additionalRemuneration) <= 5000)
+                        else if (currentMonthNetRemuneration > 20 && currentMonthNetRemuneration <= 5000)
                         {
-                            double EPFWage1 = (Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.05)) * 20;
+                            double EPFWage1 = (Math.Ceiling(currentMonthNetRemuneration * 0.05)) * 20;
                             _EPFContribution2 = Math.Ceiling(EPFWage1 * _EPFRate);
                             _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
                         }
-                        else if ((_currentMonthRemuneration + additionalRemuneration) > 5000 && (_currentMonthRemuneration + additionalRemuneration) <= 20000)
+                        else if (currentMonthNetRemuneration > 5000 && currentMonthNetRemuneration <= 20000)
                         {
-                            double EPFWage2 = (Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.01)) * 100;
+                            double EPFWage2 = (Math.Ceiling(currentMonthNetRemuneration * 0.01)) * 100;
                             _EPFContribution2 = Math.Ceiling(EPFWage2 * _EPFRate);
                             _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
                         }
                         else
                         {
-                            _EPFContribution2 = Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * _EPFRate);
+                            _EPFContribution2 = Math.Ceiling(currentMonthNetRemuneration * _EPFRate);
                             _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
                         }
                     }
