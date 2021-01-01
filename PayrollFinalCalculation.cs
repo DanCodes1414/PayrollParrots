@@ -13,15 +13,43 @@ using Newtonsoft.Json;
 
 namespace PayrollParrots
 {
-    //#fix
+    public enum Months
+    {
+        January,
+        Febuary,
+        March,
+        April,
+        May,
+        June,
+        July,
+        August,
+        September,
+        October,
+        November,
+        December
+    }
     [Activity(Label = "PayrollFinalCalculation")]
     public class PayrollFinalCalculation : Activity
     {
+        /*public const string January = "January";
+        public const string Febuary = "Febuary";
+        public const string March = "March";
+        public const string April = "April";
+        public const string May = "May";
+        public const string June = "June";
+        public const string July = "July";
+        public const string August = "August";
+        public const string September = "September";
+        public const string October = "October";
+        public const string November = "November";
+        public const string December = "December";*/
+        public const double EmployeeMaxAgeForEPFContribution = 60;
         public Payroll payroll;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.payroll_final_calculation);
+            int _monthsRemaining = Intent.GetIntExtra("monthsRemaining", 11);
             double _currentMonthRemuneration = Intent.GetDoubleExtra("currentMonthRemuneration", 0.00);
             double _BIK = Intent.GetDoubleExtra("BIK", 0.00);
             double _VOLA = Intent.GetDoubleExtra("VOLA", 0.00);
@@ -57,11 +85,9 @@ namespace PayrollParrots
             double _previousEMInsurance = Intent.GetDoubleExtra("previousEMInsurance", 0.00);
             double _previousFatherRelief = Intent.GetDoubleExtra("previousFatherRelief", 0.00);
             double _previousMotherRelief = Intent.GetDoubleExtra("previousMotherRelief", 0.00);
-            int _monthsRemaining = Intent.GetIntExtra("monthsRemaining", 11);
             double _zakatByEmployee = Intent.GetDoubleExtra("zakatByEmployee", 0.00);
             double _zakatByPayroll = Intent.GetDoubleExtra("zakatByPayroll", 0.00);
             double _departureLevy = Intent.GetDoubleExtra("departureLevy", 0.00);
-            double _totalDeductions = Intent.GetDoubleExtra("totalDeductions", 0.00);
             double _previousMonthsRemuneration = Intent.GetDoubleExtra("previousMonthsRemuneration", 0.00);
             double _previousEPFContribution = Intent.GetDoubleExtra("previousEPFContribution", 0.00);
             double _previousBIK = Intent.GetDoubleExtra("previousBIK", 0.00);
@@ -69,12 +95,6 @@ namespace PayrollParrots
             double _MTDPrevious = Intent.GetDoubleExtra("MTDPrevious", 0.00);
             double _EPFContribution = Intent.GetDoubleExtra("EPFContribution", 0.00);
             double _EPFAdditionalContribution = Intent.GetDoubleExtra("EPFAdditionalContribution", 0.00);
-            double _kidsU18 = Intent.GetDoubleExtra("kidsU18", 0.00);
-            double _over18inHE = Intent.GetDoubleExtra("over18inHE", 0.00);
-            double _disabledChildren = Intent.GetDoubleExtra("disabledChildren", 0.00);
-            double _disabledChildreninHE = Intent.GetDoubleExtra("disabledChildreninHE", 0.00);
-            double disabledDeduction = Intent.GetDoubleExtra("disabledDeduction", 0.00);
-            double disabledSpouseDeduction = Intent.GetDoubleExtra("disabledSpouseDeduction", 0.00);
             double spouseNoIncomeDeduction = Intent.GetDoubleExtra("spouseNoIncomeDeduction", 0.00);
             double _previousZakatByEmployee = Intent.GetDoubleExtra("previousZakatByEmployee", 0.00);
             double _previousZakatByPayroll = Intent.GetDoubleExtra("previousZakatByPayroll", 0.00);
@@ -88,6 +108,19 @@ namespace PayrollParrots
             double _previousPRS = Intent.GetDoubleExtra("previousPRS", 0.00);
             int _employeeAge = Intent.GetIntExtra("employeeAge", 0);
             string _employeeName = Intent.GetStringExtra("employeeName");
+
+            EditText name = FindViewById<EditText>(Resource.Id.name);
+            EditText finalPCB = FindViewById<EditText>(Resource.Id.finalPCB);
+            EditText finalEPF = FindViewById<EditText>(Resource.Id.finalEPF);
+            EditText finalSOCSO = FindViewById<EditText>(Resource.Id.finalSOCSO);
+            EditText finalEIS = FindViewById<EditText>(Resource.Id.finalEIS);
+            EditText grossSalary = FindViewById<EditText>(Resource.Id.grossSalary);
+            EditText netSalary = FindViewById<EditText>(Resource.Id.netSalary);
+            EditText employerEPFView = FindViewById<EditText>(Resource.Id.employerEPF);
+            EditText employerSOCSOView = FindViewById<EditText>(Resource.Id.employerSOCSO);
+            EditText employerEISView = FindViewById<EditText>(Resource.Id.employerEIS);
+
+            //confettti
             KonfettiView konfettiView = (KonfettiView)FindViewById(Resource.Id.viewKonfetti);
             konfettiView
             .Build()
@@ -107,294 +140,10 @@ namespace PayrollParrots
                 });
                 return false;
             });
-            double _EPFContributionC = Math.Min(4000 - _previousEPFContribution, _EPFContribution);
-            double _EPFAdditionalContributionC = Math.Min(4000 - _previousEPFContribution - _EPFContribution, _EPFAdditionalContribution);
-            //Y
-            double Y = _previousMonthsRemuneration + _previousVOLA + _previousBIK;
-            //K
-            double K = _previousEPFContribution;
-            //∑(Y-K)
-            double Y_K = Y - K;
-            //Y1
-            double Y1 = _currentMonthRemuneration + _VOLA + _BIK;
-            //K1
-            double K1 = _EPFContributionC;
-            //Yt
-            double Yt = _bonus + _arrears + _commission + _othersEPFNO + _others + _OthersEISNO;
-            //Kt
-            double Kt = _EPFAdditionalContributionC;
-            //n
+
             int n = _monthsRemaining;
-            double Y2;
-            //Y2
-            Y2 = Y1;
-            //K2
-            double K2;
-            if (n != 0)
-            {
-                K2 = Math.Floor((Math.Min(K1, (4000 - K - K1) / n)) * 100) * 0.01;
-            }
-            else
-            {
-                K2 = 0;
-            }
-            //D
-            double D = 9000.00;
-            //FamilyDeductions
-            double SDSQC = _totalFamilyDeductions;
-            //PreviousDeductions
-            double LP = _previousLifeStyleRelief + _previousSOCSOContribution + _previousLifeInsurance + _previousBasicEquipment + _previousEducationYourSelf + _previousMedicalExamintion + _previousMedicalDisease + _previousSmallKidEducation + _previousBreastFeedingEquipment + _previousAlimonyFormerWife + _previousEMInsurance + _previousFatherRelief + _previousMotherRelief + _previousMapaRelief + _previousSSPN + _previousPRS;
-            //CurrentMonthDeduction
-            double LP1 = _lifeStyleRelief + _SOCSOContribution + _lifeInsurance + _basicEquipment + _educationYourSelf + _medicalExamintion + _medicalDisease + _smallKidEducation + _breastFeedingEquipment + _alimonyFormerWife + _EMInsurance + _fatherRelief + _motherRelief + _mapaRelief + _SSPN + _PRS;
-            //P
-            double P = Math.Floor((Y_K + (Y1-K1) + ((Y2 - K2) * n) - D - SDSQC - LP - LP1) * 100) * 0.01;
 
-            int M;
-            double R;
-            int B;
-            if (P < 5001)
-            {
-                M = 0;
-                R = 0;
-                B = 0;
-            }
-            else if (P >= 5001 && P < 20001)
-            {
-                M = 5000;
-                R = 0.01;
-                if (spouseNoIncomeDeduction == 4000)
-                {
-                    B = -800;
-                }
-                else
-                {
-                    B = -400;
-                }
-            }
-            else if (P >= 20001 && P < 35001)
-            {
-                M = 20000;
-                R = 0.03;
-                if (spouseNoIncomeDeduction == 4000)
-                {
-                    B = -650;
-                }
-                else
-                {
-                    B = -250;
-                }
-            }
-            else if (P >= 35001 && P < 50001)
-            {
-                M = 35000;
-                R = 0.08;
-                B = 600;
-            }
-            else if (P >= 50001 && P < 70001)
-            {
-                M = 50000;
-                R = 0.14;
-                B = 1800;
-            }
-            else if (P >= 70001 && P < 100001)
-            {
-                M = 70000;
-                R = 0.21;
-                B = 4600;
-            }
-            else if (P >= 100001 && P < 250001)
-            {
-                M = 100000;
-                R = 0.24;
-                B = 10900;
-            }
-            else if (P >= 250001 && P < 400001)
-            {
-                M = 250000;
-                R = 0.245;
-                B = 46900;
-            }
-            else if (P >= 400001 && P < 600001)
-            {
-                M = 400000;
-                R = 0.25;
-                B = 83650;
-            }
-            else if (P >= 600001 && P < 1000001)
-            {
-                M = 600000;
-                R = 0.26;
-                B = 133650;
-            }
-            else if (P >= 1000001 && P < 2000001)
-            {
-                M = 1000000;
-                R = 0.28;
-                B = 237650;
-            }
-            else
-            {
-                M = 2000000;
-                R = 0.30;
-                B = 517650;
-            }
-            double Z = _previousZakatByEmployee + _previousZakatByPayroll + _previousDepartureLevy;
-            double X = _MTDPrevious;
-            if (P < 0.00)
-            {
-                P = 0;
-            }
-
-            double CurrentMonthMTD = Math.Floor((((P-M) * R) + B - (Z + X)) / (n + 1) * 100) * 0.01;
-            if (CurrentMonthMTD < 10.00)
-            {
-                CurrentMonthMTD = 0;
-            }
-            double NetMTD = CurrentMonthMTD - _zakatByEmployee - _zakatByPayroll - _departureLevy;
-
-            if (NetMTD < 0.00)
-            {
-                NetMTD = 0;
-            }
-
-            double YearlyMTD = X + (CurrentMonthMTD * (n + 1));
-
-            K2 = Math.Floor((Math.Min(K1, (4000 - K - K1 - Kt) / n)) * 100) * 0.01;
-
-            double PAdd = Math.Floor((Y_K + (Y1 - K1) + ((Y2 - K2) * n) + (Yt - Kt) - D - SDSQC - LP - LP1) * 100) * 0.01;
-
-            if (Yt == 0.00)
-            {
-                PAdd = 0;
-            }
-            int Madd;
-            double Radd;
-            int Badd;
-            if (PAdd < 5001)
-            {
-                Madd = 0;
-                Radd = 0;
-                Badd = 0;
-            }
-            else if (PAdd >= 5001 && PAdd < 20001)
-            {
-                Madd = 5000;
-                Radd = 0.01;
-                if (spouseNoIncomeDeduction == 4000)
-                {
-                    Badd = -800;
-                }
-                else
-                {
-                    Badd = -400;
-                }
-            }
-            else if (PAdd >= 20001 && PAdd < 35001)
-            {
-                Madd = 20000;
-                Radd = 0.03;
-                if (spouseNoIncomeDeduction == 4000)
-                {
-                    Badd = -650;
-                }
-                else
-                {
-                    Badd = -250;
-                }
-            }
-            else if (PAdd >= 35001 && PAdd < 50001)
-            {
-                Madd = 35000;
-                Radd = 0.08;
-                Badd = 600;
-            }
-            else if (PAdd >= 50001 && PAdd < 70001)
-            {
-                Madd = 50000;
-                Radd = 0.14;
-                Badd = 1800;
-            }
-            else if (PAdd >= 70001 && PAdd < 100001)
-            {
-                Madd = 70000;
-                Radd = 0.21;
-                Badd = 4600;
-            }
-            else if (PAdd >= 100001 && PAdd < 250001)
-            {
-                Madd = 100000;
-                Radd = 0.24;
-                Badd = 10900;
-            }
-            else if (PAdd >= 250001 && PAdd < 400001)
-            {
-                Madd = 250000;
-                Radd = 0.245;
-                Badd = 46900;
-            }
-            else if (PAdd >= 400001 && PAdd < 600001)
-            {
-                Madd = 400000;
-                Radd = 0.25;
-                Badd = 83650;
-            }
-            else if (PAdd >= 600001 && PAdd < 1000001)
-            {
-                Madd = 600000;
-                Radd = 0.26;
-                Badd = 133650;
-            }
-            else if (PAdd >= 1000001 && PAdd < 2000001)
-            {
-                Madd = 1000000;
-                Radd = 0.28;
-                Badd = 237650;
-            }
-            else
-            {
-                Madd = 2000000;
-                Radd = 0.3;
-                Badd = 517650;
-            }
-
-            double CS = Math.Floor(((PAdd - Madd) * Radd + Badd) * 100) * 0.01;
-            if(P < 35001.00 && spouseNoIncomeDeduction == 4000)
-            {
-                CS -= 800;
-            }
-            else if (P < 35001.00)
-            {
-                CS -= 400;
-            }
-            else
-            {
-            }
-
-            if (CS < 0)
-            {
-                CS = 0;
-            }
-
-            double ARMTD = CS - YearlyMTD - Z;
-
-            if (ARMTD < 10.00)
-            {
-                ARMTD = 0;
-            }
-
-            double MTD = ARMTD + NetMTD;
-
-            EditText name = FindViewById<EditText>(Resource.Id.name);
-            EditText finalPCB = FindViewById<EditText>(Resource.Id.finalPCB);
-            EditText finalEPF = FindViewById<EditText>(Resource.Id.finalEPF);
-            EditText finalSOCSO = FindViewById<EditText>(Resource.Id.finalSOCSO);
-            EditText finalEIS = FindViewById<EditText>(Resource.Id.finalEIS);
-            EditText grossSalary = FindViewById<EditText>(Resource.Id.grossSalary);
-            EditText netSalary = FindViewById<EditText>(Resource.Id.netSalary);
-            EditText employerEPFView = FindViewById<EditText>(Resource.Id.employerEPF);
-            EditText employerSOCSOView = FindViewById<EditText>(Resource.Id.employerSOCSO);
-            EditText employerEISView = FindViewById<EditText>(Resource.Id.employerEIS);
-
+            //EIS Calculation
             double EIS = 0;
             double WageEIS = _currentMonthRemuneration + _commission + _arrears + _others + _othersEPFNO;
             if (WageEIS <= 30)
@@ -578,17 +327,24 @@ namespace PayrollParrots
                 EIS = 7.90;
             }
 
-            if (_employeeAge >= 60)
+            if (_employeeAge >= EmployeeMaxAgeForEPFContribution)
             {
                 EIS = 0;
             }
 
-            if (MTD < 0)
-            {
-                MTD = 0;
-            }
+            PCBCaluclation pCBCaluclation = new PCBCaluclation();
+            double RoundedMTD = pCBCaluclation.FinalPCBCalculation(_monthsRemaining, _currentMonthRemuneration, _BIK, _VOLA, _totalFamilyDeductions,
+            _bonus, _arrears, _commission, _othersEPFNO, _others, _lifeStyleRelief, _SOCSOContribution,
+            _lifeInsurance, _basicEquipment, _educationYourSelf, _medicalExamintion, _medicalDisease, _smallKidEducation,
+            _breastFeedingEquipment, _alimonyFormerWife, _EMInsurance, _fatherRelief, _motherRelief, _previousLifeStyleRelief,
+            _previousSOCSOContribution, _previousLifeInsurance, _previousBasicEquipment, _previousEducationYourSelf,
+            _previousMedicalExamintion, _previousMedicalDisease, _previousSmallKidEducation, _previousBreastFeedingEquipment,
+            _previousAlimonyFormerWife, _previousEMInsurance, _previousFatherRelief, _previousMotherRelief, spouseNoIncomeDeduction,
+            _zakatByEmployee, _zakatByPayroll, _departureLevy, _previousMonthsRemuneration, _previousEPFContribution,
+            _previousBIK, _previousVOLA, _MTDPrevious, _EPFContribution, _EPFAdditionalContribution, _previousZakatByEmployee,
+            _previousZakatByPayroll, _previousDepartureLevy, _OthersEISNO, _mapaRelief, _previousMapaRelief, _SSPN,
+            _previousSSPN, _PRS, _previousPRS);
 
-            double RoundedMTD = Math.Ceiling(MTD * 20) * 0.05;
             double GrossSalary = WageEIS + _bonus + _OthersEISNO;
             double NetSalary = GrossSalary - _SOCSOContribution - _EPFAdditionalContribution - _EPFContribution - EIS - _zakatByPayroll - RoundedMTD;
             double EPF = _EPFContribution + _EPFAdditionalContribution;
@@ -597,8 +353,12 @@ namespace PayrollParrots
             double employerEIS = EIS;
             double additionalRemuneration = _bonus + _commission + _OthersEISNO + _others + _arrears;
             double addRemu = _commission + _OthersEISNO + _others + _arrears;
-            if (_employeeAge < 60)
+            double employerEPFRate;
+
+            //employer EPF
+            if (_employeeAge < EmployeeMaxAgeForEPFContribution)
             {
+                employerEPFRate = 0.13;
                 if ((_currentMonthRemuneration + additionalRemuneration) <= 20)
                 {
                     if ((_currentMonthRemuneration + additionalRemuneration) <= 10)
@@ -613,25 +373,28 @@ namespace PayrollParrots
                 else if ((_currentMonthRemuneration + additionalRemuneration) > 20 && (_currentMonthRemuneration + additionalRemuneration) <= 5000)
                 {
                     double EPFWage1 = (Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.05)) * 20;
-                    employerEPF = Math.Ceiling(EPFWage1 * 0.13);
+                    employerEPF = Math.Ceiling(EPFWage1 * employerEPFRate);
                 }
                 else if (addRemu <= 5000 && additionalRemuneration > 5000)
                 {
                     double EPFWage1 = (Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.01)) * 100;
-                    employerEPF = Math.Ceiling(EPFWage1 * 0.13);
+                    employerEPF = Math.Ceiling(EPFWage1 * employerEPFRate);
                 }
                 else if ((_currentMonthRemuneration + additionalRemuneration) > 5000 && (_currentMonthRemuneration + additionalRemuneration) <= 20000)
                 {
+                    employerEPFRate = 0.12;
                     double EPFWage2 = (Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.01)) * 100;
-                    employerEPF = Math.Ceiling(EPFWage2 * 0.12);
+                    employerEPF = Math.Ceiling(EPFWage2 * employerEPFRate);
                 }
                 else
                 {
-                    employerEPF = Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.12);
+                    employerEPFRate = 0.12;
+                    employerEPF = Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * employerEPFRate);
                 }
             }
             else
             {
+                employerEPFRate = 0.04;
                 if ((_currentMonthRemuneration + additionalRemuneration) <= 20)
                 {
                     if ((_currentMonthRemuneration + additionalRemuneration) <= 10)
@@ -646,26 +409,27 @@ namespace PayrollParrots
                 else if ((_currentMonthRemuneration + additionalRemuneration) > 20 && (_currentMonthRemuneration + additionalRemuneration) <= 5000)
                 {
                     double EPFWage1 = (Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.05)) * 20;
-                    employerEPF = Math.Ceiling(EPFWage1 * 0.04);
+                    employerEPF = Math.Ceiling(EPFWage1 * employerEPFRate);
                 }
                 else if (addRemu <= 5000 && additionalRemuneration > 5000)
                 {
                     double EPFWage1 = (Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.01)) * 100;
-                    employerEPF = Math.Ceiling(EPFWage1 * 0.04);
+                    employerEPF = Math.Ceiling(EPFWage1 * employerEPFRate);
                 }
                 else if ((_currentMonthRemuneration + additionalRemuneration) > 5000 && (_currentMonthRemuneration + additionalRemuneration) <= 20000)
                 {
                     double EPFWage2 = (Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.01)) * 100;
-                    employerEPF = Math.Ceiling(EPFWage2 * 0.04);
+                    employerEPF = Math.Ceiling(EPFWage2 * employerEPFRate);
                 }
                 else
                 {
-                    employerEPF = Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.04);
+                    employerEPF = Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * employerEPFRate);
                 }
             }
 
+            //Employer SOCSO
             double SOCSOWage = _currentMonthRemuneration + _arrears + _commission + _othersEPFNO + _others;
-            if (_employeeAge < 60)
+            if (_employeeAge < EmployeeMaxAgeForEPFContribution)
             {
                 if (SOCSOWage <= 30)
                 {
@@ -1032,6 +796,7 @@ namespace PayrollParrots
                 }
             }
 
+            //print to layout
             name.Text = "Name: " + _employeeName;
             name.SetTextColor(Color.Red);
             finalPCB.Text = "PCB: " + RoundedMTD;
@@ -1054,51 +819,51 @@ namespace PayrollParrots
             payroll.Name = _employeeName.ToString();
             if (n == 11)
             {
-                payroll.Month = "January";
+                payroll.Month = Months.January.ToString();
             }
             else if (n == 10)
             {
-                payroll.Month = "Febuary";
+                payroll.Month = Months.Febuary.ToString();
             }
             else if (n == 9)
             {
-                payroll.Month = "March";
+                payroll.Month = Months.March.ToString();
             }
             else if (n == 8)
             {
-                payroll.Month = "April";
+                payroll.Month = Months.April.ToString();
             }
             else if (n == 7)
             {
-                payroll.Month = "May";
+                payroll.Month = Months.May.ToString();
             }
             else if (n == 6)
             {
-                payroll.Month = "June";
+                payroll.Month = Months.June.ToString();
             }
             else if (n == 5)
             {
-                payroll.Month = "July";
+                payroll.Month = Months.July.ToString();
             }
             else if (n == 4)
             {
-                payroll.Month = "August";
+                payroll.Month = Months.August.ToString();
             }
             else if (n == 3)
             {
-                payroll.Month = "September";
+                payroll.Month = Months.September.ToString();
             }
             else if (n == 2)
             {
-                payroll.Month = "October";
+                payroll.Month = Months.October.ToString();
             }
             else if (n == 1)
             {
-                payroll.Month = "November";
+                payroll.Month = Months.November.ToString();
             }
             else if (n == 0)
             {
-                payroll.Month = "December";
+                payroll.Month = Months.December.ToString();
             }
 
             payroll.Age = _employeeAge.ToString();
@@ -1112,21 +877,331 @@ namespace PayrollParrots
             payroll.EmployerSOCSO = employerSOCSO.ToString();
             payroll.EmployerEIS = employerEIS.ToString();
 
-            PayrollHelper.InsertPayrollData(this, payroll);
             Button _saveDetails = FindViewById<Button>(Resource.Id.saveDetails);
 
             _saveDetails.Click += PlayButton_Click;
             _saveDetails.Click += (sender, e) => {
+                //save to database
+                PayrollHelper.InsertPayrollData(this, payroll);
                 var payrollData = new Intent(this, typeof(MainActivity));
                 payrollData.PutExtra("payroll", JsonConvert.SerializeObject(payroll));
                 StartActivity(payrollData);
             };
 
+            //button-click sound
             void PlayButton_Click(object sender, EventArgs e)
             {
                 MediaPlayer _player = MediaPlayer.Create(this, Resource.Drawable.buttonclick);
                 _player.Start();
             }
+        }
+    }
+
+    public class PCBCaluclation
+    {
+        public const double SpouseNoIncomeDeduction = 4000;
+        public const double MTDMinimumAmmountToNotGoToZero = 10;
+        public const double SpouseNoIncomeRebate = -800;
+        public const double SpouseGetIncomeRebate = -400;
+        public const double SpouseNoIncomeRebate20To35K = -650;
+        public const double SpouseGetIncomeRebate20To35K = -250;
+
+        public double FinalPCBCalculation(int _monthsRemaining, double _currentMonthRemuneration, double _BIK, double _VOLA, double _totalFamilyDeductions,
+            double _bonus, double _arrears, double _commission, double _othersEPFNO, double _others, double _lifeStyleRelief, double _SOCSOContribution,
+            double _lifeInsurance, double _basicEquipment, double _educationYourSelf, double _medicalExamintion, double _medicalDisease, double _smallKidEducation,
+            double _breastFeedingEquipment, double _alimonyFormerWife, double _EMInsurance, double _fatherRelief, double _motherRelief, double _previousLifeStyleRelief,
+            double _previousSOCSOContribution, double _previousLifeInsurance, double _previousBasicEquipment, double _previousEducationYourSelf,
+            double _previousMedicalExamintion, double _previousMedicalDisease, double _previousSmallKidEducation, double _previousBreastFeedingEquipment,
+            double _previousAlimonyFormerWife, double _previousEMInsurance, double _previousFatherRelief, double _previousMotherRelief, double spouseNoIncomeDeduction,
+            double _zakatByEmployee, double _zakatByPayroll, double _departureLevy, double _previousMonthsRemuneration, double _previousEPFContribution,
+            double _previousBIK, double _previousVOLA, double _MTDPrevious, double _EPFContribution, double _EPFAdditionalContribution, double _previousZakatByEmployee,
+            double _previousZakatByPayroll, double _previousDepartureLevy, double _OthersEISNO, double _mapaRelief, double _previousMapaRelief, double _SSPN,
+            double _previousSSPN, double _PRS, double _previousPRS)
+        {
+            double _EPFContributionC = Math.Min(4000 - _previousEPFContribution, _EPFContribution);
+            double _EPFAdditionalContributionC = Math.Min(4000 - _previousEPFContribution - _EPFContribution, _EPFAdditionalContribution);
+            //Y
+            double Y = _previousMonthsRemuneration + _previousVOLA + _previousBIK;
+            //K
+            double K = _previousEPFContribution;
+            //∑(Y-K)
+            double Y_K = Y - K;
+            //Y1
+            double Y1 = _currentMonthRemuneration + _VOLA + _BIK;
+            //K1
+            double K1 = _EPFContributionC;
+            //Yt
+            double Yt = _bonus + _arrears + _commission + _othersEPFNO + _others + _OthersEISNO;
+            //Kt
+            double Kt = _EPFAdditionalContributionC;
+            //n
+            int n = _monthsRemaining;
+            double Y2;
+            //Y2
+            Y2 = Y1;
+            //K2
+            double K2;
+            if (n != 0)
+            {
+                K2 = Math.Floor((Math.Min(K1, (4000 - K - K1) / n)) * 100) * 0.01;
+            }
+            else
+            {
+                K2 = 0;
+            }
+            //D
+            double D = 9000.00;
+            //FamilyDeductions
+            double SDSQC = _totalFamilyDeductions;
+            //PreviousDeductions
+            double LP = _previousLifeStyleRelief + _previousSOCSOContribution + _previousLifeInsurance + _previousBasicEquipment + _previousEducationYourSelf + _previousMedicalExamintion + _previousMedicalDisease + _previousSmallKidEducation + _previousBreastFeedingEquipment + _previousAlimonyFormerWife + _previousEMInsurance + _previousFatherRelief + _previousMotherRelief + _previousMapaRelief + _previousSSPN + _previousPRS;
+            //CurrentMonthDeduction
+            double LP1 = _lifeStyleRelief + _SOCSOContribution + _lifeInsurance + _basicEquipment + _educationYourSelf + _medicalExamintion + _medicalDisease + _smallKidEducation + _breastFeedingEquipment + _alimonyFormerWife + _EMInsurance + _fatherRelief + _motherRelief + _mapaRelief + _SSPN + _PRS;
+            //P
+            double P = Math.Floor((Y_K + (Y1 - K1) + ((Y2 - K2) * n) - D - SDSQC - LP - LP1) * 100) * 0.01;
+
+            int M;
+            double R;
+            double B;
+            if (P < 5001)
+            {
+                M = 0;
+                R = 0;
+                B = 0;
+            }
+            else if (P >= 5001 && P < 20001)
+            {
+                M = 5000;
+                R = 0.01;
+                if (spouseNoIncomeDeduction == SpouseNoIncomeDeduction)
+                {
+                    B = SpouseNoIncomeRebate;
+                }
+                else
+                {
+                    B = SpouseGetIncomeRebate;
+                }
+            }
+            else if (P >= 20001 && P < 35001)
+            {
+                M = 20000;
+                R = 0.03;
+                if (spouseNoIncomeDeduction == SpouseNoIncomeDeduction)
+                {
+                    B = SpouseNoIncomeRebate20To35K;
+                }
+                else
+                {
+                    B = SpouseGetIncomeRebate20To35K;
+                }
+            }
+            else if (P >= 35001 && P < 50001)
+            {
+                M = 35000;
+                R = 0.08;
+                B = 600;
+            }
+            else if (P >= 50001 && P < 70001)
+            {
+                M = 50000;
+                R = 0.14;
+                B = 1800;
+            }
+            else if (P >= 70001 && P < 100001)
+            {
+                M = 70000;
+                R = 0.21;
+                B = 4600;
+            }
+            else if (P >= 100001 && P < 250001)
+            {
+                M = 100000;
+                R = 0.24;
+                B = 10900;
+            }
+            else if (P >= 250001 && P < 400001)
+            {
+                M = 250000;
+                R = 0.245;
+                B = 46900;
+            }
+            else if (P >= 400001 && P < 600001)
+            {
+                M = 400000;
+                R = 0.25;
+                B = 83650;
+            }
+            else if (P >= 600001 && P < 1000001)
+            {
+                M = 600000;
+                R = 0.26;
+                B = 133650;
+            }
+            else if (P >= 1000001 && P < 2000001)
+            {
+                M = 1000000;
+                R = 0.28;
+                B = 237650;
+            }
+            else
+            {
+                M = 2000000;
+                R = 0.30;
+                B = 517650;
+            }
+            double Z = _previousZakatByEmployee + _previousZakatByPayroll + _previousDepartureLevy;
+            double X = _MTDPrevious;
+            if (P < 0.00)
+            {
+                P = 0;
+            }
+
+            double CurrentMonthMTD = Math.Floor((((P - M) * R) + B - (Z + X)) / (n + 1) * 100) * 0.01;
+            if (CurrentMonthMTD < MTDMinimumAmmountToNotGoToZero)
+            {
+                CurrentMonthMTD = 0;
+            }
+            double NetMTD = CurrentMonthMTD - _zakatByEmployee - _zakatByPayroll - _departureLevy;
+
+            if (NetMTD < 0.00)
+            {
+                NetMTD = 0;
+            }
+
+            double YearlyMTD = X + (CurrentMonthMTD * (n + 1));
+
+            K2 = Math.Floor((Math.Min(K1, (4000 - K - K1 - Kt) / n)) * 100) * 0.01;
+
+            double PAdd = Math.Floor((Y_K + (Y1 - K1) + ((Y2 - K2) * n) + (Yt - Kt) - D - SDSQC - LP - LP1) * 100) * 0.01;
+
+            if (Yt == 0.00)
+            {
+                PAdd = 0;
+            }
+            int Madd;
+            double Radd;
+            double Badd;
+            if (PAdd < 5001)
+            {
+                Madd = 0;
+                Radd = 0;
+                Badd = 0;
+            }
+            else if (PAdd >= 5001 && PAdd < 20001)
+            {
+                Madd = 5000;
+                Radd = 0.01;
+                if (spouseNoIncomeDeduction == SpouseNoIncomeDeduction)
+                {
+                    Badd = SpouseNoIncomeRebate;
+                }
+                else
+                {
+                    Badd = SpouseGetIncomeRebate;
+                }
+            }
+            else if (PAdd >= 20001 && PAdd < 35001)
+            {
+                Madd = 20000;
+                Radd = 0.03;
+                if (spouseNoIncomeDeduction == SpouseNoIncomeDeduction)
+                {
+                    Badd = SpouseNoIncomeRebate20To35K;
+                }
+                else
+                {
+                    Badd = SpouseGetIncomeRebate20To35K;
+                }
+            }
+            else if (PAdd >= 35001 && PAdd < 50001)
+            {
+                Madd = 35000;
+                Radd = 0.08;
+                Badd = 600;
+            }
+            else if (PAdd >= 50001 && PAdd < 70001)
+            {
+                Madd = 50000;
+                Radd = 0.14;
+                Badd = 1800;
+            }
+            else if (PAdd >= 70001 && PAdd < 100001)
+            {
+                Madd = 70000;
+                Radd = 0.21;
+                Badd = 4600;
+            }
+            else if (PAdd >= 100001 && PAdd < 250001)
+            {
+                Madd = 100000;
+                Radd = 0.24;
+                Badd = 10900;
+            }
+            else if (PAdd >= 250001 && PAdd < 400001)
+            {
+                Madd = 250000;
+                Radd = 0.245;
+                Badd = 46900;
+            }
+            else if (PAdd >= 400001 && PAdd < 600001)
+            {
+                Madd = 400000;
+                Radd = 0.25;
+                Badd = 83650;
+            }
+            else if (PAdd >= 600001 && PAdd < 1000001)
+            {
+                Madd = 600000;
+                Radd = 0.26;
+                Badd = 133650;
+            }
+            else if (PAdd >= 1000001 && PAdd < 2000001)
+            {
+                Madd = 1000000;
+                Radd = 0.28;
+                Badd = 237650;
+            }
+            else
+            {
+                Madd = 2000000;
+                Radd = 0.3;
+                Badd = 517650;
+            }
+
+            double CS = Math.Floor(((PAdd - Madd) * Radd + Badd) * 100) * 0.01;
+            if (P < 35001.00 && spouseNoIncomeDeduction == SpouseNoIncomeDeduction)
+            {
+                CS += SpouseNoIncomeRebate;
+            }
+            else if (P < 35001.00)
+            {
+                CS -= SpouseGetIncomeRebate;
+            }
+            else
+            {
+            }
+
+            if (CS < 0)
+            {
+                CS = 0;
+            }
+
+            double additionalRemunerationMTD = CS - YearlyMTD - Z;
+
+            if (additionalRemunerationMTD < MTDMinimumAmmountToNotGoToZero)
+            {
+                additionalRemunerationMTD = 0;
+            }
+
+            double MTD = additionalRemunerationMTD + NetMTD;
+
+            if (MTD < 0)
+            {
+                MTD = 0;
+            }
+
+            double RoundedMTD = Math.Ceiling(MTD * 20) * 0.05;
+            return RoundedMTD;
         }
     }
 }

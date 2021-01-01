@@ -68,7 +68,6 @@
 /Users/danyalqureshi/Projects/PayrollParrots/PayrollParrots/obj/Release/res/drawable/alert_sound.mp3
 /Users/danyalqureshi/Projects/PayrollParrots/PayrollParrots/obj/Release/res/drawable/delete_sound.mp3
 /Users/danyalqureshi/Projects/PayrollParrots/PayrollParrots/obj/Release/res/layout/payroll_review.xml
-/Users/danyalqureshi/Projects/PayrollParrots/PayrollParrots/obj/Release/res/drawable/parrot_dap.png
 /Users/danyalqureshi/Projects/PayrollParrots/PayrollParrots/obj/Release/res/layout/payroll_grid.xml
 /Users/danyalqureshi/Projects/PayrollParrots/PayrollParrots/obj/Release/uploadflags.txt
 /Users/danyalqureshi/Projects/PayrollParrots/PayrollParrots/obj/Release/resolvedassemblies.hash
@@ -445,3 +444,5 @@
 /Users/danyalqureshi/Projects/PayrollParrots/PayrollParrots/obj/Release/stamp/_GenerateJavaStubs.stamp
 /Users/danyalqureshi/Projects/PayrollParrots/PayrollParrots/obj/Release/stamp/_GeneratePackageManagerJava.stamp
 /Users/danyalqureshi/Projects/PayrollParrots/PayrollParrots/obj/Release/stamp/_ResolveLibraryProjectImports.stamp
+/Users/danyalqureshi/Projects/PayrollParrots/PayrollParrots/obj/Release/PayrollParrots.csprojAssemblyReference.cache
+/Users/danyalqureshi/Projects/PayrollParrots/PayrollParrots/obj/Release/res/drawable/dabbing_parrot.png

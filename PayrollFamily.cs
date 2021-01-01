@@ -12,7 +12,18 @@ namespace PayrollParrots
     [Activity(Label = "PayrollFamily")]
     public class PayrollFamily : Activity
     {
-        //#fix
+        /*public const string January = "January";
+        public const string Febuary = "Febuary";
+        public const string March = "March";
+        public const string April = "April";
+        public const string May = "May";
+        public const string June = "June";
+        public const string July = "July";
+        public const string August = "August";
+        public const string September = "September";
+        public const string October = "October";
+        public const string November = "November";
+        public const string December = "December";*/
         private int _kidsU18;
         private int _over18inHE;
         private int _disabledChildren;
@@ -50,8 +61,11 @@ namespace PayrollParrots
             var adapter = ArrayAdapter.CreateFromResource(this, Resource.Array.month_array, Android.Resource.Layout.SimpleSpinnerItem);
             adapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
             spinner.Adapter = adapter;
+
+            //month today
             DateTime dateToday = DateTime.Now;
             int monthToday = dateToday.Month;
+            //setting spinner to display todays month
             if (monthToday == 1)
             {
                 spinner.SetSelection(0);
@@ -199,11 +213,14 @@ namespace PayrollParrots
                 }
             };
 
+            //button-click sound
             void PlayButton_Click(object sender, EventArgs e)
             {
                 MediaPlayer _player = MediaPlayer.Create(this, Resource.Drawable.buttonclick);
                 _player.Start();
             }
+
+            //check if have spouse
             bool disabledSpouseCan()
             {
                 if ((spinner2.SelectedItem.ToString() == "Single" | spinner2.SelectedItem.ToString() == "Divorce/Widower/Widow") && (spouseDisabledTrue.Checked == true))
@@ -218,6 +235,7 @@ namespace PayrollParrots
                 }
             }
         }
+
         private void Spinner2_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
 
@@ -226,6 +244,7 @@ namespace PayrollParrots
                 spouseNoIncomeDeduction = 4000.00;
             }
         }
+
         private void RadioButton_CheckedChanged(object sender, CompoundButton.CheckedChangeEventArgs e)
         {
             RadioButton radioButton = sender as RadioButton;
@@ -245,14 +264,13 @@ namespace PayrollParrots
                     case Resource.Id.radioSpouseDisabledFalse:
                         disabledSpouseDeduction = 0.00;
                         break;
-
-
                     default:
                         break;
                 }
             }
         }
-        private void EditText_TextChanged(object sender, TextChangedEventArgs e)
+
+        public void EditText_TextChanged(object sender, TextChangedEventArgs e)
         {
             EditText editText = sender as EditText;
             switch (editText.Id)
@@ -349,50 +367,51 @@ namespace PayrollParrots
                     break;
             }
         }
+
         private void SpinnerMonth_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
 
-            if (((Spinner)sender).SelectedItem.ToString() == "January")
+            if (((Spinner)sender).SelectedItem.ToString() == Months.January.ToString())
             {
                 monthsRemaining = 11;
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == "Febuary")
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.Febuary.ToString())
             {
                 monthsRemaining = 10;
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == "March")
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.March.ToString())
             {
                 monthsRemaining = 9;
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == "April")
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.April.ToString())
             {
                 monthsRemaining = 8;
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == "May")
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.May.ToString())
             {
                 monthsRemaining = 7;
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == "June")
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.June.ToString())
             {
                 monthsRemaining = 6;
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == "July")
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.July.ToString())
             {
                 monthsRemaining = 5;
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == "August")
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.August.ToString())
             {
                 monthsRemaining = 4;
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == "September")
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.September.ToString())
             {
                 monthsRemaining = 3;
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == "October")
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.October.ToString())
             {
                 monthsRemaining = 2;
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == "November")
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.November.ToString())
             {
                 monthsRemaining = 1;
             }
@@ -401,17 +420,27 @@ namespace PayrollParrots
                 monthsRemaining = 0;
             }
         }
+
+        //pop-up for if month changed
         private void MonthNotNow(object sender, AdapterView.ItemSelectedEventArgs e)
         {
+            static string AlertTitle(string month)
+            {
+                string ItIsNot = "It is not " + month + "!";
+                return ItIsNot;
+            }
             DateTime dateToday = DateTime.Now;
             int monthToday = dateToday.Month;
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             AlertDialog alert = dialog.Create();
+            const string AlertMessage = "Are you sure you want to change the month?";
+            string ItIsNot;
 
-            if (((Spinner)sender).SelectedItem.ToString() == "January" && monthToday != 1)
+            if (((Spinner)sender).SelectedItem.ToString() == Months.January.ToString() && monthToday != 1)
             {
-                alert.SetTitle("It is not January!");
-                alert.SetMessage("Are you sure you want to change the month?");
+                ItIsNot = AlertTitle(Months.January.ToString());
+                alert.SetTitle(ItIsNot);
+                alert.SetMessage(AlertMessage);
                 alert.SetIcon(Resource.Drawable.Warning_Sign);
                 alert.SetButton("Yes", (c, ev) =>
                 {
@@ -423,10 +452,11 @@ namespace PayrollParrots
 
                 alert.Show();
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == "Febuary" && monthToday != 2)
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.Febuary.ToString() && monthToday != 2)
             {
-                alert.SetTitle("It is not Febuary!");
-                alert.SetMessage("Are you sure you want to change the month?");
+                ItIsNot = AlertTitle(Months.Febuary.ToString());
+                alert.SetTitle(ItIsNot);
+                alert.SetMessage(AlertMessage);
                 alert.SetIcon(Resource.Drawable.Warning_Sign);
                 alert.SetButton("Yes", (c, ev) =>
                 {
@@ -438,10 +468,11 @@ namespace PayrollParrots
 
                 alert.Show();
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == "March" && monthToday != 3)
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.March.ToString() && monthToday != 3)
             {
-                alert.SetTitle("It is not March!");
-                alert.SetMessage("Are you sure you want to change the month?");
+                ItIsNot = AlertTitle(Months.March.ToString());
+                alert.SetTitle(ItIsNot);
+                alert.SetMessage(AlertMessage);
                 alert.SetIcon(Resource.Drawable.Warning_Sign);
                 alert.SetButton("Yes", (c, ev) =>
                 {
@@ -453,10 +484,11 @@ namespace PayrollParrots
 
                 alert.Show();
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == "April" && monthToday != 4)
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.April.ToString() && monthToday != 4)
             {
-                alert.SetTitle("It is not April!");
-                alert.SetMessage("Are you sure you want to change the month?");
+                ItIsNot = AlertTitle(Months.April.ToString());
+                alert.SetTitle(ItIsNot);
+                alert.SetMessage(AlertMessage);
                 alert.SetIcon(Resource.Drawable.Warning_Sign);
                 alert.SetButton("Yes", (c, ev) =>
                 {
@@ -468,10 +500,11 @@ namespace PayrollParrots
 
                 alert.Show();
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == "May" && monthToday != 5)
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.May.ToString() && monthToday != 5)
             {
-                alert.SetTitle("It is not May!");
-                alert.SetMessage("Are you sure you want to change the month?");
+                ItIsNot = AlertTitle(Months.May.ToString());
+                alert.SetTitle(ItIsNot);
+                alert.SetMessage(AlertMessage);
                 alert.SetIcon(Resource.Drawable.Warning_Sign);
                 alert.SetButton("Yes", (c, ev) =>
                 {
@@ -483,10 +516,11 @@ namespace PayrollParrots
 
                 alert.Show();
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == "June" && monthToday != 6)
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.June.ToString() && monthToday != 6)
             {
-                alert.SetTitle("It is not June!");
-                alert.SetMessage("Are you sure you want to change the month?");
+                ItIsNot = AlertTitle(Months.June.ToString());
+                alert.SetTitle(ItIsNot);
+                alert.SetMessage(AlertMessage);
                 alert.SetIcon(Resource.Drawable.Warning_Sign);
                 alert.SetButton("Yes", (c, ev) =>
                 {
@@ -498,10 +532,11 @@ namespace PayrollParrots
 
                 alert.Show();
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == "July" && monthToday != 7)
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.July.ToString() && monthToday != 7)
             {
-                alert.SetTitle("It is not July!");
-                alert.SetMessage("Are you sure you want to change the month?");
+                ItIsNot = AlertTitle(Months.July.ToString());
+                alert.SetTitle(ItIsNot);
+                alert.SetMessage(AlertMessage);
                 alert.SetIcon(Resource.Drawable.Warning_Sign);
                 alert.SetButton("Yes", (c, ev) =>
                 {
@@ -513,10 +548,11 @@ namespace PayrollParrots
 
                 alert.Show();
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == "August" && monthToday != 8)
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.August.ToString() && monthToday != 8)
             {
-                alert.SetTitle("It is not August!");
-                alert.SetMessage("Are you sure you want to change the month?");
+                ItIsNot = AlertTitle(Months.August.ToString());
+                alert.SetTitle(ItIsNot);
+                alert.SetMessage(AlertMessage);
                 alert.SetIcon(Resource.Drawable.Warning_Sign);
                 alert.SetButton("Yes", (c, ev) =>
                 {
@@ -528,10 +564,11 @@ namespace PayrollParrots
 
                 alert.Show();
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == "September" && monthToday != 9)
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.September.ToString() && monthToday != 9)
             {
-                alert.SetTitle("It is not September!");
-                alert.SetMessage("Are you sure you want to change the month?");
+                ItIsNot = AlertTitle(Months.September.ToString());
+                alert.SetTitle(ItIsNot);
+                alert.SetMessage(AlertMessage);
                 alert.SetIcon(Resource.Drawable.Warning_Sign);
                 alert.SetButton("Yes", (c, ev) =>
                 {
@@ -543,10 +580,11 @@ namespace PayrollParrots
 
                 alert.Show();
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == "October" && monthToday != 10)
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.October.ToString() && monthToday != 10)
             {
-                alert.SetTitle("It is not October!");
-                alert.SetMessage("Are you sure you want to change the month?");
+                ItIsNot = AlertTitle(Months.October.ToString());
+                alert.SetTitle(ItIsNot);
+                alert.SetMessage(AlertMessage);
                 alert.SetIcon(Resource.Drawable.Warning_Sign);
                 alert.SetButton("Yes", (c, ev) =>
                 {
@@ -558,10 +596,11 @@ namespace PayrollParrots
 
                 alert.Show();
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == "November" && monthToday != 11)
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.November.ToString() && monthToday != 11)
             {
-                alert.SetTitle("It is not November!");
-                alert.SetMessage("Are you sure you want to change the month?");
+                ItIsNot = AlertTitle(Months.November.ToString());
+                alert.SetTitle(ItIsNot);
+                alert.SetMessage(AlertMessage);
                 alert.SetIcon(Resource.Drawable.Warning_Sign);
                 alert.SetButton("Yes", (c, ev) =>
                 {
@@ -573,10 +612,11 @@ namespace PayrollParrots
 
                 alert.Show();
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == "December" && monthToday != 12)
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.December.ToString() && monthToday != 12)
             {
-                alert.SetTitle("It is not December!");
-                alert.SetMessage("Are you sure you want to change the month?");
+                ItIsNot = AlertTitle(Months.December.ToString());
+                alert.SetTitle(ItIsNot);
+                alert.SetMessage(AlertMessage);
                 alert.SetIcon(Resource.Drawable.Warning_Sign);
                 alert.SetButton("Yes", (c, ev) =>
                 {

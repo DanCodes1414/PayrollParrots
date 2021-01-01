@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.companyname.payrollparrots" android:installLocation="auto">
   <uses-sdk android:minSdkVersion="26" android:targetSdkVersion="28" />
-  <application android:allowBackup="true" android:icon="@drawable/parrot_dap" android:label="@string/app_name" android:roundIcon="@mipmap/ic_launcher_round" android:supportsRtl="true" android:theme="@style/AppTheme" android:name="android.app.Application" android:extractNativeLibs="true">
+  <application android:allowBackup="true" android:icon="@drawable/dabbing_parrot" android:label="@string/app_name" android:roundIcon="@mipmap/ic_launcher_round" android:supportsRtl="true" android:theme="@style/AppTheme" android:name="android.app.Application" android:extractNativeLibs="true">
     <activity android:label="@string/app_name" android:theme="@style/AppTheme" android:name="crc642ab3dab37b1a36d6.MainActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />

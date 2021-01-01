@@ -14,6 +14,17 @@ namespace PayrollParrots
     public class PayrollReview : Activity
     {
         Payroll payroll;
+        public const string NameText = "Name: ";
+        public const string AgeText = "Age: ";
+        public const string PCBText = "PCB: ";
+        public const string EPFText = "EPF: ";
+        public const string SOCSOText = "SOCSO: ";
+        public const string EISText = "EIS: ";
+        public const string GrossSalaryText = "Gross Salary: ";
+        public const string NetSalaryText = "Net Salary: ";
+        public const string EmployerEPFText = "Employer EPF: ";
+        public const string EmployerSOCSOText = "Employer SOCSO: ";
+        public const string EmployerEISText = "Employer EIS: ";
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -31,34 +42,35 @@ namespace PayrollParrots
             EditText employerSOCSO2 = FindViewById<EditText>(Resource.Id.employerSOCSO2);
             EditText employerEIS2 = FindViewById<EditText>(Resource.Id.employerEIS2);
 
-            name2.Text = "Name: " + payroll.Name;
+            name2.Text = NameText + payroll.Name;
             name2.SetTextColor(Color.Red);
-            age2.Text = "Age: " + payroll.Age;
+            age2.Text = AgeText + payroll.Age;
             age2.SetTextColor(Color.Orange);
-            finalPCB2.Text = "PCB: " + payroll.PCB;
+            finalPCB2.Text = PCBText + payroll.PCB;
             finalPCB2.SetTextColor(Color.Gold);
-            finalEPF2.Text = "EPF: " + payroll.EPFMain;
+            finalEPF2.Text = EPFText + payroll.EPFMain;
             finalEPF2.SetTextColor(Color.Green);
-            finalSOCSO2.Text = "SOCSO: " + payroll.SOCSO;
+            finalSOCSO2.Text = SOCSOText + payroll.SOCSO;
             finalSOCSO2.SetTextColor(Color.Blue);
-            finalEIS2.Text = "EIS: " + payroll.EIS;
+            finalEIS2.Text = EISText + payroll.EIS;
             finalEIS2.SetTextColor(Color.Indigo);
-            grossSalary2.Text = "Gross Salary: " + payroll.GrossSalary;
+            grossSalary2.Text = GrossSalaryText + payroll.GrossSalary;
             grossSalary2.SetTextColor(Color.Violet);
-            netSalary2.Text = "Net Salary: " + payroll.NetSalary;
+            netSalary2.Text = NetSalaryText + payroll.NetSalary;
             netSalary2.SetTextColor(Color.Goldenrod);
-            employerEPF2.Text = "Employer EPF:" + payroll.EmployerEPF;
-            employerSOCSO2.Text = "Employer SOCSO:" + payroll.EmployerSOCSO;
-            employerEIS2.Text = "Employer EIS:" + payroll.EmployerEIS;
+            employerEPF2.Text = EmployerEPFText + payroll.EmployerEPF;
+            employerSOCSO2.Text = EmployerSOCSOText + payroll.EmployerSOCSO;
+            employerEIS2.Text = EmployerEISText + payroll.EmployerEIS;
 
             Button _reviewBack = FindViewById<Button>(Resource.Id.reviewBack);
 
-            _reviewBack.Click += PlayButton_Click;
             _reviewBack.Click += (sender, e) => {
+                PlayButton_Click(sender, e);
                 var payrollReview = new Intent(this, typeof(MainActivity));
                 StartActivity(payrollReview);
             };
 
+            //button-click sound
             void PlayButton_Click(object sender, EventArgs e)
             {
                 MediaPlayer _player = MediaPlayer.Create(this, Resource.Drawable.buttonclick);

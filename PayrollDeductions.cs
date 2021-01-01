@@ -12,6 +12,7 @@ namespace PayrollParrots
     [Activity(Label = "PayrollDeductions")]
     public class PayrollDeductions : Activity
     {
+        public const double EmployeeMaxAgeForEPFContribution = 60;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -34,7 +35,7 @@ namespace PayrollParrots
             int _employeeAge = Intent.GetIntExtra("employeeAge", 0);
             double SOCSOWage = _currentMonthRemuneration + _arrears + _commission + _othersEPFNO + _others;
             double _SOCSOContribution = 0.00;
-            if (_employeeAge < 60)
+            if (_employeeAge < EmployeeMaxAgeForEPFContribution)
             {
                 if (SOCSOWage <= 30)
                 {
@@ -447,12 +448,15 @@ namespace PayrollParrots
                 }
             };
 
+            //button-click sound
             void PlayButton_Click(object sender, EventArgs e)
             {
                 MediaPlayer _player = MediaPlayer.Create(this, Resource.Drawable.buttonclick);
                 _player.Start();
             }
         }
+
+        //check if input greater than limit
         bool Validate(double name, double value, EditText editText)
         {
             if ((name > value) && editText.Hint == "Medical expenses for serious diseases[Up to RM6000]")
@@ -470,6 +474,8 @@ namespace PayrollParrots
                 return true;
             }
         }
+
+        //check Father + Mother Relief + both parents relief greater than limit
         bool Validate2(double name, double name2, EditText editText)
         {
             if ((name > 0) && (name2 > 0))

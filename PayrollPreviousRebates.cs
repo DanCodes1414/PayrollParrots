@@ -181,6 +181,7 @@ namespace PayrollParrots
                 StartActivity(intent);
             };
 
+            //button-click continue
             void PlayButton_Click(object sender, EventArgs e)
             {
                 MediaPlayer _player = MediaPlayer.Create(this, Resource.Drawable.buttonclick);

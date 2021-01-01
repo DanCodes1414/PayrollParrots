@@ -12,6 +12,9 @@ namespace PayrollParrots
     [Activity(Label = "PayrollAdditionalCurrentMonth")]
     public class PayrollAdditionalCurrentMonth : Activity
     {
+        public const double EmployeeMaxAgeForEPFContribution = 60;
+        public const double EPFNinePercentRate = 0.09;
+        public const double EPFElevenPercentRate = 0.11;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -65,45 +68,84 @@ namespace PayrollParrots
                 double.TryParse(others_.Text, out _others);
             };
 
+            //additional EPF automatic calculation
             double _EPFAdditionalContribution = 0.00;
             double _EPFContribution = Intent.GetDoubleExtra("EPFContribution", 0.00);
+            //_EPFContribution2 = EPFContribution for both additional and normal remuneration 
             double _EPFContribution2 = 0.00;
             double _currentMonthRemuneration = Intent.GetDoubleExtra("currentMonthRemuneration", 0.00);
+            double _EPFRate = Intent.GetDoubleExtra("EPFRate", 0.11);
             int _employeeAge = Intent.GetIntExtra("employeeAge", 0);
             Button _thirdContinue = FindViewById<Button>(Resource.Id.continuePayroll3);
             _thirdContinue.Click += (sender, e) =>
             {
                 double additionalRemuneration = _bonus + _commission + _OthersEISNO + _others + _arrears;
-                if (_employeeAge < 60)
+                double currentMonthNetRemuneration = _currentMonthRemuneration + additionalRemuneration;
+                if (_employeeAge < EmployeeMaxAgeForEPFContribution)
                 {
-                    if ((_currentMonthRemuneration + additionalRemuneration) <= 20)
+                    if (_EPFRate == EPFElevenPercentRate)
                     {
-                        if ((_currentMonthRemuneration + additionalRemuneration) <= 10)
+                        if (currentMonthNetRemuneration <= 20)
                         {
-                            _EPFContribution2 = 0.00;
+                            if (currentMonthNetRemuneration <= 10)
+                            {
+                                _EPFContribution2 = 0.00;
+                            }
+                            else if (currentMonthNetRemuneration > 10 && currentMonthNetRemuneration <= 20)
+                            {
+                                _EPFContribution2 = 3.00;
+                                _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
+                            }
                         }
-                        else if ((_currentMonthRemuneration + additionalRemuneration) > 10 && (_currentMonthRemuneration + additionalRemuneration) <= 20)
+                        else if (currentMonthNetRemuneration > 20 && currentMonthNetRemuneration <= 5000)
                         {
-                            _EPFContribution2 = 3.00;
+                            double EPFWage1 = (Math.Ceiling(currentMonthNetRemuneration) * 0.05) * 20;
+                            _EPFContribution2 = Math.Ceiling(EPFWage1 * _EPFRate);
+                            _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
+                        }
+                        else if (currentMonthNetRemuneration > 5000 && currentMonthNetRemuneration <= 20000)
+                        {
+                            double EPFWage1 = (Math.Ceiling(currentMonthNetRemuneration) * 0.01) * 100;
+                            _EPFContribution2 = Math.Ceiling(EPFWage1 * _EPFRate);
+                            _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
+                        }
+                        else
+                        {
+                            _EPFContribution2 = Math.Ceiling(currentMonthNetRemuneration * _EPFRate);
                             _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
                         }
                     }
-                    else if ((_currentMonthRemuneration + additionalRemuneration) > 20 && (_currentMonthRemuneration + additionalRemuneration) <= 5000)
+                    if (_EPFRate == EPFNinePercentRate)
                     {
-                        double EPFWage1 = (Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.05)) * 20;
-                        _EPFContribution2 = Math.Ceiling(EPFWage1 * 0.11);
-                        _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
-                    }
-                    else if ((_currentMonthRemuneration + additionalRemuneration) > 5000 && (_currentMonthRemuneration + additionalRemuneration) <= 20000)
-                    {
-                        double EPFWage2 = (Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.01)) * 100;
-                        _EPFContribution2 = Math.Ceiling(EPFWage2 * 0.11);
-                        _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
-                    }
-                    else
-                    {
-                        _EPFContribution2 = Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.11);
-                        _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
+                        if (currentMonthNetRemuneration <= 20)
+                        {
+                            if (currentMonthNetRemuneration <= 10)
+                            {
+                                _EPFContribution2 = 0.00;
+                            }
+                            else if (currentMonthNetRemuneration > 10 && currentMonthNetRemuneration <= 20)
+                            {
+                                _EPFContribution2 = 2.00;
+                                _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
+                            }
+                        }
+                        else if (currentMonthNetRemuneration > 20 && currentMonthNetRemuneration <= 5000)
+                        {
+                            double EPFWage1 = (Math.Ceiling(currentMonthNetRemuneration * 0.05)) * 20;
+                            _EPFContribution2 = Math.Ceiling(EPFWage1 * _EPFRate);
+                            _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
+                        }
+                        else if (currentMonthNetRemuneration > 5000 && currentMonthNetRemuneration <= 20000)
+                        {
+                            double EPFWage1 = (Math.Ceiling(currentMonthNetRemuneration * 0.01)) * 100;
+                            _EPFContribution2 = Math.Ceiling(EPFWage1 * _EPFRate);
+                            _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
+                        }
+                        else
+                        {
+                            _EPFContribution2 = Math.Ceiling(currentMonthNetRemuneration * _EPFRate);
+                            _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
+                        }
                     }
                 }
                 else
@@ -150,6 +192,7 @@ namespace PayrollParrots
                 StartActivity(intent);
             };
 
+            //button-click sound
             void PlayButton_Click(object sender, EventArgs e)
             {
                 MediaPlayer _player = MediaPlayer.Create(this, Resource.Drawable.buttonclick);

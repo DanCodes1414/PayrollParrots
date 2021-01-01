@@ -1,62 +1,62 @@
 	.section	.rodata.map_aname.0,"aMS",@progbits,1
 	.type	.L.map_aname.0, @object
 .L.map_aname.0:
-	.asciz	"Xamarin.Android.Support.Compat"
-	.size	.L.map_aname.0, 31
+	.asciz	"PayrollParrots"
+	.size	.L.map_aname.0, 15
 
 	.section	.rodata.map_aname.1,"aMS",@progbits,1
 	.type	.L.map_aname.1, @object
 .L.map_aname.1:
-	.asciz	"Xamarin.Android.Support.v7.CardView"
-	.size	.L.map_aname.1, 36
+	.asciz	"Xamarin.Android.Support.Compat"
+	.size	.L.map_aname.1, 31
 
 	.section	.rodata.map_aname.2,"aMS",@progbits,1
 	.type	.L.map_aname.2, @object
 .L.map_aname.2:
-	.asciz	"DanielMartinus.Konfetti"
-	.size	.L.map_aname.2, 24
+	.asciz	"Xamarin.Android.Support.v7.CardView"
+	.size	.L.map_aname.2, 36
 
 	.section	.rodata.map_aname.3,"aMS",@progbits,1
 	.type	.L.map_aname.3, @object
 .L.map_aname.3:
-	.asciz	"Xamarin.Android.Support.Core.UI"
-	.size	.L.map_aname.3, 32
+	.asciz	"DanielMartinus.Konfetti"
+	.size	.L.map_aname.3, 24
 
 	.section	.rodata.map_aname.4,"aMS",@progbits,1
 	.type	.L.map_aname.4, @object
 .L.map_aname.4:
-	.asciz	"Xamarin.Android.Support.Loader"
-	.size	.L.map_aname.4, 31
+	.asciz	"Xamarin.Android.Support.Core.UI"
+	.size	.L.map_aname.4, 32
 
 	.section	.rodata.map_aname.5,"aMS",@progbits,1
 	.type	.L.map_aname.5, @object
 .L.map_aname.5:
-	.asciz	"Xamarin.Android.Support.v7.RecyclerView"
-	.size	.L.map_aname.5, 40
+	.asciz	"Xamarin.Android.Support.Loader"
+	.size	.L.map_aname.5, 31
 
 	.section	.rodata.map_aname.6,"aMS",@progbits,1
 	.type	.L.map_aname.6, @object
 .L.map_aname.6:
-	.asciz	"Xamarin.Android.Arch.Lifecycle.LiveData.Core"
-	.size	.L.map_aname.6, 45
+	.asciz	"Xamarin.Android.Support.v7.RecyclerView"
+	.size	.L.map_aname.6, 40
 
 	.section	.rodata.map_aname.7,"aMS",@progbits,1
 	.type	.L.map_aname.7, @object
 .L.map_aname.7:
-	.asciz	"Xamarin.Android.Support.v7.AppCompat"
-	.size	.L.map_aname.7, 37
+	.asciz	"Xamarin.Android.Arch.Lifecycle.LiveData.Core"
+	.size	.L.map_aname.7, 45
 
 	.section	.rodata.map_aname.8,"aMS",@progbits,1
 	.type	.L.map_aname.8, @object
 .L.map_aname.8:
-	.asciz	"Xamarin.Android.Support.CoordinaterLayout"
-	.size	.L.map_aname.8, 42
+	.asciz	"Xamarin.Android.Support.v7.AppCompat"
+	.size	.L.map_aname.8, 37
 
 	.section	.rodata.map_aname.9,"aMS",@progbits,1
 	.type	.L.map_aname.9, @object
 .L.map_aname.9:
-	.asciz	"PayrollParrots"
-	.size	.L.map_aname.9, 15
+	.asciz	"Xamarin.Android.Support.CoordinaterLayout"
+	.size	.L.map_aname.9, 42
 
 	.section	.rodata.map_aname.10,"aMS",@progbits,1
 	.type	.L.map_aname.10, @object
