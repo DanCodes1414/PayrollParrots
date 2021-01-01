@@ -13,10 +13,25 @@ using Newtonsoft.Json;
 
 namespace PayrollParrots
 {
+    public enum Months
+    {
+        January,
+        Febuary,
+        March,
+        April,
+        May,
+        June,
+        July,
+        August,
+        September,
+        October,
+        November,
+        December
+    }
     [Activity(Label = "PayrollFinalCalculation")]
     public class PayrollFinalCalculation : Activity
     {
-        public const string January = "January";
+        /*public const string January = "January";
         public const string Febuary = "Febuary";
         public const string March = "March";
         public const string April = "April";
@@ -27,7 +42,7 @@ namespace PayrollParrots
         public const string September = "September";
         public const string October = "October";
         public const string November = "November";
-        public const string December = "December";
+        public const string December = "December";*/
         public const double EmployeeMaxAgeForEPFContribution = 60;
         public Payroll payroll;
         protected override void OnCreate(Bundle savedInstanceState)
@@ -804,51 +819,51 @@ namespace PayrollParrots
             payroll.Name = _employeeName.ToString();
             if (n == 11)
             {
-                payroll.Month = January;
+                payroll.Month = Months.January.ToString();
             }
             else if (n == 10)
             {
-                payroll.Month = Febuary;
+                payroll.Month = Months.Febuary.ToString();
             }
             else if (n == 9)
             {
-                payroll.Month = March;
+                payroll.Month = Months.March.ToString();
             }
             else if (n == 8)
             {
-                payroll.Month = April;
+                payroll.Month = Months.April.ToString();
             }
             else if (n == 7)
             {
-                payroll.Month = May;
+                payroll.Month = Months.May.ToString();
             }
             else if (n == 6)
             {
-                payroll.Month = June;
+                payroll.Month = Months.June.ToString();
             }
             else if (n == 5)
             {
-                payroll.Month = July;
+                payroll.Month = Months.July.ToString();
             }
             else if (n == 4)
             {
-                payroll.Month = August;
+                payroll.Month = Months.August.ToString();
             }
             else if (n == 3)
             {
-                payroll.Month = September;
+                payroll.Month = Months.September.ToString();
             }
             else if (n == 2)
             {
-                payroll.Month = October;
+                payroll.Month = Months.October.ToString();
             }
             else if (n == 1)
             {
-                payroll.Month = November;
+                payroll.Month = Months.November.ToString();
             }
             else if (n == 0)
             {
-                payroll.Month = December;
+                payroll.Month = Months.December.ToString();
             }
 
             payroll.Age = _employeeAge.ToString();

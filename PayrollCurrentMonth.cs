@@ -11,12 +11,6 @@ using static Android.Widget.TextView;
 
 namespace PayrollParrots
 {
-    /*public enum EPFRate
-    {
-        EPFElevenPercentRate,
-        EPFNinePercentRate
-    }*/
-
     [Activity(Label = "PayrollCurrentMonth")]
     public class PayrollCurrentMonth : Activity
     {

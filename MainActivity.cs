@@ -17,7 +17,7 @@ namespace PayrollParrots
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
     public class MainActivity : AppCompatActivity
     {
-        public const string January = "January";
+        /*public const string January = "January";
         public const string Febuary = "Febuary";
         public const string March = "March";
         public const string April = "April";
@@ -28,7 +28,7 @@ namespace PayrollParrots
         public const string September = "September";
         public const string October = "October";
         public const string November = "November";
-        public const string December = "December";
+        public const string December = "December";*/
         Spinner spinner;
         TextView _txtLabel;
         ListView listfilter;
@@ -120,65 +120,65 @@ namespace PayrollParrots
         private void BindDataFilter(object sender, AdapterView.ItemSelectedEventArgs e)
         {
             string month = "";
-            if (((Spinner)sender).SelectedItem.ToString() == January)
+            if (((Spinner)sender).SelectedItem.ToString() == Months.January.ToString())
             {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(January)).ToArray();
-                month = January;
+                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.January.ToString())).ToArray();
+                month = Months.January.ToString();
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == Febuary)
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.Febuary.ToString())
             {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Febuary)).ToArray();
-                month = Febuary;
+                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.Febuary.ToString())).ToArray();
+                month = Months.Febuary.ToString();
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == March)
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.March.ToString())
             {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(March)).ToArray();
-                month = March;
+                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.March.ToString())).ToArray();
+                month = Months.March.ToString();
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == April)
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.April.ToString())
             {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(April)).ToArray();
-                month = April;
+                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.April.ToString())).ToArray();
+                month = Months.April.ToString();
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == May)
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.May.ToString())
             {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(May)).ToArray();
-                month = May;
+                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.May.ToString())).ToArray();
+                month = Months.May.ToString();
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == June)
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.June.ToString())
             {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(June)).ToArray();
-                month = June;
+                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.June.ToString())).ToArray();
+                month = Months.June.ToString();
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == July)
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.July.ToString())
             {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(July)).ToArray();
-                month = July;
+                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.July.ToString())).ToArray();
+                month = Months.July.ToString();
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == August)
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.August.ToString())
             {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(August)).ToArray();
-                month = August;
+                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.August.ToString())).ToArray();
+                month = Months.August.ToString();
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == September)
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.September.ToString())
             {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(September)).ToArray();
-                month = September;
+                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.September.ToString())).ToArray();
+                month = Months.September.ToString();
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == October)
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.October.ToString())
             {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(October)).ToArray();
-                month = October;
+                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.October.ToString())).ToArray();
+                month = Months.October.ToString();
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == November)
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.November.ToString())
             {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(November)).ToArray();
-                month = November;
+                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.November.ToString())).ToArray();
+                month = Months.November.ToString();
             }
-            else if (((Spinner)sender).SelectedItem.ToString() == December)
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.December.ToString())
             {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(December)).ToArray();
-                month = December;
+                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.December.ToString())).ToArray();
+                month = Months.December.ToString();
             }
             if (listitem.Length > 0)
             {
