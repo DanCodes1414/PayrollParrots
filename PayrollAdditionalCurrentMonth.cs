@@ -13,6 +13,8 @@ namespace PayrollParrots
     public class PayrollAdditionalCurrentMonth : Activity
     {
         public const double EmployeeMaxAgeForEPFContribution = 60;
+        public const double EPFNinePercentRate = 0.09;
+        public const double EPFElevenPercentRate = 0.11;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -81,7 +83,7 @@ namespace PayrollParrots
                 double currentMonthNetRemuneration = _currentMonthRemuneration + additionalRemuneration;
                 if (_employeeAge < EmployeeMaxAgeForEPFContribution)
                 {
-                    if (_EPFRate == (double)EPFRate.EPFElevenPercentRate)
+                    if (_EPFRate == EPFElevenPercentRate)
                     {
                         if (currentMonthNetRemuneration <= 20)
                         {
@@ -113,7 +115,7 @@ namespace PayrollParrots
                             _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
                         }
                     }
-                    if (_EPFRate == (double)EPFRate.EPFNinePercentRate)
+                    if (_EPFRate == EPFNinePercentRate)
                     {
                         if (currentMonthNetRemuneration <= 20)
                         {

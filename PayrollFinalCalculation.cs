@@ -16,6 +16,18 @@ namespace PayrollParrots
     [Activity(Label = "PayrollFinalCalculation")]
     public class PayrollFinalCalculation : Activity
     {
+        public const string January = "January";
+        public const string Febuary = "Febuary";
+        public const string March = "March";
+        public const string April = "April";
+        public const string May = "May";
+        public const string June = "June";
+        public const string July = "July";
+        public const string August = "August";
+        public const string September = "September";
+        public const string October = "October";
+        public const string November = "November";
+        public const string December = "December";
         public const double EmployeeMaxAgeForEPFContribution = 60;
         public Payroll payroll;
         protected override void OnCreate(Bundle savedInstanceState)
@@ -792,51 +804,51 @@ namespace PayrollParrots
             payroll.Name = _employeeName.ToString();
             if (n == 11)
             {
-                payroll.Month = Months.January.ToString();
+                payroll.Month = January;
             }
             else if (n == 10)
             {
-                payroll.Month = Months.Febuary.ToString();
+                payroll.Month = Febuary;
             }
             else if (n == 9)
             {
-                payroll.Month = Months.March.ToString();
+                payroll.Month = March;
             }
             else if (n == 8)
             {
-                payroll.Month = Months.April.ToString();
+                payroll.Month = April;
             }
             else if (n == 7)
             {
-                payroll.Month = Months.May.ToString();
+                payroll.Month = May;
             }
             else if (n == 6)
             {
-                payroll.Month = Months.June.ToString();
+                payroll.Month = June;
             }
             else if (n == 5)
             {
-                payroll.Month = Months.July.ToString();
+                payroll.Month = July;
             }
             else if (n == 4)
             {
-                payroll.Month = Months.August.ToString();
+                payroll.Month = August;
             }
             else if (n == 3)
             {
-                payroll.Month = Months.September.ToString();
+                payroll.Month = September;
             }
             else if (n == 2)
             {
-                payroll.Month = Months.October.ToString();
+                payroll.Month = October;
             }
             else if (n == 1)
             {
-                payroll.Month = Months.November.ToString();
+                payroll.Month = November;
             }
             else if (n == 0)
             {
-                payroll.Month = Months.December.ToString();
+                payroll.Month = December;
             }
 
             payroll.Age = _employeeAge.ToString();
@@ -874,6 +886,10 @@ namespace PayrollParrots
     {
         public const double SpouseNoIncomeDeduction = 4000;
         public const double MTDMinimumAmmountToNotGoToZero = 10;
+        public const double SpouseNoIncomeRebate = -800;
+        public const double SpouseGetIncomeRebate = -400;
+        public const double SpouseNoIncomeRebate20To35K = -650;
+        public const double SpouseGetIncomeRebate20To35K = -250;
 
         public double FinalPCBCalculation(int _monthsRemaining, double _currentMonthRemuneration, double _BIK, double _VOLA, double _totalFamilyDeductions,
             double _bonus, double _arrears, double _commission, double _othersEPFNO, double _others, double _lifeStyleRelief, double _SOCSOContribution,
@@ -931,7 +947,7 @@ namespace PayrollParrots
 
             int M;
             double R;
-            int B;
+            double B;
             if (P < 5001)
             {
                 M = 0;
@@ -944,11 +960,11 @@ namespace PayrollParrots
                 R = 0.01;
                 if (spouseNoIncomeDeduction == SpouseNoIncomeDeduction)
                 {
-                    B = -800;
+                    B = SpouseNoIncomeRebate;
                 }
                 else
                 {
-                    B = -400;
+                    B = SpouseGetIncomeRebate;
                 }
             }
             else if (P >= 20001 && P < 35001)
@@ -957,11 +973,11 @@ namespace PayrollParrots
                 R = 0.03;
                 if (spouseNoIncomeDeduction == SpouseNoIncomeDeduction)
                 {
-                    B = -650;
+                    B = SpouseNoIncomeRebate20To35K;
                 }
                 else
                 {
-                    B = -250;
+                    B = SpouseGetIncomeRebate20To35K;
                 }
             }
             else if (P >= 35001 && P < 50001)
@@ -1049,7 +1065,7 @@ namespace PayrollParrots
             }
             int Madd;
             double Radd;
-            int Badd;
+            double Badd;
             if (PAdd < 5001)
             {
                 Madd = 0;
@@ -1062,11 +1078,11 @@ namespace PayrollParrots
                 Radd = 0.01;
                 if (spouseNoIncomeDeduction == SpouseNoIncomeDeduction)
                 {
-                    Badd = -800;
+                    Badd = SpouseNoIncomeRebate;
                 }
                 else
                 {
-                    Badd = -400;
+                    Badd = SpouseGetIncomeRebate;
                 }
             }
             else if (PAdd >= 20001 && PAdd < 35001)
@@ -1075,11 +1091,11 @@ namespace PayrollParrots
                 Radd = 0.03;
                 if (spouseNoIncomeDeduction == SpouseNoIncomeDeduction)
                 {
-                    Badd = -650;
+                    Badd = SpouseNoIncomeRebate20To35K;
                 }
                 else
                 {
-                    Badd = -250;
+                    Badd = SpouseGetIncomeRebate20To35K;
                 }
             }
             else if (PAdd >= 35001 && PAdd < 50001)
@@ -1140,11 +1156,11 @@ namespace PayrollParrots
             double CS = Math.Floor(((PAdd - Madd) * Radd + Badd) * 100) * 0.01;
             if (P < 35001.00 && spouseNoIncomeDeduction == SpouseNoIncomeDeduction)
             {
-                CS -= 800;
+                CS += SpouseNoIncomeRebate;
             }
             else if (P < 35001.00)
             {
-                CS -= 400;
+                CS -= SpouseGetIncomeRebate;
             }
             else
             {

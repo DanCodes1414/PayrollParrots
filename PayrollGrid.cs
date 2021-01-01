@@ -34,9 +34,12 @@ namespace PayrollParrots
             var view = context.LayoutInflater.Inflate(Resource.Layout.payroll_grid, parent, false);
             TextView nameOfEmployee = (TextView)view.FindViewById(Resource.Id.nameOfEmployee);
             TextView monthOfPayroll = (TextView)view.FindViewById(Resource.Id.monthOfPayroll);
-            //items to show on list front
-            monthOfPayroll.Text = "Month: " + listitem[position].Month.ToString() + " ";
-            nameOfEmployee.Text = "Name: " + listitem[position].Name.ToString();
+
+            string MonthText = "Month: " + listitem[position].Month.ToString() + " ";
+            string NameText = "Name: " + listitem[position].Name.ToString();
+
+            monthOfPayroll.Text = MonthText;
+            nameOfEmployee.Text = NameText;
             return view;
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Android.App;
 using Android.Content;
@@ -10,15 +11,16 @@ using static Android.Widget.TextView;
 
 namespace PayrollParrots
 {
-    public enum EPFRate
+    /*public enum EPFRate
     {
         EPFElevenPercentRate,
         EPFNinePercentRate
-    }
+    }*/
 
     [Activity(Label = "PayrollCurrentMonth")]
     public class PayrollCurrentMonth : Activity
     {
+        public Dictionary<string, double> EPFRate = new Dictionary<string, double>();
         public const double EmployeeMaxAgeForEPFContribution = 60;
         double _EPFRate;
         double _currentMonthRemuneration = 0.00;
@@ -119,20 +121,19 @@ namespace PayrollParrots
                 {
                     case Resource.Id.radio9rate:
                         _EPFRate = 0.09;
+                        EPFRate.Remove("EPFElevenPercentRate");
+                        EPFRate.Add("EPFNinePercentRate", 0.09);
+                        EPFRate.Keys.Equals("EPFNinePercentRate");
                         break;
                     case Resource.Id.radio11rate:
                         _EPFRate = 0.11;
+                        EPFRate.Remove("EPFNinePercentRate");
+                        EPFRate.Add("EPFElevenPercentRate", 0.11);
+                        EPFRate.Keys.Equals("EPFElevenPercentRate");
                         break;
                     default:
                         break;
                 }
-
-                return _EPFRate switch
-                {
-                    (double)EPFRate.EPFElevenPercentRate => 0.11,
-                    (double)EPFRate.EPFNinePercentRate => 0.09,
-                    _ => throw new NotImplementedException(),
-                };
             }
             return _EPFRate;
         }
@@ -154,7 +155,7 @@ namespace PayrollParrots
                         _currentMonthRemuneration = double.Parse(editText.Text);
                         if (_employeeAge < EmployeeMaxAgeForEPFContribution)
                         {
-                            if (_EPFRate == (double)EPFRate.EPFElevenPercentRate)
+                            if (EPFRate.Values.Equals(0.11))
                             {
                                 if (_currentMonthRemuneration <= 20)
                                 {
@@ -182,7 +183,7 @@ namespace PayrollParrots
                                     _EPFContribution = Math.Ceiling(_currentMonthRemuneration * _EPFRate);
                                 }
                             }
-                            else if (_EPFRate == (double)EPFRate.EPFNinePercentRate)
+                            else if (EPFRate.Values.Equals(0.09))
                             {
                                 if (_currentMonthRemuneration <= 20)
                                 {
