@@ -14,17 +14,17 @@ namespace PayrollParrots
     public class PayrollReview : Activity
     {
         Payroll payroll;
-        public const string NameText = "Name: ";
-        public const string AgeText = "Age: ";
-        public const string PCBText = "PCB: ";
-        public const string EPFText = "EPF: ";
-        public const string SOCSOText = "SOCSO: ";
-        public const string EISText = "EIS: ";
-        public const string GrossSalaryText = "Gross Salary: ";
-        public const string NetSalaryText = "Net Salary: ";
-        public const string EmployerEPFText = "Employer EPF: ";
-        public const string EmployerSOCSOText = "Employer SOCSO: ";
-        public const string EmployerEISText = "Employer EIS: ";
+        public const string NameText = "Name:";
+        public const string AgeText = "Age:";
+        public const string PCBText = "PCB:";
+        public const string EPFText = "EPF:";
+        public const string SOCSOText = "SOCSO:";
+        public const string EISText = "EIS:";
+        public const string GrossSalaryText = "Gross Salary:";
+        public const string NetSalaryText = "Net Salary:";
+        public const string EmployerEPFText = "Employer EPF:";
+        public const string EmployerSOCSOText = "Employer SOCSO:";
+        public const string EmployerEISText = "Employer EIS:";
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -42,25 +42,25 @@ namespace PayrollParrots
             EditText employerSOCSO2 = FindViewById<EditText>(Resource.Id.employerSOCSO2);
             EditText employerEIS2 = FindViewById<EditText>(Resource.Id.employerEIS2);
 
-            name2.Text = NameText + payroll.Name;
+            name2.Text = $"{NameText} {payroll.Name}";
             name2.SetTextColor(Color.Red);
-            age2.Text = AgeText + payroll.Age;
+            age2.Text = $"{AgeText} {payroll.Age}";
             age2.SetTextColor(Color.Orange);
-            finalPCB2.Text = PCBText + payroll.PCB;
+            finalPCB2.Text = $"{PCBText} {payroll.PCB:N2}";
             finalPCB2.SetTextColor(Color.Gold);
-            finalEPF2.Text = EPFText + payroll.EPFMain;
+            finalEPF2.Text = $"{EPFText} {payroll.EPFMain:N2}";
             finalEPF2.SetTextColor(Color.Green);
-            finalSOCSO2.Text = SOCSOText + payroll.SOCSO;
+            finalSOCSO2.Text = $"{SOCSOText} {payroll.SOCSO:N2}";
             finalSOCSO2.SetTextColor(Color.Blue);
-            finalEIS2.Text = EISText + payroll.EIS;
+            finalEIS2.Text = $"{EISText} {payroll.EIS:N2}";
             finalEIS2.SetTextColor(Color.Indigo);
-            grossSalary2.Text = GrossSalaryText + payroll.GrossSalary;
+            grossSalary2.Text = $"{GrossSalaryText} {payroll.GrossSalary:N2}";
             grossSalary2.SetTextColor(Color.Violet);
-            netSalary2.Text = NetSalaryText + payroll.NetSalary;
+            netSalary2.Text = $"{NetSalaryText} {payroll.NetSalary:N2}";
             netSalary2.SetTextColor(Color.Goldenrod);
-            employerEPF2.Text = EmployerEPFText + payroll.EmployerEPF;
-            employerSOCSO2.Text = EmployerSOCSOText + payroll.EmployerSOCSO;
-            employerEIS2.Text = EmployerEISText + payroll.EmployerEIS;
+            employerEPF2.Text = $"{EmployerEPFText} {payroll.EmployerEPF:N2}";
+            employerSOCSO2.Text = $"{EmployerSOCSOText} {payroll.EmployerSOCSO:N2}";
+            employerEIS2.Text = $"{EmployerEISText} {payroll.EmployerEIS:N2}";
 
             Button _reviewBack = FindViewById<Button>(Resource.Id.reviewBack);
 

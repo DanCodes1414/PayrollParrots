@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Android.App;
 using Android.Content;
@@ -14,11 +13,13 @@ namespace PayrollParrots
     [Activity(Label = "PayrollCurrentMonth")]
     public class PayrollCurrentMonth : Activity
     {
-        public Dictionary<string, double> EPFRate = new Dictionary<string, double>();
+        readonly TaxCalculation taxCalculation = new TaxCalculation();
         public const double EmployeeMaxAgeForEPFContribution = 60;
-        double _EPFRate;
+        public const double EPFNinePercentRate = 0.09;
+        public const double EPFElevenPercentRate = 0.11;
+        double _EPFRate = 0.11;
         double _currentMonthRemuneration = 0.00;
-        double _EPFContribution = 0.00;
+        double _EPFContribution;
         int _employeeAge;
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -42,8 +43,7 @@ namespace PayrollParrots
             currentMonthRemuneration_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
             currentMonthRemuneration_.AfterTextChanged += (sender, args) =>
             {
-                //double.TryParse(currentMonthRemuneration_.Text, out _currentMonthRemuneration);
-                EditText_TextChanged(sender, args, _EPFRate);
+                (_EPFContribution, _currentMonthRemuneration) = CurrentMonthRemunerationTextChanged_CalculateEPF(sender, args, _EPFRate);
             };
             //BIK
             EditText BIK_ = FindViewById<EditText>(Resource.Id.BIK);
@@ -61,6 +61,7 @@ namespace PayrollParrots
             {
                 double.TryParse(VOLA_.Text, out _VOLA);
             };
+
             Button _secondContinue = FindViewById<Button>(Resource.Id.continuePayroll2);
             _secondContinue.Click += (sender, e) =>
             {
@@ -115,27 +116,20 @@ namespace PayrollParrots
                 {
                     case Resource.Id.radio9rate:
                         _EPFRate = 0.09;
-                        EPFRate.Remove("EPFElevenPercentRate");
-                        EPFRate.Add("EPFNinePercentRate", 0.09);
-                        EPFRate.Keys.Equals("EPFNinePercentRate");
                         break;
                     case Resource.Id.radio11rate:
                         _EPFRate = 0.11;
-                        EPFRate.Remove("EPFNinePercentRate");
-                        EPFRate.Add("EPFElevenPercentRate", 0.11);
-                        EPFRate.Keys.Equals("EPFElevenPercentRate");
-                        break;
-                    default:
                         break;
                 }
             }
             return _EPFRate;
         }
 
-        public void EditText_TextChanged(object sender, AfterTextChangedEventArgs e, double _EPFRate)
+        public (double, double) CurrentMonthRemunerationTextChanged_CalculateEPF(object sender, AfterTextChangedEventArgs e, double _EPFRate)
         {
             EditText editText = sender as EditText;
             _employeeAge = Intent.GetIntExtra("employeeAge", 0);
+
             switch (editText.Id)
             {
                 case Resource.Id.currentMonthRemuneration:
@@ -143,78 +137,17 @@ namespace PayrollParrots
                     {
                         editText.SetText("0", BufferType.Editable);
                         editText.Text.Remove(0);
+                        double _EPFContribution = 0.00;
+                        return (_EPFContribution, _currentMonthRemuneration);
                     }
                     else
                     {
                         _currentMonthRemuneration = double.Parse(editText.Text);
-                        if (_employeeAge < EmployeeMaxAgeForEPFContribution)
-                        {
-                            if (EPFRate.Values.Equals(0.11))
-                            {
-                                if (_currentMonthRemuneration <= 20)
-                                {
-                                    if (_currentMonthRemuneration <= 10)
-                                    {
-                                        _EPFContribution = 0.00;
-                                    }
-                                    else if (_currentMonthRemuneration > 10 && _currentMonthRemuneration <= 20)
-                                    {
-                                        _EPFContribution = 3.00;
-                                    }
-                                }
-                                else if (_currentMonthRemuneration > 20 && _currentMonthRemuneration <= 5000)
-                                {
-                                    double EPFWage1 = (Math.Ceiling(_currentMonthRemuneration * 0.05)) * 20;
-                                    _EPFContribution = Math.Ceiling(EPFWage1 * _EPFRate);
-                                }
-                                else if (_currentMonthRemuneration > 5000 && _currentMonthRemuneration <= 20000)
-                                {
-                                    double EPFWage2 = (Math.Ceiling(_currentMonthRemuneration * 0.01)) * 100;
-                                    _EPFContribution = Math.Ceiling(EPFWage2 * _EPFRate);
-                                }
-                                else
-                                {
-                                    _EPFContribution = Math.Ceiling(_currentMonthRemuneration * _EPFRate);
-                                }
-                            }
-                            else if (EPFRate.Values.Equals(0.09))
-                            {
-                                if (_currentMonthRemuneration <= 20)
-                                {
-                                    if (_currentMonthRemuneration <= 10)
-                                    {
-                                        _EPFContribution = 0.00;
-                                    }
-                                    else if (_currentMonthRemuneration > 10 && _currentMonthRemuneration <= 20)
-                                    {
-                                        _EPFContribution = 2.00;
-                                    }
-                                }
-                                else if (_currentMonthRemuneration > 20 && _currentMonthRemuneration <= 5000)
-                                {
-                                    double EPFWage1 = (Math.Ceiling(_currentMonthRemuneration * 0.05)) * 20;
-                                    _EPFContribution = Math.Ceiling(EPFWage1 * _EPFRate);
-                                }
-                                else if (_currentMonthRemuneration > 5000 && _currentMonthRemuneration <= 20000)
-                                {
-                                    double EPFWage2 = (Math.Ceiling(_currentMonthRemuneration * 0.01)) * 100;
-                                    _EPFContribution = Math.Ceiling(EPFWage2 * _EPFRate);
-                                }
-                                else
-                                {
-                                    _EPFContribution = Math.Ceiling(_currentMonthRemuneration * _EPFRate);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            _EPFContribution = 0;
-                        }
+                        _EPFContribution = taxCalculation.EmployeeEPFCalculation(_employeeAge, _EPFRate, _currentMonthRemuneration);
+                        return (_EPFContribution, _currentMonthRemuneration);
                     }
-                    break;
-                default:
-                    break;
             }
+            return (_EPFContribution, _currentMonthRemuneration);
         }
     }
 

@@ -12,18 +12,6 @@ namespace PayrollParrots
     [Activity(Label = "PayrollFamily")]
     public class PayrollFamily : Activity
     {
-        /*public const string January = "January";
-        public const string Febuary = "Febuary";
-        public const string March = "March";
-        public const string April = "April";
-        public const string May = "May";
-        public const string June = "June";
-        public const string July = "July";
-        public const string August = "August";
-        public const string September = "September";
-        public const string October = "October";
-        public const string November = "November";
-        public const string December = "December";*/
         private int _kidsU18;
         private int _over18inHE;
         private int _disabledChildren;
@@ -40,6 +28,7 @@ namespace PayrollParrots
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.payroll_family);
+
             //name
             EditText employeeName_ = FindViewById<EditText>(Resource.Id.employeeName);
             string _employeeName = "";
@@ -57,133 +46,136 @@ namespace PayrollParrots
             };
 
             //payroll month
-            Spinner spinner = FindViewById<Spinner>(Resource.Id.monthSpinner);
-            var adapter = ArrayAdapter.CreateFromResource(this, Resource.Array.month_array, Android.Resource.Layout.SimpleSpinnerItem);
-            adapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
-            spinner.Adapter = adapter;
+            Spinner spinnerMonth = FindViewById<Spinner>(Resource.Id.monthSpinner);
+            var adapterMonth = ArrayAdapter.CreateFromResource(this, Resource.Array.month_array, Android.Resource.Layout.SimpleSpinnerItem);
+            adapterMonth.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
+            spinnerMonth.Adapter = adapterMonth;
 
             //month today
             DateTime dateToday = DateTime.Now;
             int monthToday = dateToday.Month;
+            monthsRemaining = 12 - monthToday;
+
             //setting spinner to display todays month
             if (monthToday == 1)
             {
-                spinner.SetSelection(0);
+                spinnerMonth.SetSelection(0);
             }
             else if (monthToday == 2)
             {
-                spinner.SetSelection(1);
+                spinnerMonth.SetSelection(1);
             }
             else if (monthToday == 3)
             {
-                spinner.SetSelection(2);
+                spinnerMonth.SetSelection(2);
             }
             else if (monthToday == 4)
             {
-                spinner.SetSelection(3);
+                spinnerMonth.SetSelection(3);
             }
             else if (monthToday == 5)
             {
-                spinner.SetSelection(4);
+                spinnerMonth.SetSelection(4);
             }
             else if (monthToday == 6)
             {
-                spinner.SetSelection(5);
+                spinnerMonth.SetSelection(5);
             }
             else if (monthToday == 7)
             {
-                spinner.SetSelection(6);
+                spinnerMonth.SetSelection(6);
             }
             else if (monthToday == 8)
             {
-                spinner.SetSelection(7);
+                spinnerMonth.SetSelection(7);
             }
             else if (monthToday == 9)
             {
-                spinner.SetSelection(8);
+                spinnerMonth.SetSelection(8);
             }
             else if (monthToday == 10)
             {
-                spinner.SetSelection(9);
+                spinnerMonth.SetSelection(9);
             }
             else if (monthToday == 11)
             {
-                spinner.SetSelection(10);
+                spinnerMonth.SetSelection(10);
             }
             else if (monthToday == 12)
             {
-                spinner.SetSelection(11);
+                spinnerMonth.SetSelection(11);
             }
-
-            spinner.ItemSelected += SpinnerMonth_ItemSelected;
-            spinner.ItemSelected += MonthNotNow;
+            spinnerMonth.ItemSelected += (sender, e) =>
+            {
+                MonthSelctedNotTodaysMonth(sender, e);
+                monthsRemaining = SpinnerMonth_ItemSelected(sender, e);
+            };
 
             //marital status
-            Spinner spinner2 = FindViewById<Spinner>(Resource.Id.statusSpinner);
-            var adapter2 = ArrayAdapter.CreateFromResource(this, Resource.Array.status_array, Android.Resource.Layout.SimpleSpinnerItem);
-            adapter2.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
-            spinner2.Adapter = adapter2;
-            spinner2.ItemSelected += Spinner2_ItemSelected;
+            Spinner spinnerMaritalStatus = FindViewById<Spinner>(Resource.Id.statusSpinner);
+            var adapterMaritalStatus = ArrayAdapter.CreateFromResource(this, Resource.Array.status_array, Android.Resource.Layout.SimpleSpinnerItem);
+            adapterMaritalStatus.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
+            spinnerMaritalStatus.Adapter = adapterMaritalStatus;
+            spinnerMaritalStatus.ItemSelected += SpinnerMaritalStatus_ItemSelected;
 
             //disabled
             RadioButton disabledTrue = FindViewById<RadioButton>(Resource.Id.radioDisabledTrue);
-            disabledTrue.CheckedChange += RadioButton_CheckedChanged;
+            disabledTrue.CheckedChange += SpouseAndSelfDisabled_RadioCheckedChanged;
             RadioButton disabledFalse = FindViewById<RadioButton>(Resource.Id.radioDisabledFalse);
-            disabledFalse.CheckedChange += RadioButton_CheckedChanged;
+            disabledFalse.CheckedChange += SpouseAndSelfDisabled_RadioCheckedChanged;
 
             //spouse disabled
             EditText errorView = FindViewById<EditText>(Resource.Id.erroreditview);
             RadioButton spouseDisabledTrue = FindViewById<RadioButton>(Resource.Id.radioSpouseDisabledTrue);
-            spouseDisabledTrue.CheckedChange += RadioButton_CheckedChanged;
+            spouseDisabledTrue.CheckedChange += SpouseAndSelfDisabled_RadioCheckedChanged;
             RadioButton spouseDisabledFalse = FindViewById<RadioButton>(Resource.Id.radioSpouseDisabledFalse);
-            spouseDisabledFalse.CheckedChange += RadioButton_CheckedChanged;
+            spouseDisabledFalse.CheckedChange += SpouseAndSelfDisabled_RadioCheckedChanged;
             spouseDisabledTrue.Click += (sender, e) =>
             {
-                disabledSpouseCan();
+                disabledSpouseCanCheck();
             };
             spouseDisabledFalse.Click += (sender, e) =>
             {
-                disabledSpouseCan();
+                disabledSpouseCanCheck();
             };
 
             //kidsunder18 or in education 2000
             EditText kidsU18 = FindViewById<EditText>(Resource.Id.u18kids);
-            kidsU18.TextChanged += EditText_TextChanged;
+            kidsU18.TextChanged += NumberOfKids_TextChanged;
 
             //over 18 HE 8000
             EditText over18inHE = FindViewById<EditText>(Resource.Id.over18inHE);
-            over18inHE.TextChanged += EditText_TextChanged;
+            over18inHE.TextChanged += NumberOfKids_TextChanged;
 
             //disabled 6000
             EditText disabledChildren = FindViewById<EditText>(Resource.Id.disabledChildren);
-            disabledChildren.TextChanged += EditText_TextChanged;
+            disabledChildren.TextChanged += NumberOfKids_TextChanged;
 
             //disabled HE 14000
             EditText disabledChildreninHE = FindViewById<EditText>(Resource.Id.disabledChildreninHE);
-            disabledChildreninHE.TextChanged += EditText_TextChanged;
+            disabledChildreninHE.TextChanged += NumberOfKids_TextChanged;
 
             //kidsunder18 or in education 1000
             EditText kidsU18split = FindViewById<EditText>(Resource.Id.u18kidssplit);
-            kidsU18split.TextChanged += EditText_TextChanged;
+            kidsU18split.TextChanged += NumberOfKids_TextChanged;
 
             //over 18 HE 4000
             EditText over18inHEsplit = FindViewById<EditText>(Resource.Id.over18inHEsplit);
-            over18inHEsplit.TextChanged += EditText_TextChanged;
+            over18inHEsplit.TextChanged += NumberOfKids_TextChanged;
 
             //disabled 3000
             EditText disabledChildrensplit = FindViewById<EditText>(Resource.Id.disabledChildrensplit);
-            disabledChildrensplit.TextChanged += EditText_TextChanged;
+            disabledChildrensplit.TextChanged += NumberOfKids_TextChanged;
 
             //disabled HE 7000
             EditText disabledChildreninHEsplit = FindViewById<EditText>(Resource.Id.disabledChildreninHEsplit);
-            disabledChildreninHEsplit.TextChanged += EditText_TextChanged;
-
+            disabledChildreninHEsplit.TextChanged += NumberOfKids_TextChanged;
 
             Button _firstContinue = FindViewById<Button>(Resource.Id.continuePayroll1);
 
             _firstContinue.Click += (sender, e) =>
             {
-                if (disabledSpouseCan() == false)
+                if (disabledSpouseCanCheck() == false)
                 {
                     Toast toast = Toast.MakeText(this, "Check the error above", ToastLength.Short);
                     toast.Show();
@@ -221,9 +213,9 @@ namespace PayrollParrots
             }
 
             //check if have spouse
-            bool disabledSpouseCan()
+            bool disabledSpouseCanCheck()
             {
-                if ((spinner2.SelectedItem.ToString() == "Single" | spinner2.SelectedItem.ToString() == "Divorce/Widower/Widow") && (spouseDisabledTrue.Checked == true))
+                if ((spinnerMaritalStatus.SelectedItem.ToString() == "Single" | spinnerMaritalStatus.SelectedItem.ToString() == "Divorce/Widower/Widow") && (spouseDisabledTrue.Checked == true))
                 {
                     errorView.Error = "You don't have a spouse";
                     return false;
@@ -236,7 +228,7 @@ namespace PayrollParrots
             }
         }
 
-        private void Spinner2_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
+        private void SpinnerMaritalStatus_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
 
             if (((Spinner)sender).SelectedItem.ToString() == "Married and spouse not working")
@@ -245,7 +237,7 @@ namespace PayrollParrots
             }
         }
 
-        private void RadioButton_CheckedChanged(object sender, CompoundButton.CheckedChangeEventArgs e)
+        private void SpouseAndSelfDisabled_RadioCheckedChanged(object sender, CompoundButton.CheckedChangeEventArgs e)
         {
             RadioButton radioButton = sender as RadioButton;
             if (e.IsChecked)
@@ -270,7 +262,7 @@ namespace PayrollParrots
             }
         }
 
-        public void EditText_TextChanged(object sender, TextChangedEventArgs e)
+        public void NumberOfKids_TextChanged(object sender, TextChangedEventArgs e)
         {
             EditText editText = sender as EditText;
             switch (editText.Id)
@@ -368,7 +360,7 @@ namespace PayrollParrots
             }
         }
 
-        private void SpinnerMonth_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
+        private int SpinnerMonth_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
 
             if (((Spinner)sender).SelectedItem.ToString() == Months.January.ToString())
@@ -415,14 +407,15 @@ namespace PayrollParrots
             {
                 monthsRemaining = 1;
             }
-            else
+            else if (((Spinner)sender).SelectedItem.ToString() == Months.December.ToString())
             {
                 monthsRemaining = 0;
             }
+            return monthsRemaining;
         }
 
-        //pop-up for if month changed
-        private void MonthNotNow(object sender, AdapterView.ItemSelectedEventArgs e)
+        //pop-up for if another month selected from spinner
+        private void/*int*/ MonthSelctedNotTodaysMonth(object sender, AdapterView.ItemSelectedEventArgs e)
         {
             static string AlertTitle(string month)
             {
@@ -444,10 +437,12 @@ namespace PayrollParrots
                 alert.SetIcon(Resource.Drawable.Warning_Sign);
                 alert.SetButton("Yes", (c, ev) =>
                 {
+                    monthsRemaining = 11;
                 });
                 alert.SetButton2("No", (c, ev) =>
                 {
                     ((Spinner)sender).SetSelection(monthToday - 1);
+                    monthsRemaining = 12 - monthToday;
                 });
 
                 alert.Show();
@@ -460,10 +455,12 @@ namespace PayrollParrots
                 alert.SetIcon(Resource.Drawable.Warning_Sign);
                 alert.SetButton("Yes", (c, ev) =>
                 {
+                    monthsRemaining = 10;
                 });
                 alert.SetButton2("No", (c, ev) =>
                 {
                     ((Spinner)sender).SetSelection(monthToday - 1);
+                    monthsRemaining = 12 - monthToday;
                 });
 
                 alert.Show();
@@ -476,10 +473,12 @@ namespace PayrollParrots
                 alert.SetIcon(Resource.Drawable.Warning_Sign);
                 alert.SetButton("Yes", (c, ev) =>
                 {
+                    monthsRemaining = 9;
                 });
                 alert.SetButton2("No", (c, ev) =>
                 {
                     ((Spinner)sender).SetSelection(monthToday - 1);
+                    monthsRemaining = 12 - monthToday;
                 });
 
                 alert.Show();
@@ -492,10 +491,12 @@ namespace PayrollParrots
                 alert.SetIcon(Resource.Drawable.Warning_Sign);
                 alert.SetButton("Yes", (c, ev) =>
                 {
+                    monthsRemaining = 8;
                 });
                 alert.SetButton2("No", (c, ev) =>
                 {
                     ((Spinner)sender).SetSelection(monthToday - 1);
+                    monthsRemaining = 12 - monthToday;
                 });
 
                 alert.Show();
@@ -508,10 +509,12 @@ namespace PayrollParrots
                 alert.SetIcon(Resource.Drawable.Warning_Sign);
                 alert.SetButton("Yes", (c, ev) =>
                 {
+                    monthsRemaining = 7;
                 });
                 alert.SetButton2("No", (c, ev) =>
                 {
                     ((Spinner)sender).SetSelection(monthToday - 1);
+                    monthsRemaining = 12 - monthToday;
                 });
 
                 alert.Show();
@@ -524,10 +527,12 @@ namespace PayrollParrots
                 alert.SetIcon(Resource.Drawable.Warning_Sign);
                 alert.SetButton("Yes", (c, ev) =>
                 {
+                    monthsRemaining = 6;
                 });
                 alert.SetButton2("No", (c, ev) =>
                 {
                     ((Spinner)sender).SetSelection(monthToday - 1);
+                    monthsRemaining = 12 - monthToday;
                 });
 
                 alert.Show();
@@ -540,10 +545,12 @@ namespace PayrollParrots
                 alert.SetIcon(Resource.Drawable.Warning_Sign);
                 alert.SetButton("Yes", (c, ev) =>
                 {
+                    monthsRemaining = 5;
                 });
                 alert.SetButton2("No", (c, ev) =>
                 {
                     ((Spinner)sender).SetSelection(monthToday - 1);
+                    monthsRemaining = 12 - monthToday;
                 });
 
                 alert.Show();
@@ -556,10 +563,12 @@ namespace PayrollParrots
                 alert.SetIcon(Resource.Drawable.Warning_Sign);
                 alert.SetButton("Yes", (c, ev) =>
                 {
+                    monthsRemaining = 4;
                 });
                 alert.SetButton2("No", (c, ev) =>
                 {
                     ((Spinner)sender).SetSelection(monthToday - 1);
+                    monthsRemaining = 12 - monthToday;
                 });
 
                 alert.Show();
@@ -572,10 +581,12 @@ namespace PayrollParrots
                 alert.SetIcon(Resource.Drawable.Warning_Sign);
                 alert.SetButton("Yes", (c, ev) =>
                 {
+                    monthsRemaining = 3;
                 });
                 alert.SetButton2("No", (c, ev) =>
                 {
                     ((Spinner)sender).SetSelection(monthToday - 1);
+                    monthsRemaining = 12 - monthToday;
                 });
 
                 alert.Show();
@@ -588,10 +599,12 @@ namespace PayrollParrots
                 alert.SetIcon(Resource.Drawable.Warning_Sign);
                 alert.SetButton("Yes", (c, ev) =>
                 {
+                    monthsRemaining = 2;
                 });
                 alert.SetButton2("No", (c, ev) =>
                 {
                     ((Spinner)sender).SetSelection(monthToday - 1);
+                    monthsRemaining = 12 - monthToday;
                 });
 
                 alert.Show();
@@ -604,10 +617,12 @@ namespace PayrollParrots
                 alert.SetIcon(Resource.Drawable.Warning_Sign);
                 alert.SetButton("Yes", (c, ev) =>
                 {
+                    monthsRemaining = 1;
                 });
                 alert.SetButton2("No", (c, ev) =>
                 {
                     ((Spinner)sender).SetSelection(monthToday - 1);
+                    monthsRemaining = 12 - monthToday;
                 });
 
                 alert.Show();
@@ -620,16 +635,15 @@ namespace PayrollParrots
                 alert.SetIcon(Resource.Drawable.Warning_Sign);
                 alert.SetButton("Yes", (c, ev) =>
                 {
+                    monthsRemaining = 0;
                 });
                 alert.SetButton2("No", (c, ev) =>
                 {
                     ((Spinner)sender).SetSelection(monthToday - 1);
+                    monthsRemaining = 12 - monthToday;
                 });
 
                 alert.Show();
-            }
-            else
-            {
             }
         }
     }
