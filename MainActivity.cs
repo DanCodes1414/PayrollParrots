@@ -13,23 +13,27 @@ using System.Linq;
 
 namespace PayrollParrots
 {
+    public enum Months
+    {
+        January,
+        Febuary,
+        March,
+        April,
+        May,
+        June,
+        July,
+        August,
+        September,
+        October,
+        November,
+        December
+    }
+
     //add REP, IRDA, N-R
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
     public class MainActivity : AppCompatActivity
     {
-        /*public const string January = "January";
-        public const string Febuary = "Febuary";
-        public const string March = "March";
-        public const string April = "April";
-        public const string May = "May";
-        public const string June = "June";
-        public const string July = "July";
-        public const string August = "August";
-        public const string September = "September";
-        public const string October = "October";
-        public const string November = "November";
-        public const string December = "December";*/
-        Spinner spinner;
+        Spinner spinnerMonth;
         TextView _txtLabel;
         ListView listfilter;
         Payroll payroll;
@@ -44,19 +48,19 @@ namespace PayrollParrots
             DateTime dateToday = DateTime.Now;
             int monthToday = dateToday.Month;
 
-            spinner = FindViewById<Spinner>(Resource.Id.monthSpinnerList);
-            var adaptersp = ArrayAdapter.CreateFromResource(this, Resource.Array.month_array, Android.Resource.Layout.SimpleSpinnerItem);
-            adaptersp.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
-            spinner.Adapter = adaptersp;
+            spinnerMonth = FindViewById<Spinner>(Resource.Id.monthSpinnerList);
+            var adapterMonth = ArrayAdapter.CreateFromResource(this, Resource.Array.month_array, Android.Resource.Layout.SimpleSpinnerItem);
+            adapterMonth.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
+            spinnerMonth.Adapter = adapterMonth;
 
             //set spinner startup month
-            spinner.SetSelection(monthToday - 1);
+            spinnerMonth.SetSelection(monthToday - 1);
 
             _txtLabel = FindViewById<TextView>(Resource.Id.noEmployees);
             listfilter = (ListView)FindViewById(Resource.Id.filterList);
             _txtLabel.Visibility = ViewStates.Invisible;
 
-            spinner.ItemSelected += BindDataFilter;
+            spinnerMonth.ItemSelected += BindDataFilter;
 
             Button _startPayroll = FindViewById<Button>(Resource.Id.startPayroll);
 
@@ -98,6 +102,7 @@ namespace PayrollParrots
                     _txtLabel = FindViewById<TextView>(Resource.Id.noEmployees);
                     MediaPlayer player = MediaPlayer.Create(this, Resource.Drawable.delete_sound);
                     player.Start();
+
                     StartActivity(new Intent(this, typeof(MainActivity)));
                     Toast.MakeText(this, "Employee Deleted Sucessfully!", ToastLength.Short).Show();
                     GC.Collect();

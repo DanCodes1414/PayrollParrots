@@ -12,6 +12,7 @@ namespace PayrollParrots
     [Activity(Label = "PayrollAdditionalCurrentMonth")]
     public class PayrollAdditionalCurrentMonth : Activity
     {
+        readonly TaxCalculation taxCalculation = new TaxCalculation();
         public const double EmployeeMaxAgeForEPFContribution = 60;
         public const double EPFNinePercentRate = 0.09;
         public const double EPFElevenPercentRate = 0.11;
@@ -68,91 +69,21 @@ namespace PayrollParrots
                 double.TryParse(others_.Text, out _others);
             };
 
-            //additional EPF automatic calculation
-            double _EPFAdditionalContribution = 0.00;
+            //additional EPF for automatic calculation
             double _EPFContribution = Intent.GetDoubleExtra("EPFContribution", 0.00);
-            //_EPFContribution2 = EPFContribution for both additional and normal remuneration 
-            double _EPFContribution2 = 0.00;
             double _currentMonthRemuneration = Intent.GetDoubleExtra("currentMonthRemuneration", 0.00);
             double _EPFRate = Intent.GetDoubleExtra("EPFRate", 0.11);
             int _employeeAge = Intent.GetIntExtra("employeeAge", 0);
+            double additionalRemuneration = _bonus + _commission + _OthersEISNO + _others + _arrears;
+            double currentMonthNetRemuneration = _currentMonthRemuneration + additionalRemuneration;
+
             Button _thirdContinue = FindViewById<Button>(Resource.Id.continuePayroll3);
             _thirdContinue.Click += (sender, e) =>
             {
-                double additionalRemuneration = _bonus + _commission + _OthersEISNO + _others + _arrears;
-                double currentMonthNetRemuneration = _currentMonthRemuneration + additionalRemuneration;
-                if (_employeeAge < EmployeeMaxAgeForEPFContribution)
-                {
-                    if (_EPFRate == EPFElevenPercentRate)
-                    {
-                        if (currentMonthNetRemuneration <= 20)
-                        {
-                            if (currentMonthNetRemuneration <= 10)
-                            {
-                                _EPFContribution2 = 0.00;
-                            }
-                            else if (currentMonthNetRemuneration > 10 && currentMonthNetRemuneration <= 20)
-                            {
-                                _EPFContribution2 = 3.00;
-                                _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
-                            }
-                        }
-                        else if (currentMonthNetRemuneration > 20 && currentMonthNetRemuneration <= 5000)
-                        {
-                            double EPFWage1 = (Math.Ceiling(currentMonthNetRemuneration) * 0.05) * 20;
-                            _EPFContribution2 = Math.Ceiling(EPFWage1 * _EPFRate);
-                            _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
-                        }
-                        else if (currentMonthNetRemuneration > 5000 && currentMonthNetRemuneration <= 20000)
-                        {
-                            double EPFWage1 = (Math.Ceiling(currentMonthNetRemuneration) * 0.01) * 100;
-                            _EPFContribution2 = Math.Ceiling(EPFWage1 * _EPFRate);
-                            _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
-                        }
-                        else
-                        {
-                            _EPFContribution2 = Math.Ceiling(currentMonthNetRemuneration * _EPFRate);
-                            _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
-                        }
-                    }
-                    if (_EPFRate == EPFNinePercentRate)
-                    {
-                        if (currentMonthNetRemuneration <= 20)
-                        {
-                            if (currentMonthNetRemuneration <= 10)
-                            {
-                                _EPFContribution2 = 0.00;
-                            }
-                            else if (currentMonthNetRemuneration > 10 && currentMonthNetRemuneration <= 20)
-                            {
-                                _EPFContribution2 = 2.00;
-                                _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
-                            }
-                        }
-                        else if (currentMonthNetRemuneration > 20 && currentMonthNetRemuneration <= 5000)
-                        {
-                            double EPFWage1 = (Math.Ceiling(currentMonthNetRemuneration * 0.05)) * 20;
-                            _EPFContribution2 = Math.Ceiling(EPFWage1 * _EPFRate);
-                            _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
-                        }
-                        else if (currentMonthNetRemuneration > 5000 && currentMonthNetRemuneration <= 20000)
-                        {
-                            double EPFWage1 = (Math.Ceiling(currentMonthNetRemuneration * 0.01)) * 100;
-                            _EPFContribution2 = Math.Ceiling(EPFWage1 * _EPFRate);
-                            _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
-                        }
-                        else
-                        {
-                            _EPFContribution2 = Math.Ceiling(currentMonthNetRemuneration * _EPFRate);
-                            _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
-                        }
-                    }
-                }
-                else
-                {
-                    _EPFAdditionalContribution = 0;
-                }
+                double _EPFAdditionalContribution = taxCalculation.EmployeeEPFAdditionalCalculation(_employeeAge, _EPFRate, currentMonthNetRemuneration, _EPFContribution);
+
                 PlayButton_Click(sender, e);
+
                 double _BIK = Intent.GetDoubleExtra("BIK", 0.00);
                 double _VOLA = Intent.GetDoubleExtra("VOLA", 0.00);
                 double _totalFamilyDeductions = Intent.GetDoubleExtra("totalFamilyDeductions", 0.00);
@@ -165,6 +96,7 @@ namespace PayrollParrots
                 double disabledSpouseDeduction = Intent.GetDoubleExtra("disabledSpouseDeduction", 0.00);
                 double spouseNoIncomeDeduction = Intent.GetDoubleExtra("spouseNoIncomeDeduction", 0.00);
                 string _employeeName = Intent.GetStringExtra("employeeName");
+
                 Intent intent = new Intent(this, typeof(PayrollDeductions));
                 intent.PutExtra("bonus", _bonus);
                 intent.PutExtra("arrears", _arrears);
@@ -173,7 +105,6 @@ namespace PayrollParrots
                 intent.PutExtra("othersEISNO", _OthersEISNO);
                 intent.PutExtra("Others", _others);
                 intent.PutExtra("EPFAdditionalContribution", _EPFAdditionalContribution);
-
                 intent.PutExtra("employeeAge", _employeeAge);
                 intent.PutExtra("employeeName", _employeeName);
                 intent.PutExtra("kidsU18", _kidsU18);

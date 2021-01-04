@@ -13,6 +13,7 @@ namespace PayrollParrots
     public class PayrollDeductions : Activity
     {
         public const double EmployeeMaxAgeForEPFContribution = 60;
+        readonly TaxCalculation taxCalculation = new TaxCalculation();
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -22,6 +23,8 @@ namespace PayrollParrots
             double _othersEPFNO = Intent.GetDoubleExtra("othersNoEPF", 0.00);
             double _others = Intent.GetDoubleExtra("Others", 0.00);
             double _currentMonthRemuneration = Intent.GetDoubleExtra("currentMonthRemuneration", 0.00);
+            int _employeeAge = Intent.GetIntExtra("employeeAge", 0);
+
             //lifeStyleRelief
             EditText lifeStyleRelief_ = FindViewById<EditText>(Resource.Id.lifeStyleRelief);
             lifeStyleRelief_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
@@ -31,197 +34,11 @@ namespace PayrollParrots
                 double.TryParse(lifeStyleRelief_.Text, out _lifeStyleRelief);
                 Validate(_lifeStyleRelief, 2500, lifeStyleRelief_);
             };
+
             //SOCSOContribution
-            int _employeeAge = Intent.GetIntExtra("employeeAge", 0);
             double SOCSOWage = _currentMonthRemuneration + _arrears + _commission + _othersEPFNO + _others;
-            double _SOCSOContribution = 0.00;
-            if (_employeeAge < EmployeeMaxAgeForEPFContribution)
-            {
-                if (SOCSOWage <= 30)
-                {
-                    _SOCSOContribution = 0.10;
-                }
-                else if (SOCSOWage > 30 && SOCSOWage <= 50)
-                {
-                    _SOCSOContribution = 0.30;
-                }
-                else if (SOCSOWage > 50 && SOCSOWage <= 70)
-                {
-                    _SOCSOContribution = 0.30;
-                }
-                else if (SOCSOWage > 70 && SOCSOWage <= 100)
-                {
-                    _SOCSOContribution = 0.40;
-                }
-                else if (SOCSOWage > 100 && SOCSOWage <= 140)
-                {
-                    _SOCSOContribution = 0.60;
-                }
-                else if (SOCSOWage > 140 && SOCSOWage <= 200)
-                {
-                    _SOCSOContribution = 0.85;
-                }
-                else if (SOCSOWage > 200 && SOCSOWage <= 300)
-                {
-                    _SOCSOContribution = 1.25;
-                }
-                else if (SOCSOWage > 300 && SOCSOWage <= 400)
-                {
-                    _SOCSOContribution = 1.75;
-                }
-                else if (SOCSOWage > 400 && SOCSOWage <= 500)
-                {
-                    _SOCSOContribution = 2.25;
-                }
-                else if (SOCSOWage > 500 && SOCSOWage <= 600)
-                {
-                    _SOCSOContribution = 2.75;
-                }
-                else if (SOCSOWage > 600 && SOCSOWage <= 700)
-                {
-                    _SOCSOContribution = 3.25;
-                }
-                else if (SOCSOWage > 700 && SOCSOWage <= 800)
-                {
-                    _SOCSOContribution = 3.75;
-                }
-                else if (SOCSOWage > 800 && SOCSOWage <= 900)
-                {
-                    _SOCSOContribution = 4.25;
-                }
-                else if (SOCSOWage > 900 && SOCSOWage <= 1000)
-                {
-                    _SOCSOContribution = 4.75;
-                }
-                else if (SOCSOWage > 1000 && SOCSOWage <= 1100)
-                {
-                    _SOCSOContribution = 5.25;
-                }
-                else if (SOCSOWage > 1100 && SOCSOWage <= 1200)
-                {
-                    _SOCSOContribution = 5.75;
-                }
-                else if (SOCSOWage > 1200 && SOCSOWage <= 1300)
-                {
-                    _SOCSOContribution = 6.25;
-                }
-                else if (SOCSOWage > 1300 && SOCSOWage <= 1400)
-                {
-                    _SOCSOContribution = 6.75;
-                }
-                else if (SOCSOWage > 1400 && SOCSOWage <= 1500)
-                {
-                    _SOCSOContribution = 7.25;
-                }
-                else if (SOCSOWage > 1500 && SOCSOWage <= 1600)
-                {
-                    _SOCSOContribution = 7.75;
-                }
-                else if (SOCSOWage > 1600 && SOCSOWage <= 1700)
-                {
-                    _SOCSOContribution = 8.25;
-                }
-                else if (SOCSOWage > 1700 && SOCSOWage <= 1800)
-                {
-                    _SOCSOContribution = 8.75;
-                }
-                else if (SOCSOWage > 1800 && SOCSOWage <= 1900)
-                {
-                    _SOCSOContribution = 9.25;
-                }
-                else if (SOCSOWage > 1900 && SOCSOWage <= 2000)
-                {
-                    _SOCSOContribution = 9.75;
-                }
-                else if (SOCSOWage > 2000 && SOCSOWage <= 2100)
-                {
-                    _SOCSOContribution = 10.25;
-                }
-                else if (SOCSOWage > 2100 && SOCSOWage <= 2200)
-                {
-                    _SOCSOContribution = 10.75;
-                }
-                else if (SOCSOWage > 2200 && SOCSOWage <= 2300)
-                {
-                    _SOCSOContribution = 11.25;
-                }
-                else if (SOCSOWage > 2300 && SOCSOWage <= 2400)
-                {
-                    _SOCSOContribution = 11.75;
-                }
-                else if (SOCSOWage > 2400 && SOCSOWage <= 2500)
-                {
-                    _SOCSOContribution = 12.25;
-                }
-                else if (SOCSOWage > 2500 && SOCSOWage <= 2600)
-                {
-                    _SOCSOContribution = 12.75;
-                }
-                else if (SOCSOWage > 2600 && SOCSOWage <= 2700)
-                {
-                    _SOCSOContribution = 13.25;
-                }
-                else if (SOCSOWage > 2700 && SOCSOWage <= 2800)
-                {
-                    _SOCSOContribution = 13.75;
-                }
-                else if (SOCSOWage > 2800 && SOCSOWage <= 2900)
-                {
-                    _SOCSOContribution = 14.25;
-                }
-                else if (SOCSOWage > 2900 && SOCSOWage <= 3000)
-                {
-                    _SOCSOContribution = 14.75;
-                }
-                else if (SOCSOWage > 3000 && SOCSOWage <= 3100)
-                {
-                    _SOCSOContribution = 15.25;
-                }
-                else if (SOCSOWage > 3100 && SOCSOWage <= 3200)
-                {
-                    _SOCSOContribution = 15.75;
-                }
-                else if (SOCSOWage > 3200 && SOCSOWage <= 3300)
-                {
-                    _SOCSOContribution = 16.25;
-                }
-                else if (SOCSOWage > 3300 && SOCSOWage <= 3400)
-                {
-                    _SOCSOContribution = 16.75;
-                }
-                else if (SOCSOWage > 3400 && SOCSOWage <= 3500)
-                {
-                    _SOCSOContribution = 17.25;
-                }
-                else if (SOCSOWage > 3500 && SOCSOWage <= 3600)
-                {
-                    _SOCSOContribution = 17.75;
-                }
-                else if (SOCSOWage > 3600 && SOCSOWage <= 3700)
-                {
-                    _SOCSOContribution = 18.25;
-                }
-                else if (SOCSOWage > 3700 && SOCSOWage <= 3800)
-                {
-                    _SOCSOContribution = 18.75;
-                }
-                else if (SOCSOWage > 3800 && SOCSOWage <= 3900)
-                {
-                    _SOCSOContribution = 19.25;
-                }
-                else if (SOCSOWage > 3900 && SOCSOWage <= 4000)
-                {
-                    _SOCSOContribution = 19.75;
-                }
-                else
-                {
-                    _SOCSOContribution = 19.75;
-                }
-            }
-            else
-            {
-                _SOCSOContribution = 0;
-            }
+            double _SOCSOContribution = taxCalculation.EmployeeSOCSOCalculation(_employeeAge, SOCSOWage);
+            
             //lifeInsurance
             EditText lifeInsurance_ = FindViewById<EditText>(Resource.Id.lifeInsurance);
             lifeInsurance_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
@@ -231,6 +48,7 @@ namespace PayrollParrots
                 double.TryParse(lifeInsurance_.Text, out _lifeInsurance);
                 Validate(_lifeInsurance, 3000, lifeInsurance_);
             };
+
             //basicEquipment
             EditText basicEquipment_ = FindViewById<EditText>(Resource.Id.basicEquipment);
             basicEquipment_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
@@ -240,6 +58,7 @@ namespace PayrollParrots
                 double.TryParse(basicEquipment_.Text, out _basicEquipment);
                 Validate(_basicEquipment, 6000, basicEquipment_);
             };
+
             //educationYourSelf
             EditText educationYourSelf_ = FindViewById<EditText>(Resource.Id.educationYourSelf);
             educationYourSelf_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
@@ -249,6 +68,7 @@ namespace PayrollParrots
                 double.TryParse(educationYourSelf_.Text, out _educationYourSelf);
                 Validate(_educationYourSelf, 7000, educationYourSelf_);
             };
+
             //medicalExamintion
             EditText medicalExamintion_ = FindViewById<EditText>(Resource.Id.medicalExamintion);
             medicalExamintion_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
@@ -258,6 +78,7 @@ namespace PayrollParrots
                 double.TryParse(medicalExamintion_.Text, out _medicalExamintion);
                 Validate(_medicalExamintion, 500, medicalExamintion_);
             };
+
             //medicalDisease
             EditText medicalDisease_ = FindViewById<EditText>(Resource.Id.medicalDisease);
             medicalDisease_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
@@ -276,6 +97,7 @@ namespace PayrollParrots
                 double.TryParse(medicalExamintion_.Text, out _medicalExamintion);
                 Validate(_medicalExamintion + _medicalDisease, 6000, medicalDisease_);
             };
+
             //SSPN
             EditText SSPN_ = FindViewById<EditText>(Resource.Id.SSPN);
             SSPN_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
@@ -285,6 +107,7 @@ namespace PayrollParrots
                 double.TryParse(SSPN_.Text, out _SSPN);
                 Validate(_SSPN, 8000, SSPN_);
             };
+
             //PRS
             EditText PRS_ = FindViewById<EditText>(Resource.Id.PRS);
             PRS_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
@@ -294,6 +117,7 @@ namespace PayrollParrots
                 double.TryParse(PRS_.Text, out _PRS);
                 Validate(_PRS, 3000, PRS_);
             };
+
             //smallKidEducation
             EditText smallKidEducation_ = FindViewById<EditText>(Resource.Id.smallKidEducation);
             smallKidEducation_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
@@ -303,6 +127,7 @@ namespace PayrollParrots
                 double.TryParse(smallKidEducation_.Text, out _smallKidEducation);
                 Validate(_smallKidEducation, 2000, smallKidEducation_);
             };
+
             //breastFeedingEquipment
             EditText breastFeedingEquipment_ = FindViewById<EditText>(Resource.Id.breastFeedingEquipment);
             breastFeedingEquipment_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
@@ -312,6 +137,7 @@ namespace PayrollParrots
                 double.TryParse(breastFeedingEquipment_.Text, out _breastFeedingEquipment);
                 Validate(_breastFeedingEquipment, 1000, breastFeedingEquipment_);
             };
+
             //alimonyFormerWife
             EditText alimonyFormerWife_ = FindViewById<EditText>(Resource.Id.alimonyFormerWife);
             alimonyFormerWife_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
@@ -321,6 +147,7 @@ namespace PayrollParrots
                 double.TryParse(alimonyFormerWife_.Text, out _alimonyFormerWife);
                 Validate(_alimonyFormerWife, 4000, alimonyFormerWife_);
             };
+
             //EMInsurance
             EditText EMInsurance_ = FindViewById<EditText>(Resource.Id.EMInsurance);
             EMInsurance_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
@@ -330,6 +157,7 @@ namespace PayrollParrots
                 double.TryParse(EMInsurance_.Text, out _EMInsurance);
                 Validate(_EMInsurance, 3000, EMInsurance_);
             };
+
             //fatherRelief
             EditText fatherRelief_ = FindViewById<EditText>(Resource.Id.fatherRelief);
             fatherRelief_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
@@ -339,6 +167,7 @@ namespace PayrollParrots
                 double.TryParse(fatherRelief_.Text, out _fatherRelief);
                 Validate(_fatherRelief, 1500, fatherRelief_);
             };
+
             //motherRelief
             EditText motherRelief_ = FindViewById<EditText>(Resource.Id.motherRelief);
             motherRelief_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
@@ -348,6 +177,7 @@ namespace PayrollParrots
                 double.TryParse(motherRelief_.Text, out _motherRelief);
                 Validate(_motherRelief, 1500, motherRelief_);
             };
+
             //mapaRelief
             EditText mapaRelief_ = FindViewById<EditText>(Resource.Id.mapaRelief);
             mapaRelief_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });

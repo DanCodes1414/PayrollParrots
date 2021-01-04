@@ -177,7 +177,7 @@ namespace PayrollParrots
         {
             if (name > value)
             {
-                editText.Error = "EPF for (Additional + Current month + Previous months) remuneration cannot be greater than " + value;
+                editText.Error = "EPF for previous months remuneration cannot be greater than " + value;
                 return false;
             }
             else
