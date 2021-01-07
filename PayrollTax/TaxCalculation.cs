@@ -1,7 +1,6 @@
 ﻿using System;
 namespace PayrollParrots
 {
-    //add other tax
     public class TaxCalculation
     {
         public const double EmployeeMaxAgeForEPFContribution = 60;
@@ -15,12 +14,12 @@ namespace PayrollParrots
         public const double EPFElevenPercentRate = 0.11;
 
         public double PCBCalculation(int _monthsRemaining, double _currentMonthRemuneration, double _BIK, double _VOLA, double _totalFamilyDeductions,
-            double _bonus, double _arrears, double _commission, double _othersEPFNO, double _others, double _lifeStyleRelief, double _SOCSOContribution,
-            double _lifeInsurance, double _basicEquipment, double _educationYourSelf, double _medicalExamintion, double _medicalDisease, double _smallKidEducation,
-            double _breastFeedingEquipment, double _alimonyFormerWife, double _EMInsurance, double _fatherRelief, double _motherRelief, double _previousLifeStyleRelief,
-            double _previousSOCSOContribution, double _previousLifeInsurance, double _previousBasicEquipment, double _previousEducationYourSelf,
-            double _previousMedicalExamintion, double _previousMedicalDisease, double _previousSmallKidEducation, double _previousBreastFeedingEquipment,
-            double _previousAlimonyFormerWife, double _previousEMInsurance, double _previousFatherRelief, double _previousMotherRelief, double spouseNoIncomeDeduction,
+            double _bonus, double _arrears, double _commission, double _othersEPFNO, double _others, double _lifeStyleRelief, double _sportsRelief, double _SOCSOContribution,
+            double _lifeInsurance, double _basicEquipment, double _educationYourSelf, double _medicalExamination, double _medicalVaccination, double _medicalDisease, double _smallKidEducation,
+            double _breastFeedingEquipment, double _alimonyFormerWife, double _EMInsurance, double _fatherRelief, double _motherRelief, double _domesticTourismExpenditure, double _previousLifeStyleRelief,
+            double _previousSportsRelief, double _previousSOCSOContribution, double _previousLifeInsurance, double _previousBasicEquipment, double _previousEducationYourSelf,
+            double _previousMedicalExamination, double _previousMedicalVaccination, double _previousMedicalDisease, double _previousSmallKidEducation, double _previousBreastFeedingEquipment,
+            double _previousAlimonyFormerWife, double _previousEMInsurance, double _previousFatherRelief, double _previousMotherRelief, double _previousDomesticTourismExpenditure, double spouseNoIncomeDeduction,
             double _zakatByEmployee, double _zakatByPayroll, double _departureLevy, double _previousMonthsRemuneration, double _previousEPFContribution,
             double _previousBIK, double _previousVOLA, double _MTDPrevious, double _EPFContribution, double _EPFAdditionalContribution, double _previousZakatByEmployee,
             double _previousZakatByPayroll, double _previousDepartureLevy, double _OthersEISNO, double _mapaRelief, double _previousMapaRelief, double _SSPN,
@@ -51,7 +50,7 @@ namespace PayrollParrots
             double K2;
             if (n != 0)
             {
-                K2 = Math.Floor((Math.Min(K1, (4000 - K - K1) / n)) * 100) * 0.01;
+                K2 = Math.Floor(Math.Min(K1, (4000 - K - K1) / n) * 100) * 0.01;
             }
             else
             {
@@ -62,9 +61,9 @@ namespace PayrollParrots
             //FamilyDeductions
             double SDSQC = _totalFamilyDeductions;
             //PreviousDeductions
-            double LP = _previousLifeStyleRelief + _previousSOCSOContribution + _previousLifeInsurance + _previousBasicEquipment + _previousEducationYourSelf + _previousMedicalExamintion + _previousMedicalDisease + _previousSmallKidEducation + _previousBreastFeedingEquipment + _previousAlimonyFormerWife + _previousEMInsurance + _previousFatherRelief + _previousMotherRelief + _previousMapaRelief + _previousSSPN + _previousPRS;
+            double LP = _previousLifeStyleRelief + _previousSportsRelief + _previousSOCSOContribution + _previousLifeInsurance + _previousBasicEquipment + _previousEducationYourSelf + _previousMedicalExamination + _previousMedicalVaccination + _previousMedicalDisease + _previousSmallKidEducation + _previousBreastFeedingEquipment + _previousAlimonyFormerWife + _previousEMInsurance + _previousFatherRelief + _previousMotherRelief + _previousMapaRelief + _previousSSPN + _previousPRS + _previousDomesticTourismExpenditure;
             //CurrentMonthDeduction
-            double LP1 = _lifeStyleRelief + _SOCSOContribution + _lifeInsurance + _basicEquipment + _educationYourSelf + _medicalExamintion + _medicalDisease + _smallKidEducation + _breastFeedingEquipment + _alimonyFormerWife + _EMInsurance + _fatherRelief + _motherRelief + _mapaRelief + _SSPN + _PRS;
+            double LP1 = _lifeStyleRelief + _sportsRelief + _SOCSOContribution + _lifeInsurance + _basicEquipment + _educationYourSelf + _medicalExamination + _medicalVaccination + _medicalDisease + _smallKidEducation + _breastFeedingEquipment + _alimonyFormerWife + _EMInsurance + _fatherRelief + _motherRelief + _mapaRelief + _SSPN + _PRS + _domesticTourismExpenditure;
             //P
             double P = Math.Floor((Y_K + (Y1 - K1) + ((Y2 - K2) * n) - D - SDSQC - LP - LP1) * 100) * 0.01;
 
@@ -112,50 +111,50 @@ namespace PayrollParrots
             else if (P >= 50001 && P < 70001)
             {
                 M = 50000;
-                R = 0.14;
+                R = 0.13;
                 B = 1800;
             }
             else if (P >= 70001 && P < 100001)
             {
                 M = 70000;
                 R = 0.21;
-                B = 4600;
+                B = 4400;
             }
             else if (P >= 100001 && P < 250001)
             {
                 M = 100000;
                 R = 0.24;
-                B = 10900;
+                B = 10700;
             }
             else if (P >= 250001 && P < 400001)
             {
                 M = 250000;
                 R = 0.245;
-                B = 46900;
+                B = 46700;
             }
             else if (P >= 400001 && P < 600001)
             {
                 M = 400000;
                 R = 0.25;
-                B = 83650;
+                B = 83450;
             }
             else if (P >= 600001 && P < 1000001)
             {
                 M = 600000;
                 R = 0.26;
-                B = 133650;
+                B = 133450;
             }
             else if (P >= 1000001 && P < 2000001)
             {
                 M = 1000000;
                 R = 0.28;
-                B = 237650;
+                B = 237450;
             }
             else
             {
                 M = 2000000;
                 R = 0.30;
-                B = 517650;
+                B = 517450;
             }
             double Z = _previousZakatByEmployee + _previousZakatByPayroll + _previousDepartureLevy;
             double X = _MTDPrevious;
@@ -230,50 +229,50 @@ namespace PayrollParrots
             else if (PAdd >= 50001 && PAdd < 70001)
             {
                 Madd = 50000;
-                Radd = 0.14;
+                Radd = 0.13;
                 Badd = 1800;
             }
             else if (PAdd >= 70001 && PAdd < 100001)
             {
                 Madd = 70000;
                 Radd = 0.21;
-                Badd = 4600;
+                Badd = 4400;
             }
             else if (PAdd >= 100001 && PAdd < 250001)
             {
                 Madd = 100000;
                 Radd = 0.24;
-                Badd = 10900;
+                Badd = 10700;
             }
             else if (PAdd >= 250001 && PAdd < 400001)
             {
                 Madd = 250000;
                 Radd = 0.245;
-                Badd = 46900;
+                Badd = 46700;
             }
             else if (PAdd >= 400001 && PAdd < 600001)
             {
                 Madd = 400000;
                 Radd = 0.25;
-                Badd = 83650;
+                Badd = 83450;
             }
             else if (PAdd >= 600001 && PAdd < 1000001)
             {
                 Madd = 600000;
                 Radd = 0.26;
-                Badd = 133650;
+                Badd = 133450;
             }
             else if (PAdd >= 1000001 && PAdd < 2000001)
             {
                 Madd = 1000000;
                 Radd = 0.28;
-                Badd = 237650;
+                Badd = 237450;
             }
             else
             {
                 Madd = 2000000;
                 Radd = 0.3;
-                Badd = 517650;
+                Badd = 517450;
             }
 
             double CS = Math.Floor(((PAdd - Madd) * Radd + Badd) * 100) * 0.01;
@@ -283,7 +282,7 @@ namespace PayrollParrots
             }
             else if (P < 35001.00)
             {
-                CS -= SpouseGetIncomeRebate;
+                CS += SpouseGetIncomeRebate;
             }
             else
             {
@@ -416,14 +415,14 @@ namespace PayrollParrots
                     }
                     else if (currentMonthNetRemuneration > 20 && currentMonthNetRemuneration <= 5000)
                     {
-                        double EPFWage1 = (Math.Ceiling(currentMonthNetRemuneration) * 0.05) * 20;
+                        double EPFWage1 = Math.Ceiling(currentMonthNetRemuneration * 0.05) * 20;
                         _EPFContribution2 = Math.Ceiling(EPFWage1 * _EPFRate);
                         _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
                         return _EPFAdditionalContribution;
                     }
                     else if (currentMonthNetRemuneration > 5000 && currentMonthNetRemuneration <= 20000)
                     {
-                        double EPFWage1 = (Math.Ceiling(currentMonthNetRemuneration) * 0.01) * 100;
+                        double EPFWage1 = Math.Ceiling(currentMonthNetRemuneration * 0.01) * 100;
                         _EPFContribution2 = Math.Ceiling(EPFWage1 * _EPFRate);
                         _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
                         return _EPFAdditionalContribution;
@@ -453,14 +452,14 @@ namespace PayrollParrots
                     }
                     else if (currentMonthNetRemuneration > 20 && currentMonthNetRemuneration <= 5000)
                     {
-                        double EPFWage1 = (Math.Ceiling(currentMonthNetRemuneration * 0.05)) * 20;
+                        double EPFWage1 = Math.Ceiling(currentMonthNetRemuneration * 0.05) * 20;
                         _EPFContribution2 = Math.Ceiling(EPFWage1 * _EPFRate);
                         _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
                         return _EPFAdditionalContribution;
                     }
                     else if (currentMonthNetRemuneration > 5000 && currentMonthNetRemuneration <= 20000)
                     {
-                        double EPFWage1 = (Math.Ceiling(currentMonthNetRemuneration * 0.01)) * 100;
+                        double EPFWage1 = Math.Ceiling(currentMonthNetRemuneration * 0.01) * 100;
                         _EPFContribution2 = Math.Ceiling(EPFWage1 * _EPFRate);
                         _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
                         return _EPFAdditionalContribution;
@@ -695,18 +694,18 @@ namespace PayrollParrots
                 }
                 else if ((_currentMonthRemuneration + additionalRemuneration) > 20 && (_currentMonthRemuneration + additionalRemuneration) <= 5000)
                 {
-                    double EPFWage1 = (Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.05)) * 20;
+                    double EPFWage1 = Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.05) * 20;
                     employerEPF = Math.Ceiling(EPFWage1 * employerEPFRate);
                 }
                 else if (additionalRemunerationWithoutBonus <= 5000 && additionalRemuneration > 5000)
                 {
-                    double EPFWage1 = (Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.01)) * 100;
+                    double EPFWage1 = Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.01) * 100;
                     employerEPF = Math.Ceiling(EPFWage1 * employerEPFRate);
                 }
                 else if ((_currentMonthRemuneration + additionalRemuneration) > 5000 && (_currentMonthRemuneration + additionalRemuneration) <= 20000)
                 {
                     employerEPFRate = 0.12;
-                    double EPFWage2 = (Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.01)) * 100;
+                    double EPFWage2 = Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.01) * 100;
                     employerEPF = Math.Ceiling(EPFWage2 * employerEPFRate);
                 }
                 else
@@ -731,17 +730,17 @@ namespace PayrollParrots
                 }
                 else if ((_currentMonthRemuneration + additionalRemuneration) > 20 && (_currentMonthRemuneration + additionalRemuneration) <= 5000)
                 {
-                    double EPFWage1 = (Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.05)) * 20;
+                    double EPFWage1 = Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.05) * 20;
                     employerEPF = Math.Ceiling(EPFWage1 * employerEPFRate);
                 }
                 else if (additionalRemunerationWithoutBonus <= 5000 && additionalRemuneration > 5000)
                 {
-                    double EPFWage1 = (Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.01)) * 100;
+                    double EPFWage1 = Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.01) * 100;
                     employerEPF = Math.Ceiling(EPFWage1 * employerEPFRate);
                 }
                 else if ((_currentMonthRemuneration + additionalRemuneration) > 5000 && (_currentMonthRemuneration + additionalRemuneration) <= 20000)
                 {
-                    double EPFWage2 = (Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.01)) * 100;
+                    double EPFWage2 = Math.Ceiling((_currentMonthRemuneration + additionalRemuneration) * 0.01) * 100;
                     employerEPF = Math.Ceiling(EPFWage2 * employerEPFRate);
                 }
                 else

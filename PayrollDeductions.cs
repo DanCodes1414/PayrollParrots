@@ -1,10 +1,9 @@
-﻿using System;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
-using Android.Media;
 using Android.OS;
 using Android.Text;
 using Android.Widget;
+using PayrollParrots.UsedManyTimes;
 
 namespace PayrollParrots
 {
@@ -12,6 +11,7 @@ namespace PayrollParrots
     [Activity(Label = "PayrollDeductions")]
     public class PayrollDeductions : Activity
     {
+        readonly SoundPlayer soundPlayer = new SoundPlayer();
         public const double EmployeeMaxAgeForEPFContribution = 60;
         readonly TaxCalculation taxCalculation = new TaxCalculation();
         protected override void OnCreate(Bundle savedInstanceState)
@@ -33,6 +33,16 @@ namespace PayrollParrots
             {
                 double.TryParse(lifeStyleRelief_.Text, out _lifeStyleRelief);
                 Validate(_lifeStyleRelief, 2500, lifeStyleRelief_);
+            };
+
+            //sportsRelief
+            EditText sportsRelief_ = FindViewById<EditText>(Resource.Id.sportsRelief);
+            sportsRelief_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
+            double _sportsRelief = 0.00;
+            sportsRelief_.AfterTextChanged += (sender, args) =>
+            {
+                double.TryParse(sportsRelief_.Text, out _sportsRelief);
+                Validate(_sportsRelief, 500, sportsRelief_);
             };
 
             //SOCSOContribution
@@ -69,14 +79,24 @@ namespace PayrollParrots
                 Validate(_educationYourSelf, 7000, educationYourSelf_);
             };
 
-            //medicalExamintion
-            EditText medicalExamintion_ = FindViewById<EditText>(Resource.Id.medicalExamintion);
-            medicalExamintion_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
-            double _medicalExamintion = 0.00;
-            medicalExamintion_.AfterTextChanged += (sender, args) =>
+            //medicalExamination
+            EditText medicalExamination_ = FindViewById<EditText>(Resource.Id.medicalExamination);
+            medicalExamination_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
+            double _medicalExamination = 0.00;
+            medicalExamination_.AfterTextChanged += (sender, args) =>
             {
-                double.TryParse(medicalExamintion_.Text, out _medicalExamintion);
-                Validate(_medicalExamintion, 500, medicalExamintion_);
+                double.TryParse(medicalExamination_.Text, out _medicalExamination);
+                Validate(_medicalExamination, 1000, medicalExamination_);
+            };
+
+            //medicalVaccination
+            EditText medicalVaccination_ = FindViewById<EditText>(Resource.Id.medicalVaccination);
+            medicalVaccination_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
+            double _medicalVaccination = 0.00;
+            medicalVaccination_.AfterTextChanged += (sender, args) =>
+            {
+                double.TryParse(medicalVaccination_.Text, out _medicalVaccination);
+                Validate(_medicalVaccination, 1000, medicalVaccination_);
             };
 
             //medicalDisease
@@ -87,15 +107,20 @@ namespace PayrollParrots
             {
                 double.TryParse(medicalDisease_.Text, out _medicalDisease);
             };
-            medicalExamintion_.AfterTextChanged += (sender, args) =>
+            medicalExamination_.AfterTextChanged += (sender, args) =>
             {
-                double.TryParse(medicalExamintion_.Text, out _medicalExamintion);
-                Validate(_medicalExamintion + _medicalDisease, 6000, medicalDisease_);
+                double.TryParse(medicalExamination_.Text, out _medicalExamination);
+                Validate(_medicalExamination + _medicalVaccination + _medicalDisease, 8000, medicalDisease_);
+            };
+            medicalVaccination_.AfterTextChanged += (sender, args) =>
+            {
+                double.TryParse(medicalVaccination_.Text, out _medicalVaccination);
+                Validate(_medicalExamination + _medicalVaccination + _medicalDisease, 8000, medicalDisease_);
             };
             medicalDisease_.AfterTextChanged += (sender, args) =>
             {
-                double.TryParse(medicalExamintion_.Text, out _medicalExamintion);
-                Validate(_medicalExamintion + _medicalDisease, 6000, medicalDisease_);
+                double.TryParse(medicalDisease_.Text, out _medicalDisease);
+                Validate(_medicalExamination + _medicalVaccination + _medicalDisease, 8000, medicalDisease_);
             };
 
             //SSPN
@@ -125,7 +150,7 @@ namespace PayrollParrots
             smallKidEducation_.AfterTextChanged += (sender, args) =>
             {
                 double.TryParse(smallKidEducation_.Text, out _smallKidEducation);
-                Validate(_smallKidEducation, 2000, smallKidEducation_);
+                Validate(_smallKidEducation, 3000, smallKidEducation_);
             };
 
             //breastFeedingEquipment
@@ -185,7 +210,7 @@ namespace PayrollParrots
             mapaRelief_.AfterTextChanged += (sender, args) =>
             {
                 double.TryParse(mapaRelief_.Text, out _mapaRelief);
-                Validate(_mapaRelief, 5000, mapaRelief_);
+                Validate(_mapaRelief, 8000, mapaRelief_);
                 Validate2(_mapaRelief, _fatherRelief + _motherRelief, mapaRelief_);
             };
             fatherRelief_.AfterTextChanged += (sender, args) =>
@@ -197,26 +222,37 @@ namespace PayrollParrots
                 Validate2(_mapaRelief, _fatherRelief + _motherRelief, mapaRelief_);
             };
 
-            double TotalDeductions = _lifeStyleRelief + _SOCSOContribution + _lifeInsurance + _basicEquipment + _educationYourSelf + _medicalExamintion + _medicalDisease + _smallKidEducation + _breastFeedingEquipment + _alimonyFormerWife + _EMInsurance + _fatherRelief + _motherRelief;
+            //domesticTourismExpenditure
+            EditText domesticTourismExpenditure_ = FindViewById<EditText>(Resource.Id.domesticTourismExpenditure);
+            domesticTourismExpenditure_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
+            double _domesticTourismExpenditure = 0.00;
+            domesticTourismExpenditure_.AfterTextChanged += (sender, args) =>
+            {
+                double.TryParse(domesticTourismExpenditure_.Text, out _domesticTourismExpenditure);
+                Validate(_domesticTourismExpenditure, 1000, domesticTourismExpenditure_);
+            };
+
+            double TotalDeductions = _lifeStyleRelief + _SOCSOContribution + _lifeInsurance + _basicEquipment + _educationYourSelf + _medicalExamination + _medicalDisease + _smallKidEducation + _breastFeedingEquipment + _alimonyFormerWife + _EMInsurance + _fatherRelief + _motherRelief;
             Button _fourthContinue = FindViewById<Button>(Resource.Id.continuePayroll4);
             _fourthContinue.Click += (sender, e) => {
-                if (Validate(_lifeStyleRelief, 2500, lifeStyleRelief_) == false
+                if (Validate(_lifeStyleRelief, 2500, lifeStyleRelief_) == false | Validate(_sportsRelief, 500, sportsRelief_) == false
                 | Validate(_lifeInsurance, 3000, lifeInsurance_) == false | Validate(_basicEquipment, 6000, basicEquipment_) == false
-                | Validate(_educationYourSelf, 7000, educationYourSelf_) == false | Validate(_medicalExamintion, 500, medicalExamintion_) == false
-                | Validate(_medicalDisease, 6000, medicalDisease_) == false | Validate(_smallKidEducation, 2000, smallKidEducation_) == false
-                | Validate(_breastFeedingEquipment, 1000, breastFeedingEquipment_) == false
+                | Validate(_educationYourSelf, 7000, educationYourSelf_) == false | Validate(_medicalExamination, 1000, medicalExamination_) == false
+                | Validate(_medicalDisease, 8000, medicalDisease_) == false | Validate(_smallKidEducation, 3000, smallKidEducation_) == false
+                | Validate(_breastFeedingEquipment, 1000, breastFeedingEquipment_) == false | Validate(_medicalVaccination, 1000, medicalVaccination_) == false
                 | Validate(_alimonyFormerWife, 4000, alimonyFormerWife_) == false | Validate(_EMInsurance, 3000, EMInsurance_) == false
                 | Validate(_fatherRelief, 1500, fatherRelief_) == false | Validate(_motherRelief, 1500, motherRelief_) == false
-                | Validate(_medicalExamintion + _medicalDisease, 6000, medicalDisease_) == false | Validate(_mapaRelief, 5000, mapaRelief_) == false
+                | Validate(_medicalExamination + _medicalDisease + _medicalVaccination, 8000, medicalDisease_) == false | Validate(_mapaRelief, 8000, mapaRelief_) == false
                 | Validate2(_mapaRelief, _fatherRelief + _motherRelief, mapaRelief_) == false | Validate(_SSPN, 8000, SSPN_) == false
-                | Validate(_PRS, 3000, PRS_) == false)
+                | Validate(_PRS, 3000, PRS_) == false | Validate(_domesticTourismExpenditure, 1000, domesticTourismExpenditure_) == false)
                 {
                     Toast toast = Toast.MakeText(this, "Make sure all fields are below their limits", ToastLength.Short);
                     toast.Show();
                 }
                 else
                 {
-                    PlayButton_Click(sender, e);
+                    soundPlayer.PlaySound_ButtonClick(this);
+
                     double _BIK = Intent.GetDoubleExtra("BIK", 0.00);
                     double _VOLA = Intent.GetDoubleExtra("VOLA", 0.00);
                     double _totalFamilyDeductions = Intent.GetDoubleExtra("totalFamilyDeductions", 0.00);
@@ -239,7 +275,7 @@ namespace PayrollParrots
                     intent.PutExtra("lifeInsurance", _lifeInsurance);
                     intent.PutExtra("basicEquipment", _basicEquipment);
                     intent.PutExtra("educationYourSelf", _educationYourSelf);
-                    intent.PutExtra("medicalExamintion", _medicalExamintion);
+                    intent.PutExtra("medicalExamination", _medicalExamination);
                     intent.PutExtra("medicalDisease", _medicalDisease);
                     intent.PutExtra("smallKidEducation", _smallKidEducation);
                     intent.PutExtra("breastFeedingEquipment", _breastFeedingEquipment);
@@ -251,6 +287,9 @@ namespace PayrollParrots
                     intent.PutExtra("totalDeductions", TotalDeductions);
                     intent.PutExtra("SSPN", _SSPN);
                     intent.PutExtra("PRS", _PRS);
+                    intent.PutExtra("sportsRelief", _sportsRelief);
+                    intent.PutExtra("medicalVaccination", _medicalVaccination);
+                    intent.PutExtra("domesticTourismExpenditure", _domesticTourismExpenditure);
 
                     intent.PutExtra("employeeAge", _employeeAge);
                     intent.PutExtra("employeeName", _employeeName);
@@ -277,24 +316,17 @@ namespace PayrollParrots
                     StartActivity(intent);
                 }
             };
-
-            //button-click sound
-            void PlayButton_Click(object sender, EventArgs e)
-            {
-                MediaPlayer _player = MediaPlayer.Create(this, Resource.Drawable.buttonclick);
-                _player.Start();
-            }
         }
 
         //check if input greater than limit
         bool Validate(double name, double value, EditText editText)
         {
-            if ((name > value) && editText.Hint == "Medical expenses for serious diseases[Up to RM6000]")
+            if ((name > value) && editText.Hint == "Medical Expenses For Serious Diseases[Up to RM8000]")
             {
                 editText.Error = "Cost of medical expenses(examintaion + serious diseases) cannot be greater than " + value;
                 return false;
             }
-            else if ((name > value) && editText.Hint != "Medical expenses for serious diseases[Up to RM6000]")
+            else if ((name > value) && editText.Hint != "Medical Expenses For Serious Diseases[Up to RM8000]")
             {
                 editText.Error = "Cannot be greater than " + value;
                 return false;

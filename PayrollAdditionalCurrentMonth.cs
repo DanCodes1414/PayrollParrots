@@ -1,10 +1,9 @@
-﻿using System;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
-using Android.Media;
 using Android.OS;
 using Android.Text;
 using Android.Widget;
+using PayrollParrots.UsedManyTimes;
 
 namespace PayrollParrots
 {
@@ -12,6 +11,7 @@ namespace PayrollParrots
     [Activity(Label = "PayrollAdditionalCurrentMonth")]
     public class PayrollAdditionalCurrentMonth : Activity
     {
+        readonly SoundPlayer soundPlayer = new SoundPlayer();
         readonly TaxCalculation taxCalculation = new TaxCalculation();
         public const double EmployeeMaxAgeForEPFContribution = 60;
         public const double EPFNinePercentRate = 0.09;
@@ -74,15 +74,15 @@ namespace PayrollParrots
             double _currentMonthRemuneration = Intent.GetDoubleExtra("currentMonthRemuneration", 0.00);
             double _EPFRate = Intent.GetDoubleExtra("EPFRate", 0.11);
             int _employeeAge = Intent.GetIntExtra("employeeAge", 0);
-            double additionalRemuneration = _bonus + _commission + _OthersEISNO + _others + _arrears;
-            double currentMonthNetRemuneration = _currentMonthRemuneration + additionalRemuneration;
 
             Button _thirdContinue = FindViewById<Button>(Resource.Id.continuePayroll3);
             _thirdContinue.Click += (sender, e) =>
             {
+                double additionalRemuneration = _bonus + _commission + _OthersEISNO + _others + _arrears;
+                double currentMonthNetRemuneration = _currentMonthRemuneration + additionalRemuneration;
                 double _EPFAdditionalContribution = taxCalculation.EmployeeEPFAdditionalCalculation(_employeeAge, _EPFRate, currentMonthNetRemuneration, _EPFContribution);
 
-                PlayButton_Click(sender, e);
+                soundPlayer.PlaySound_ButtonClick(this);
 
                 double _BIK = Intent.GetDoubleExtra("BIK", 0.00);
                 double _VOLA = Intent.GetDoubleExtra("VOLA", 0.00);
@@ -122,13 +122,6 @@ namespace PayrollParrots
                 intent.PutExtra("monthsRemaining", _monthsRemaining);
                 StartActivity(intent);
             };
-
-            //button-click sound
-            void PlayButton_Click(object sender, EventArgs e)
-            {
-                MediaPlayer _player = MediaPlayer.Create(this, Resource.Drawable.buttonclick);
-                _player.Start();
-            }
         }
     }
 }

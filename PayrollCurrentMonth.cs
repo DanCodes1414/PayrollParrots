@@ -1,18 +1,17 @@
-﻿using System;
-using System.Text.RegularExpressions;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
-using Android.Media;
 using Android.OS;
 using Android.Text;
 using Android.Widget;
 using static Android.Widget.TextView;
+using PayrollParrots.UsedManyTimes;
 
 namespace PayrollParrots
 {
     [Activity(Label = "PayrollCurrentMonth")]
     public class PayrollCurrentMonth : Activity
     {
+        readonly SoundPlayer soundPlayer = new SoundPlayer();
         readonly TaxCalculation taxCalculation = new TaxCalculation();
         public const double EmployeeMaxAgeForEPFContribution = 60;
         public const double EPFNinePercentRate = 0.09;
@@ -30,12 +29,12 @@ namespace PayrollParrots
             RadioButton EPFRate9 = FindViewById<RadioButton>(Resource.Id.radio9rate);
             EPFRate9.CheckedChange += (sender, e) =>
             {
-                double _EPFRate = RadioButton_CheckedChanged(sender, e);
+                double _EPFRate = EPFRate_CheckedChanged(sender, e);
             };
             RadioButton EPFRate11 = FindViewById<RadioButton>(Resource.Id.radio11rate);
             EPFRate11.CheckedChange += (sender, e) =>
             {
-                double _EPFRate = RadioButton_CheckedChanged(sender, e);
+                double _EPFRate = EPFRate_CheckedChanged(sender, e);
             };
 
             //currentmonthremu
@@ -43,8 +42,9 @@ namespace PayrollParrots
             currentMonthRemuneration_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
             currentMonthRemuneration_.AfterTextChanged += (sender, args) =>
             {
-                (_EPFContribution, _currentMonthRemuneration) = CurrentMonthRemunerationTextChanged_CalculateEPF(sender, args, _EPFRate);
+                (_EPFContribution, _currentMonthRemuneration) = CurrentMonthRemunerationTextChanged_CalculateEPF(sender, _EPFRate);
             };
+
             //BIK
             EditText BIK_ = FindViewById<EditText>(Resource.Id.BIK);
             BIK_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
@@ -53,6 +53,7 @@ namespace PayrollParrots
             {
                 double.TryParse(BIK_.Text, out _BIK);
             };
+
             //VOLA
             EditText VOLA_ = FindViewById<EditText>(Resource.Id.VOLA);
             VOLA_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
@@ -65,7 +66,8 @@ namespace PayrollParrots
             Button _secondContinue = FindViewById<Button>(Resource.Id.continuePayroll2);
             _secondContinue.Click += (sender, e) =>
             {
-                PlayButton_Click(sender, e);
+                soundPlayer.PlaySound_ButtonClick(this);
+
                 int _monthsRemaining = Intent.GetIntExtra("monthsRemaining", 11);
                 double _totalFamilyDeductions = Intent.GetDoubleExtra("totalFamilyDeductions", 0.00);
                 double _kidsU18 = Intent.GetDoubleExtra("kidsU18", 0.00);
@@ -97,17 +99,10 @@ namespace PayrollParrots
                 intent.PutExtra("spouseNoIncomeDeduction", spouseNoIncomeDeduction);
                 StartActivity(intent);
             };
-
-            //button-click sound
-            void PlayButton_Click(object sender, EventArgs e)
-            {
-                MediaPlayer _player = MediaPlayer.Create(this, Resource.Drawable.buttonclick);
-                _player.Start();
-            }
         }
 
         //change epfrate
-        private double RadioButton_CheckedChanged(object sender, CompoundButton.CheckedChangeEventArgs e)
+        private double EPFRate_CheckedChanged(object sender, CompoundButton.CheckedChangeEventArgs e)
         {
             RadioButton radioButton = sender as RadioButton;
             if (e.IsChecked)
@@ -125,7 +120,7 @@ namespace PayrollParrots
             return _EPFRate;
         }
 
-        public (double, double) CurrentMonthRemunerationTextChanged_CalculateEPF(object sender, AfterTextChangedEventArgs e, double _EPFRate)
+        public (double, double) CurrentMonthRemunerationTextChanged_CalculateEPF(object sender, double _EPFRate)
         {
             EditText editText = sender as EditText;
             _employeeAge = Intent.GetIntExtra("employeeAge", 0);
@@ -137,6 +132,7 @@ namespace PayrollParrots
                     {
                         editText.SetText("0", BufferType.Editable);
                         editText.Text.Remove(0);
+                        _currentMonthRemuneration = 0.00;
                         double _EPFContribution = 0.00;
                         return (_EPFContribution, _currentMonthRemuneration);
                     }
@@ -148,45 +144,6 @@ namespace PayrollParrots
                     }
             }
             return (_EPFContribution, _currentMonthRemuneration);
-        }
-    }
-
-    //class to limit decimal places
-    public class DecimalDigitsInputFilter : Java.Lang.Object, IInputFilter
-    {
-        readonly string regexStr = string.Empty;
-
-        public DecimalDigitsInputFilter(int digitsBeforeZero, int digitsAfterZero)
-        {
-            regexStr = "^[0-9]{0," + digitsBeforeZero + "}([.][0-9]{0," + (digitsAfterZero - 1) + "})?$";
-        }
-
-        public Java.Lang.ICharSequence FilterFormatted(Java.Lang.ICharSequence source, int start, int end, ISpanned dest, int dstart, int dend)
-        {
-            Regex regex = new Regex(regexStr);
-
-            if (regex.IsMatch(dest.ToString()) || dest.ToString().Equals(""))
-            {
-                if (dest.ToString().Length < 12 && source.ToString() != ".")
-                {
-                    return new Java.Lang.String(source.ToString());
-                }
-                else if (source.ToString() == ".")
-                {
-                    return new Java.Lang.String(source.ToString());
-                }
-                else if (dest.ToString().Length >= 13 && dest.ToString().Length <= 20)
-                {
-                    return new Java.Lang.String(source.ToString());
-                }
-                else
-                {
-                    return new Java.Lang.String(string.Empty);
-
-                }
-            }
-
-            return new Java.Lang.String(string.Empty);
         }
     }
 }

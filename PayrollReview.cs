@@ -1,12 +1,11 @@
-﻿using System;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.Graphics;
-using Android.Media;
 using Android.OS;
 using Android.Widget;
 using PayrollParrots.Model;
 using Newtonsoft.Json;
+using PayrollParrots.UsedManyTimes;
 
 namespace PayrollParrots
 {
@@ -14,6 +13,7 @@ namespace PayrollParrots
     public class PayrollReview : Activity
     {
         Payroll payroll;
+        readonly SoundPlayer soundPlayer = new SoundPlayer();
         public const string NameText = "Name:";
         public const string AgeText = "Age:";
         public const string PCBText = "PCB:";
@@ -65,18 +65,10 @@ namespace PayrollParrots
             Button _reviewBack = FindViewById<Button>(Resource.Id.reviewBack);
 
             _reviewBack.Click += (sender, e) => {
-                PlayButton_Click(sender, e);
+                soundPlayer.PlaySound_ButtonClick(this);
                 var payrollReview = new Intent(this, typeof(MainActivity));
                 StartActivity(payrollReview);
             };
-
-            //button-click sound
-            void PlayButton_Click(object sender, EventArgs e)
-            {
-                MediaPlayer _player = MediaPlayer.Create(this, Resource.Drawable.buttonclick);
-                _player.Start();
-            }
-
         }
     }
 }

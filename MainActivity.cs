@@ -10,6 +10,7 @@ using PayrollParrots.Helper;
 using Newtonsoft.Json;
 using Android.Views;
 using System.Linq;
+using PayrollParrots.UsedManyTimes;
 
 namespace PayrollParrots
 {
@@ -29,10 +30,10 @@ namespace PayrollParrots
         December
     }
 
-    //add REP, IRDA, N-R
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
     public class MainActivity : AppCompatActivity
     {
+        readonly SoundPlayer soundPlayer = new SoundPlayer();
         Spinner spinnerMonth;
         TextView _txtLabel;
         ListView listfilter;
@@ -65,16 +66,9 @@ namespace PayrollParrots
             Button _startPayroll = FindViewById<Button>(Resource.Id.startPayroll);
 
             _startPayroll.Click += (sender, e) => {
-                PlayButton_Click(sender, e);
+                soundPlayer.PlaySound_ButtonClick(this);
                 StartActivity(new Intent(this, typeof(PayrollFamily)));
             };
-
-            //button-click sound
-            void PlayButton_Click(object sender, EventArgs e)
-            {
-                MediaPlayer _player = MediaPlayer.Create(this, Resource.Drawable.buttonclick);
-                _player.Start();
-            }
         }
 
         //pop-up when item in list is clicked
@@ -96,12 +90,10 @@ namespace PayrollParrots
                 alert2.SetIcon(Resource.Drawable.Warning_Sign);
                 alert2.SetButton("yes", (c, ev) =>
                 {
-                    TextView _txtLabel;
                     payroll = listitem[e.Position];
                     PayrollHelper.DeletePayroll(this, payroll);
-                    _txtLabel = FindViewById<TextView>(Resource.Id.noEmployees);
-                    MediaPlayer player = MediaPlayer.Create(this, Resource.Drawable.delete_sound);
-                    player.Start();
+
+                    soundPlayer.PlaySound_DeleteEmployee(this);
 
                     StartActivity(new Intent(this, typeof(MainActivity)));
                     Toast.MakeText(this, "Employee Deleted Sucessfully!", ToastLength.Short).Show();

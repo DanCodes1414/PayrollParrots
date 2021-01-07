@@ -1,10 +1,9 @@
-﻿using System;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
-using Android.Media;
 using Android.OS;
 using Android.Text;
 using Android.Widget;
+using PayrollParrots.UsedManyTimes;
 
 namespace PayrollParrots
 {
@@ -12,10 +11,12 @@ namespace PayrollParrots
     [Activity(Label = "PayrollPreviousDeductions")]
     public class PayrollPreviousDeductions : Activity
     {
+        readonly SoundPlayer soundPlayer = new SoundPlayer();
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.payroll_previous_deductions);
+
             //previousLifeStyleRelief
             double _lifeStyleRelief = Intent.GetDoubleExtra("lifeStyleRelief", 0.00);
             EditText previousLifeStyleRelief_ = FindViewById<EditText>(Resource.Id.previousLifeStyleRelief);
@@ -26,6 +27,18 @@ namespace PayrollParrots
                 double.TryParse(previousLifeStyleRelief_.Text, out _previousLifeStyleRelief);
                 Validate(_previousLifeStyleRelief + _lifeStyleRelief, 2500, previousLifeStyleRelief_);
             };
+
+            //previousSportsRelief
+            double _sportsRelief = Intent.GetDoubleExtra("sportsRelief", 0.00);
+            EditText previousSportsRelief_ = FindViewById<EditText>(Resource.Id.previousSportsRelief);
+            previousSportsRelief_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
+            double _previousSportsRelief = 0.00;
+            previousSportsRelief_.AfterTextChanged += (sender, args) =>
+            {
+                double.TryParse(previousSportsRelief_.Text, out _previousSportsRelief);
+                Validate(_previousSportsRelief + _sportsRelief, 500, previousSportsRelief_);
+            };
+
             //previousSOCSOContribution
             double _SOCSOContribution = Intent.GetDoubleExtra("SOCSOContribution", 0.00);
             EditText previousSOCSOContribution_ = FindViewById<EditText>(Resource.Id.previousSOCSOContribution);
@@ -36,6 +49,7 @@ namespace PayrollParrots
                 double.TryParse(previousSOCSOContribution_.Text, out _previousSOCSOContribution);
                 Validate(_previousSOCSOContribution + _SOCSOContribution, 250, previousSOCSOContribution_);
             };
+
             //previouslifeInsurance
             double _lifeInsurance = Intent.GetDoubleExtra("lifeInsurance", 0.00);
             EditText previousLifeInsurance_ = FindViewById<EditText>(Resource.Id.previouslifeInsurance);
@@ -46,6 +60,7 @@ namespace PayrollParrots
                 double.TryParse(previousLifeInsurance_.Text, out _previousLifeInsurance);
                 Validate(_previousLifeInsurance + _previousLifeInsurance, 3000, previousLifeInsurance_);
             };
+
             //previousBasicEquipment
             double _basicEquipment = Intent.GetDoubleExtra("basicEquipment", 0.00);
             EditText previousBasicEquipment_ = FindViewById<EditText>(Resource.Id.previousBasicEquipment);
@@ -56,6 +71,7 @@ namespace PayrollParrots
                 double.TryParse(previousBasicEquipment_.Text, out _previousBasicEquipment);
                 Validate(_previousBasicEquipment + _basicEquipment, 6000, previousBasicEquipment_);
             };
+
             //previousEducationYourSelf
             double _educationYourSelf = Intent.GetDoubleExtra("educationYourSelf", 0.00);
             EditText previousEducationYourSelf_ = FindViewById<EditText>(Resource.Id.previousEducationYourSelf);
@@ -66,16 +82,29 @@ namespace PayrollParrots
                 double.TryParse(previousEducationYourSelf_.Text, out _previousEducationYourSelf);
                 Validate(_previousEducationYourSelf + _educationYourSelf, 7000, previousEducationYourSelf_);
             };
-            //previousMedicalExamintion
-            double _medicalExamintion = Intent.GetDoubleExtra("medicalExamintion", 0.00);
-            EditText previousMedicalExamintion_ = FindViewById<EditText>(Resource.Id.previousMedicalExamintion);
-            previousMedicalExamintion_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
-            double _previousMedicalExamintion = 0.00;
-            previousMedicalExamintion_.AfterTextChanged += (sender, args) =>
+
+            //previousMedicalExamination
+            double _medicalExamination = Intent.GetDoubleExtra("medicalExamination", 0.00);
+            EditText previousMedicalExamination_ = FindViewById<EditText>(Resource.Id.previousMedicalExamination);
+            previousMedicalExamination_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
+            double _previousMedicalExamination = 0.00;
+            previousMedicalExamination_.AfterTextChanged += (sender, args) =>
             {
-                double.TryParse(previousMedicalExamintion_.Text, out _previousMedicalExamintion);
-                Validate(_previousMedicalExamintion + _medicalExamintion, 500, previousMedicalExamintion_);
+                double.TryParse(previousMedicalExamination_.Text, out _previousMedicalExamination);
+                Validate(_previousMedicalExamination + _medicalExamination, 1000, previousMedicalExamination_);
             };
+
+            //previousMedicalVaccination
+            double _medicalVaccination = Intent.GetDoubleExtra("medicalVaccination", 0.00);
+            EditText previousMedicalVaccination_ = FindViewById<EditText>(Resource.Id.previousMedicalVaccination);
+            previousMedicalVaccination_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
+            double _previousMedicalVaccination = 0.00;
+            previousMedicalVaccination_.AfterTextChanged += (sender, args) =>
+            {
+                double.TryParse(previousMedicalVaccination_.Text, out _previousMedicalVaccination);
+                Validate(_previousMedicalVaccination + _medicalVaccination, 1000, previousMedicalVaccination_);
+            };
+
             //previousMedicalDisease
             double _medicalDisease = Intent.GetDoubleExtra("medicalDisease", 0.00);
             EditText previousMedicalDisease_ = FindViewById<EditText>(Resource.Id.previousMedicalDisease);
@@ -84,18 +113,23 @@ namespace PayrollParrots
             previousMedicalDisease_.AfterTextChanged += (sender, args) =>
             {
                 double.TryParse(previousMedicalDisease_.Text, out _previousMedicalDisease);
-                //Validate(_previousMedicalDisease + _medicalDisease, 6000, previousMedicalDisease_);
             };
-            previousMedicalExamintion_.AfterTextChanged += (sender, args) =>
+            previousMedicalExamination_.AfterTextChanged += (sender, args) =>
             {
-                double.TryParse(previousMedicalExamintion_.Text, out _previousMedicalExamintion);
-                Validate(_medicalExamintion + _medicalDisease + _previousMedicalDisease + _previousMedicalExamintion, 6000, previousMedicalDisease_);
+                double.TryParse(previousMedicalExamination_.Text, out _previousMedicalExamination);
+                Validate(_medicalExamination + _medicalVaccination + _medicalDisease + _previousMedicalDisease + _previousMedicalVaccination + _previousMedicalExamination, 8000, previousMedicalDisease_);
+            };
+            previousMedicalVaccination_.AfterTextChanged += (sender, args) =>
+            {
+                double.TryParse(previousMedicalVaccination_.Text, out _previousMedicalVaccination);
+                Validate(_medicalExamination + _medicalVaccination + _medicalDisease + _previousMedicalDisease + _previousMedicalVaccination + _previousMedicalExamination, 8000, previousMedicalDisease_);
             };
             previousMedicalDisease_.AfterTextChanged += (sender, args) =>
             {
-                double.TryParse(previousMedicalExamintion_.Text, out _previousMedicalExamintion);
-                Validate(_medicalExamintion + _medicalDisease + _previousMedicalDisease + _previousMedicalExamintion, 6000, previousMedicalDisease_);
+                double.TryParse(previousMedicalDisease_.Text, out _previousMedicalDisease);
+                Validate(_medicalExamination + _medicalVaccination + _medicalDisease + _previousMedicalDisease + _previousMedicalVaccination + _previousMedicalExamination, 8000, previousMedicalDisease_);
             };
+
             //previousSSPN
             double _SSPN = Intent.GetDoubleExtra("SSPN", 0.00);
             EditText previousSSPN_ = FindViewById<EditText>(Resource.Id.previousSSPN);
@@ -124,7 +158,7 @@ namespace PayrollParrots
             previousSmallKidEducation_.AfterTextChanged += (sender, args) =>
             {
                 double.TryParse(previousSmallKidEducation_.Text, out _previousSmallKidEducation);
-                Validate(_previousSmallKidEducation + _smallKidEducation, 2000, previousSmallKidEducation_);
+                Validate(_previousSmallKidEducation + _smallKidEducation, 3000, previousSmallKidEducation_);
             };
             //previousBreastFeedingEquipment
             double _breastFeedingEquipment = Intent.GetDoubleExtra("breastFeedingEquipment", 0.00);
@@ -184,7 +218,7 @@ namespace PayrollParrots
             previousMapaRelief_.AfterTextChanged += (sender, args) =>
             {
                 double.TryParse(previousMapaRelief_.Text, out _previousMapaRelief);
-                Validate(_previousMapaRelief + _mapaRelief, 5000, previousMapaRelief_);
+                Validate(_previousMapaRelief + _mapaRelief, 8000, previousMapaRelief_);
                 Validate2(_previousMapaRelief, _previousFatherRelief + _previousMotherRelief, previousMapaRelief_);
             };
             previousFatherRelief_.AfterTextChanged += (sender, args) =>
@@ -196,25 +230,37 @@ namespace PayrollParrots
                 Validate2(_previousMapaRelief, _previousFatherRelief + _previousMotherRelief, previousMapaRelief_);
             };
 
+            //previousDomesticTourismExpenditure
+            double _domesticTourismExpenditure = Intent.GetDoubleExtra("domesticTourismExpenditure", 0.00);
+            EditText previousDomesticTourismExpenditure_ = FindViewById<EditText>(Resource.Id.previousDomesticTourismExpenditure);
+            previousDomesticTourismExpenditure_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
+            double _previousDomesticTourismExpenditure = 0.00;
+            previousDomesticTourismExpenditure_.AfterTextChanged += (sender, args) =>
+            {
+                double.TryParse(previousDomesticTourismExpenditure_.Text, out _previousDomesticTourismExpenditure);
+                Validate(_previousDomesticTourismExpenditure + _domesticTourismExpenditure, 1000, previousDomesticTourismExpenditure_);
+            };
+
             Button _seventhContinue = FindViewById<Button>(Resource.Id.continuePayroll7);
             _seventhContinue.Click += (sender, e) =>
             {
-                if (Validate(_previousLifeStyleRelief + _lifeStyleRelief, 2500, previousLifeStyleRelief_) == false | Validate(_previousSOCSOContribution + _SOCSOContribution, 250, previousSOCSOContribution_) == false
+                if (Validate(_previousLifeStyleRelief + _lifeStyleRelief, 2500, previousLifeStyleRelief_) == false | Validate(_previousSportsRelief + _sportsRelief, 500, previousSportsRelief_) == false | Validate(_previousSOCSOContribution + _SOCSOContribution, 250, previousSOCSOContribution_) == false
                 | Validate(_previousLifeInsurance + _lifeInsurance, 3000, previousLifeInsurance_) == false | Validate(_previousBasicEquipment + _basicEquipment, 6000, previousBasicEquipment_) == false
-                | Validate(_previousEducationYourSelf + _educationYourSelf, 7000, previousEducationYourSelf_) == false | Validate(_previousMedicalExamintion + _medicalExamintion, 500, previousMedicalExamintion_) == false
-                | Validate(_previousMedicalDisease + _medicalDisease, 6000, previousMedicalDisease_) == false | Validate(_previousSmallKidEducation + _smallKidEducation, 2000, previousSmallKidEducation_) == false
-                | Validate(_previousBreastFeedingEquipment + _breastFeedingEquipment, 1000, previousBreastFeedingEquipment_) == false
+                | Validate(_previousEducationYourSelf + _educationYourSelf, 7000, previousEducationYourSelf_) == false | Validate(_previousMedicalExamination + _medicalExamination, 500, previousMedicalExamination_) == false
+                | Validate(_previousMedicalDisease + _medicalDisease, 6000, previousMedicalDisease_) == false | Validate(_previousSmallKidEducation + _smallKidEducation, 3000, previousSmallKidEducation_) == false
+                | Validate(_previousBreastFeedingEquipment + _breastFeedingEquipment, 1000, previousBreastFeedingEquipment_) == false | Validate(_previousMedicalVaccination + _medicalVaccination, 1000, previousMedicalVaccination_) == false
                 | Validate(_previousAlimonyFormerWife + _alimonyFormerWife, 4000, previousAlimonyFormerWife_) == false | Validate(_previousEMInsurance + _EMInsurance, 3000, previousEMInsurance_) == false
                 | Validate(_previousFatherRelief + _fatherRelief, 1500, previousFatherRelief_) == false | Validate(_previousMotherRelief + _motherRelief, 1500, previousMotherRelief_) == false
-                | Validate(_previousMapaRelief + _mapaRelief, 5000, previousMapaRelief_) == false | Validate2(_previousMapaRelief, _previousFatherRelief + _previousMotherRelief, previousMapaRelief_) == false
-                | Validate(_previousSSPN + _SSPN, 8000, previousSSPN_) == false | Validate(_previousPRS + _PRS, 3000, previousPRS_) == false)
+                | Validate(_previousMapaRelief + _mapaRelief, 8000, previousMapaRelief_) == false | Validate2(_previousMapaRelief, _previousFatherRelief + _previousMotherRelief, previousMapaRelief_) == false
+                | Validate(_previousSSPN + _SSPN, 8000, previousSSPN_) == false | Validate(_previousPRS + _PRS, 3000, previousPRS_) == false | Validate(_previousDomesticTourismExpenditure + _domesticTourismExpenditure, 1000, previousDomesticTourismExpenditure_) == false)
                 {
                     Toast toast = Toast.MakeText(this, "Make sure all fields are below their limits", ToastLength.Short);
                     toast.Show();
                 }
                 else
                 {
-                    PlayButton_Click(sender, e);
+                    soundPlayer.PlaySound_ButtonClick(this);
+
                     double _currentMonthRemuneration = Intent.GetDoubleExtra("currentMonthRemuneration", 0.00);
                     double _BIK = Intent.GetDoubleExtra("BIK", 0.00);
                     double _VOLA = Intent.GetDoubleExtra("VOLA", 0.00);
@@ -229,7 +275,7 @@ namespace PayrollParrots
                     double _lifeInsurance = Intent.GetDoubleExtra("lifeInsurance", 0.00);
                     double _basicEquipment = Intent.GetDoubleExtra("basicEquipment", 0.00);
                     double _educationYourSelf = Intent.GetDoubleExtra("educationYourSelf", 0.00);
-                    double _medicalExamintion = Intent.GetDoubleExtra("medicalExamintion", 0.00);
+                    double _medicalExamination = Intent.GetDoubleExtra("medicalExamination", 0.00);
                     double _medicalDisease = Intent.GetDoubleExtra("medicalDisease", 0.00);
                     double _smallKidEducation = Intent.GetDoubleExtra("smallKidEducation", 0.00);
                     double _breastFeedingEquipment = Intent.GetDoubleExtra("breastFeedingEquipment", 0.00);
@@ -237,6 +283,9 @@ namespace PayrollParrots
                     double _EMInsurance = Intent.GetDoubleExtra("EMInsurance", 0.00);
                     double _fatherRelief = Intent.GetDoubleExtra("fatherRelief", 0.00);
                     double _motherRelief = Intent.GetDoubleExtra("motherRelief", 0.00);
+                    double _sportsRelief = Intent.GetDoubleExtra("sportsRelief", 0.00);
+                    double _medicalVaccination = Intent.GetDoubleExtra("medicalVaccination", 0.00);
+                    double _domesticTourismExpenditure = Intent.GetDoubleExtra("domesticTourismExpenditure", 0.00);
                     int _monthsRemaining = Intent.GetIntExtra("monthsRemaining", 11);
                     double _zakatByEmployee = Intent.GetDoubleExtra("zakatByEmployee", 0.00);
                     double _zakatByPayroll = Intent.GetDoubleExtra("zakatByPayroll", 0.00);
@@ -265,7 +314,7 @@ namespace PayrollParrots
                     intent.PutExtra("previousLifeInsurance", _previousLifeInsurance);
                     intent.PutExtra("previousBasicEquipment", _previousBasicEquipment);
                     intent.PutExtra("previousEducationYourSelf", _previousEducationYourSelf);
-                    intent.PutExtra("previousMedicalExamintion", _previousMedicalExamintion);
+                    intent.PutExtra("previousMedicalExamination", _previousMedicalExamination);
                     intent.PutExtra("previousMedicalDisease", _previousMedicalDisease);
                     intent.PutExtra("previousSmallKidEducation", _previousSmallKidEducation);
                     intent.PutExtra("previousBreastFeedingEquipment", _previousBreastFeedingEquipment);
@@ -276,6 +325,9 @@ namespace PayrollParrots
                     intent.PutExtra("previousMapaRelief", _previousMapaRelief);
                     intent.PutExtra("previousSSPN", _previousSSPN);
                     intent.PutExtra("previousPRS", _previousPRS);
+                    intent.PutExtra("previousSportsRelief", _previousSportsRelief);
+                    intent.PutExtra("previousMedicalVaccination", _previousMedicalVaccination);
+                    intent.PutExtra("previousDomesticTourismExpenditure", _previousDomesticTourismExpenditure);
 
                     intent.PutExtra("employeeAge", _employeeAge);
                     intent.PutExtra("employeeName", _employeeName);
@@ -299,7 +351,7 @@ namespace PayrollParrots
                     intent.PutExtra("lifeInsurance", _lifeInsurance);
                     intent.PutExtra("basicEquipment", _basicEquipment);
                     intent.PutExtra("educationYourSelf", _educationYourSelf);
-                    intent.PutExtra("medicalExamintion", _medicalExamintion);
+                    intent.PutExtra("medicalExamination", _medicalExamination);
                     intent.PutExtra("medicalDisease", _medicalDisease);
                     intent.PutExtra("smallKidEducation", _smallKidEducation);
                     intent.PutExtra("breastFeedingEquipment", _breastFeedingEquipment);
@@ -307,6 +359,9 @@ namespace PayrollParrots
                     intent.PutExtra("EMInsurance", _EMInsurance);
                     intent.PutExtra("fatherRelief", _fatherRelief);
                     intent.PutExtra("motherRelief", _motherRelief);
+                    intent.PutExtra("sportsRelief", _sportsRelief);
+                    intent.PutExtra("medicalVaccination", _medicalVaccination);
+                    intent.PutExtra("domesticTourismExpenditure", _domesticTourismExpenditure);
                     intent.PutExtra("bonus", _bonus);
                     intent.PutExtra("arrears", _arrears);
                     intent.PutExtra("commission", _commission);
@@ -329,24 +384,17 @@ namespace PayrollParrots
                     StartActivity(intent);
                 }
             };
-
-            //button-click sound
-            void PlayButton_Click(object sender, EventArgs e)
-            {
-                MediaPlayer _player = MediaPlayer.Create(this, Resource.Drawable.buttonclick);
-                _player.Start();
-            }
         }
 
         //check that deduction not greater than limit
         bool Validate(double name, double value, EditText editText)
         {
-            if ((name > value) && editText.Hint == "Medical expenses for serious diseases[Up to RM6000]")
+            if ((name > value) && editText.Hint == "Medical Expenses for Serious Diseases[Up to RM8000]")
             {
-                editText.Error = "Cost of medical expenses(examintaion + serious diseases) cannot be greater than " + value;
+                editText.Error = "Cost of medical expenses(examintaion + vaccination + serious diseases) cannot be greater than " + value;
                 return false;
             }
-            else if ((name > value) && editText.Hint != "Medical expenses for serious diseases[Up to RM6000]")
+            else if ((name > value) && editText.Hint != "Medical Expenses For Serious Diseases[Up to RM8000]")
             {
                 editText.Error = "Cannot be greater than " + value;
                 return false;

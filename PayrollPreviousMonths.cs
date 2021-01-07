@@ -1,10 +1,9 @@
-﻿using System;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
-using Android.Media;
 using Android.OS;
 using Android.Text;
 using Android.Widget;
+using PayrollParrots.UsedManyTimes;
 
 namespace PayrollParrots
 {
@@ -12,6 +11,7 @@ namespace PayrollParrots
     [Activity(Label = "PayrollPreviousMonths")]
     public class PayrollPreviousMonths : Activity
     {
+        readonly SoundPlayer soundPlayer = new SoundPlayer();
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -68,7 +68,8 @@ namespace PayrollParrots
                 }
                 else
                 {
-                    PlayButton_Click(sender, e);
+                    soundPlayer.PlaySound_ButtonClick(this);
+
                     double _currentMonthRemuneration = Intent.GetDoubleExtra("currentMonthRemuneration", 0.00);
                     double _BIK = Intent.GetDoubleExtra("BIK", 0.00);
                     double _VOLA = Intent.GetDoubleExtra("VOLA", 0.00);
@@ -83,7 +84,7 @@ namespace PayrollParrots
                     double _lifeInsurance = Intent.GetDoubleExtra("lifeInsurance", 0.00);
                     double _basicEquipment = Intent.GetDoubleExtra("basicEquipment", 0.00);
                     double _educationYourSelf = Intent.GetDoubleExtra("educationYourSelf", 0.00);
-                    double _medicalExamintion = Intent.GetDoubleExtra("medicalExamintion", 0.00);
+                    double _medicalExamination = Intent.GetDoubleExtra("medicalExamination", 0.00);
                     double _medicalDisease = Intent.GetDoubleExtra("medicalDisease", 0.00);
                     double _smallKidEducation = Intent.GetDoubleExtra("smallKidEducation", 0.00);
                     double _breastFeedingEquipment = Intent.GetDoubleExtra("breastFeedingEquipment", 0.00);
@@ -109,6 +110,9 @@ namespace PayrollParrots
                     double _mapaRelief = Intent.GetDoubleExtra("mapaRelief", 0.00);
                     double _SSPN = Intent.GetDoubleExtra("SSPN", 0.00);
                     double _PRS = Intent.GetDoubleExtra("PRS", 0.00);
+                    double _sportsRelief = Intent.GetDoubleExtra("sportsRelief", 0.00);
+                    double _medicalVaccination = Intent.GetDoubleExtra("medicalVaccination", 0.00);
+                    double _domesticTourismExpenditure = Intent.GetDoubleExtra("domesticTourismExpenditure", 0.00);
                     int _employeeAge = Intent.GetIntExtra("employeeAge", 0);
                     string _employeeName = Intent.GetStringExtra("employeeName");
                     Intent intent = new Intent(this, typeof(PayrollPreviousDeductions));
@@ -133,7 +137,7 @@ namespace PayrollParrots
                     intent.PutExtra("lifeInsurance", _lifeInsurance);
                     intent.PutExtra("basicEquipment", _basicEquipment);
                     intent.PutExtra("educationYourSelf", _educationYourSelf);
-                    intent.PutExtra("medicalExamintion", _medicalExamintion);
+                    intent.PutExtra("medicalExamintion", _medicalExamination);
                     intent.PutExtra("medicalDisease", _medicalDisease);
                     intent.PutExtra("smallKidEducation", _smallKidEducation);
                     intent.PutExtra("breastFeedingEquipment", _breastFeedingEquipment);
@@ -141,6 +145,9 @@ namespace PayrollParrots
                     intent.PutExtra("EMInsurance", _EMInsurance);
                     intent.PutExtra("fatherRelief", _fatherRelief);
                     intent.PutExtra("motherRelief", _motherRelief);
+                    intent.PutExtra("sportsRelief", _sportsRelief);
+                    intent.PutExtra("medicalVaccination", _medicalVaccination);
+                    intent.PutExtra("domesticTourismExpenditure", _domesticTourismExpenditure);
                     intent.PutExtra("bonus", _bonus);
                     intent.PutExtra("arrears", _arrears);
                     intent.PutExtra("commission", _commission);
@@ -163,13 +170,6 @@ namespace PayrollParrots
                     StartActivity(intent);
                 }
             };
-
-            //button-click sound
-            void PlayButton_Click(object sender, EventArgs e)
-            {
-                MediaPlayer _player = MediaPlayer.Create(this, Resource.Drawable.buttonclick);
-                _player.Start();
-            }
         }
 
         //check that total epf less than 4000

@@ -2,7 +2,6 @@
 using Android.App;
 using Android.Content;
 using Android.Graphics;
-using Android.Media;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
@@ -10,6 +9,7 @@ using PayrollParrots.Model;
 using PayrollParrots.Helper;
 using NL.DionSegijn.Konfetti;
 using Newtonsoft.Json;
+using PayrollParrots.UsedManyTimes;
 
 namespace PayrollParrots
 {
@@ -17,6 +17,8 @@ namespace PayrollParrots
     public class PayrollFinalCalculation : Activity
     {
         public const double EmployeeMaxAgeForEPFContribution = 60;
+        readonly SoundPlayer soundPlayer = new SoundPlayer();
+        readonly TaxCalculation taxCalculation = new TaxCalculation();
         public Payroll payroll;
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -37,7 +39,7 @@ namespace PayrollParrots
             double _lifeInsurance = Intent.GetDoubleExtra("lifeInsurance", 0.00);
             double _basicEquipment = Intent.GetDoubleExtra("basicEquipment", 0.00);
             double _educationYourSelf = Intent.GetDoubleExtra("educationYourSelf", 0.00);
-            double _medicalExamintion = Intent.GetDoubleExtra("medicalExamintion", 0.00);
+            double _medicalExamination = Intent.GetDoubleExtra("medicalExamination", 0.00);
             double _medicalDisease = Intent.GetDoubleExtra("medicalDisease", 0.00);
             double _smallKidEducation = Intent.GetDoubleExtra("smallKidEducation", 0.00);
             double _breastFeedingEquipment = Intent.GetDoubleExtra("breastFeedingEquipment", 0.00);
@@ -45,12 +47,15 @@ namespace PayrollParrots
             double _EMInsurance = Intent.GetDoubleExtra("EMInsurance", 0.00);
             double _fatherRelief = Intent.GetDoubleExtra("fatherRelief", 0.00);
             double _motherRelief = Intent.GetDoubleExtra("motherRelief", 0.00);
+            double _sportsRelief = Intent.GetDoubleExtra("sportsRelief", 0.00);
+            double _medicalVaccination = Intent.GetDoubleExtra("medicalVaccination", 0.00);
+            double _domesticTourismExpenditure = Intent.GetDoubleExtra("domesticTourismExpenditure", 0.00);
             double _previousLifeStyleRelief = Intent.GetDoubleExtra("previousLifeStyleRelief", 0.00);
             double _previousSOCSOContribution = Intent.GetDoubleExtra("previousSOCSOContribution", 0.00);
             double _previousLifeInsurance = Intent.GetDoubleExtra("previousLifeInsurance", 0.00);
             double _previousBasicEquipment = Intent.GetDoubleExtra("previousBasicEquipment", 0.00);
             double _previousEducationYourSelf = Intent.GetDoubleExtra("previousEducationYourSelf", 0.00);
-            double _previousMedicalExamintion = Intent.GetDoubleExtra("previousMedicalExamintion", 0.00);
+            double _previousMedicalExamination = Intent.GetDoubleExtra("previousMedicalExamination", 0.00);
             double _previousMedicalDisease = Intent.GetDoubleExtra("previousMedicalDisease", 0.00);
             double _previousSmallKidEducation = Intent.GetDoubleExtra("previousSmallKidEducation", 0.00);
             double _previousBreastFeedingEquipment = Intent.GetDoubleExtra("previousBreastFeedingEquipment", 0.00);
@@ -58,6 +63,9 @@ namespace PayrollParrots
             double _previousEMInsurance = Intent.GetDoubleExtra("previousEMInsurance", 0.00);
             double _previousFatherRelief = Intent.GetDoubleExtra("previousFatherRelief", 0.00);
             double _previousMotherRelief = Intent.GetDoubleExtra("previousMotherRelief", 0.00);
+            double _previousSportsRelief = Intent.GetDoubleExtra("previousSportsRelief", 0.00);
+            double _previousMedicalVaccination = Intent.GetDoubleExtra("previousMedicalVaccination", 0.00);
+            double _previousDomesticTourismExpenditure = Intent.GetDoubleExtra("previousDomesticTourismExpenditure", 0.00);
             double _zakatByEmployee = Intent.GetDoubleExtra("zakatByEmployee", 0.00);
             double _zakatByPayroll = Intent.GetDoubleExtra("zakatByPayroll", 0.00);
             double _departureLevy = Intent.GetDoubleExtra("departureLevy", 0.00);
@@ -119,18 +127,17 @@ namespace PayrollParrots
             //EIS Calculation
             double WageEIS = _currentMonthRemuneration + _commission + _arrears + _others + _othersEPFNO;
 
-            TaxCalculation taxCalculation = new TaxCalculation();
             double EIS = taxCalculation.EISCalculation(WageEIS, _employeeAge);
             double employerEIS = EIS;
 
             //MTD Calculation
             double RoundedMTD = taxCalculation.PCBCalculation(_monthsRemaining, _currentMonthRemuneration, _BIK, _VOLA, _totalFamilyDeductions,
-            _bonus, _arrears, _commission, _othersEPFNO, _others, _lifeStyleRelief, _SOCSOContribution,
-            _lifeInsurance, _basicEquipment, _educationYourSelf, _medicalExamintion, _medicalDisease, _smallKidEducation,
-            _breastFeedingEquipment, _alimonyFormerWife, _EMInsurance, _fatherRelief, _motherRelief, _previousLifeStyleRelief,
-            _previousSOCSOContribution, _previousLifeInsurance, _previousBasicEquipment, _previousEducationYourSelf,
-            _previousMedicalExamintion, _previousMedicalDisease, _previousSmallKidEducation, _previousBreastFeedingEquipment,
-            _previousAlimonyFormerWife, _previousEMInsurance, _previousFatherRelief, _previousMotherRelief, spouseNoIncomeDeduction,
+            _bonus, _arrears, _commission, _othersEPFNO, _others, _lifeStyleRelief, _sportsRelief, _SOCSOContribution,
+            _lifeInsurance, _basicEquipment, _educationYourSelf, _medicalExamination, _medicalVaccination, _medicalDisease, _smallKidEducation,
+            _breastFeedingEquipment, _alimonyFormerWife, _EMInsurance, _fatherRelief, _motherRelief, _domesticTourismExpenditure, _previousLifeStyleRelief,
+            _previousSportsRelief, _previousSOCSOContribution, _previousLifeInsurance, _previousBasicEquipment, _previousEducationYourSelf,
+            _previousMedicalExamination, _previousMedicalVaccination, _previousMedicalDisease, _previousSmallKidEducation, _previousBreastFeedingEquipment,
+            _previousAlimonyFormerWife, _previousEMInsurance, _previousFatherRelief, _previousMotherRelief, _previousDomesticTourismExpenditure, spouseNoIncomeDeduction,
             _zakatByEmployee, _zakatByPayroll, _departureLevy, _previousMonthsRemuneration, _previousEPFContribution,
             _previousBIK, _previousVOLA, _MTDPrevious, _EPFContribution, _EPFAdditionalContribution, _previousZakatByEmployee,
             _previousZakatByPayroll, _previousDepartureLevy, _OthersEISNO, _mapaRelief, _previousMapaRelief, _SSPN,
@@ -239,21 +246,14 @@ namespace PayrollParrots
 
             Button _saveDetails = FindViewById<Button>(Resource.Id.saveDetails);
 
-            _saveDetails.Click += PlayButton_Click;
             _saveDetails.Click += (sender, e) => {
+                soundPlayer.PlaySound_ButtonClick(this);
                 //save to database
                 PayrollHelper.InsertPayrollData(this, payroll);
                 var payrollData = new Intent(this, typeof(MainActivity));
                 payrollData.PutExtra("payroll", JsonConvert.SerializeObject(payroll));
                 StartActivity(payrollData);
             };
-
-            //button-click sound
-            void PlayButton_Click(object sender, EventArgs e)
-            {
-                MediaPlayer _player = MediaPlayer.Create(this, Resource.Drawable.buttonclick);
-                _player.Start();
-            }
         }
     }
 }

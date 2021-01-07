@@ -1,17 +1,18 @@
 ﻿using System;
 using Android.App;
 using Android.Content;
-using Android.Media;
 using Android.OS;
 using Android.Widget;
 using Android.Text;
 using static Android.Widget.TextView;
+using PayrollParrots.UsedManyTimes;
 
 namespace PayrollParrots
 {
     [Activity(Label = "PayrollFamily")]
     public class PayrollFamily : Activity
     {
+        readonly SoundPlayer soundPlayer = new SoundPlayer();
         private int _kidsU18;
         private int _over18inHE;
         private int _disabledChildren;
@@ -188,7 +189,9 @@ namespace PayrollParrots
                 else
                 {
                     double totalFamilyDeductions = (_kidsU18 * 2000) + (_over18inHE * 8000) + (_disabledChildren * 6000) + (_disabledChildreninHE * 14000) + (_kidsU18split * 1000) + (_over18inHEsplit * 4000) + (_disabledChildrensplit * 3000) + (_disabledChildreninHEsplit * 7000) + disabledDeduction + disabledSpouseDeduction + spouseNoIncomeDeduction;
-                    PlayButton_Click(sender, e);
+
+                    soundPlayer.PlaySound_ButtonClick(this);
+
                     Intent intent = new Intent(this, typeof(PayrollCurrentMonth));
                     intent.PutExtra("employeeAge", _employeeAge);
                     intent.PutExtra("employeeName", _employeeName);
@@ -205,19 +208,17 @@ namespace PayrollParrots
                 }
             };
 
-            //button-click sound
-            void PlayButton_Click(object sender, EventArgs e)
-            {
-                MediaPlayer _player = MediaPlayer.Create(this, Resource.Drawable.buttonclick);
-                _player.Start();
-            }
-
-            //check if have spouse
+            //check if user can check disbled spouse as yes
             bool disabledSpouseCanCheck()
             {
                 if ((spinnerMaritalStatus.SelectedItem.ToString() == "Single" | spinnerMaritalStatus.SelectedItem.ToString() == "Divorce/Widower/Widow") && (spouseDisabledTrue.Checked == true))
                 {
-                    errorView.Error = "You don't have a spouse";
+                    errorView.Error = "You don't have a spouse!";
+                    return false;
+                }
+                else if (spinnerMaritalStatus.SelectedItem.ToString() == "Married and spouse working" && (spouseDisabledTrue.Checked == true))
+                {
+                    errorView.Error = "Deduction for disabled spouse only applicable if your spouse is not working";
                     return false;
                 }
                 else
@@ -248,7 +249,7 @@ namespace PayrollParrots
                         disabledDeduction = 6000.00;
                         break;
                     case Resource.Id.radioSpouseDisabledTrue:
-                        disabledSpouseDeduction = 3500.00;
+                        disabledSpouseDeduction = 5000.00;
                         break;
                     case Resource.Id.radioDisabledFalse:
                         disabledDeduction = 0.00;
@@ -415,7 +416,7 @@ namespace PayrollParrots
         }
 
         //pop-up for if another month selected from spinner
-        private void/*int*/ MonthSelctedNotTodaysMonth(object sender, AdapterView.ItemSelectedEventArgs e)
+        private void MonthSelctedNotTodaysMonth(object sender, AdapterView.ItemSelectedEventArgs e)
         {
             static string AlertTitle(string month)
             {
@@ -444,6 +445,7 @@ namespace PayrollParrots
                     ((Spinner)sender).SetSelection(monthToday - 1);
                     monthsRemaining = 12 - monthToday;
                 });
+                soundPlayer.PlaySound_AlertWarning(this);
 
                 alert.Show();
             }
@@ -462,6 +464,7 @@ namespace PayrollParrots
                     ((Spinner)sender).SetSelection(monthToday - 1);
                     monthsRemaining = 12 - monthToday;
                 });
+                soundPlayer.PlaySound_AlertWarning(this);
 
                 alert.Show();
             }
@@ -480,6 +483,7 @@ namespace PayrollParrots
                     ((Spinner)sender).SetSelection(monthToday - 1);
                     monthsRemaining = 12 - monthToday;
                 });
+                soundPlayer.PlaySound_AlertWarning(this);
 
                 alert.Show();
             }
@@ -498,6 +502,7 @@ namespace PayrollParrots
                     ((Spinner)sender).SetSelection(monthToday - 1);
                     monthsRemaining = 12 - monthToday;
                 });
+                soundPlayer.PlaySound_AlertWarning(this);
 
                 alert.Show();
             }
@@ -516,6 +521,7 @@ namespace PayrollParrots
                     ((Spinner)sender).SetSelection(monthToday - 1);
                     monthsRemaining = 12 - monthToday;
                 });
+                soundPlayer.PlaySound_AlertWarning(this);
 
                 alert.Show();
             }
@@ -534,6 +540,7 @@ namespace PayrollParrots
                     ((Spinner)sender).SetSelection(monthToday - 1);
                     monthsRemaining = 12 - monthToday;
                 });
+                soundPlayer.PlaySound_AlertWarning(this);
 
                 alert.Show();
             }
@@ -552,6 +559,7 @@ namespace PayrollParrots
                     ((Spinner)sender).SetSelection(monthToday - 1);
                     monthsRemaining = 12 - monthToday;
                 });
+                soundPlayer.PlaySound_AlertWarning(this);
 
                 alert.Show();
             }
@@ -570,6 +578,7 @@ namespace PayrollParrots
                     ((Spinner)sender).SetSelection(monthToday - 1);
                     monthsRemaining = 12 - monthToday;
                 });
+                soundPlayer.PlaySound_AlertWarning(this);
 
                 alert.Show();
             }
@@ -588,6 +597,7 @@ namespace PayrollParrots
                     ((Spinner)sender).SetSelection(monthToday - 1);
                     monthsRemaining = 12 - monthToday;
                 });
+                soundPlayer.PlaySound_AlertWarning(this);
 
                 alert.Show();
             }
@@ -606,6 +616,7 @@ namespace PayrollParrots
                     ((Spinner)sender).SetSelection(monthToday - 1);
                     monthsRemaining = 12 - monthToday;
                 });
+                soundPlayer.PlaySound_AlertWarning(this);
 
                 alert.Show();
             }
@@ -624,6 +635,7 @@ namespace PayrollParrots
                     ((Spinner)sender).SetSelection(monthToday - 1);
                     monthsRemaining = 12 - monthToday;
                 });
+                soundPlayer.PlaySound_AlertWarning(this);
 
                 alert.Show();
             }
@@ -642,6 +654,7 @@ namespace PayrollParrots
                     ((Spinner)sender).SetSelection(monthToday - 1);
                     monthsRemaining = 12 - monthToday;
                 });
+                soundPlayer.PlaySound_AlertWarning(this);
 
                 alert.Show();
             }

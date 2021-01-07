@@ -1,10 +1,9 @@
-﻿using System;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
-using Android.Media;
 using Android.OS;
 using Android.Text;
 using Android.Widget;
+using PayrollParrots.UsedManyTimes;
 
 namespace PayrollParrots
 {
@@ -12,6 +11,7 @@ namespace PayrollParrots
     [Activity(Label = "PayrollPreviousRebates")]
     public class PayrollPreviousRebates : Activity
     {
+        readonly SoundPlayer soundPlayer = new SoundPlayer();
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -44,7 +44,8 @@ namespace PayrollParrots
             Button _eighthContinue = FindViewById<Button>(Resource.Id.continuePayroll8);
             _eighthContinue.Click += (sender, e) =>
             {
-                PlayButton_Click(sender, e);
+                soundPlayer.PlaySound_ButtonClick(this);
+
                 double _currentMonthRemuneration = Intent.GetDoubleExtra("currentMonthRemuneration", 0.00);
                 double _BIK = Intent.GetDoubleExtra("BIK", 0.00);
                 double _VOLA = Intent.GetDoubleExtra("VOLA", 0.00);
@@ -59,7 +60,7 @@ namespace PayrollParrots
                 double _lifeInsurance = Intent.GetDoubleExtra("lifeInsurance", 0.00);
                 double _basicEquipment = Intent.GetDoubleExtra("basicEquipment", 0.00);
                 double _educationYourSelf = Intent.GetDoubleExtra("educationYourSelf", 0.00);
-                double _medicalExamintion = Intent.GetDoubleExtra("medicalExamintion", 0.00);
+                double _medicalExamination = Intent.GetDoubleExtra("medicalExamination", 0.00);
                 double _medicalDisease = Intent.GetDoubleExtra("medicalDisease", 0.00);
                 double _smallKidEducation = Intent.GetDoubleExtra("smallKidEducation", 0.00);
                 double _breastFeedingEquipment = Intent.GetDoubleExtra("breastFeedingEquipment", 0.00);
@@ -67,12 +68,15 @@ namespace PayrollParrots
                 double _EMInsurance = Intent.GetDoubleExtra("EMInsurance", 0.00);
                 double _fatherRelief = Intent.GetDoubleExtra("fatherRelief", 0.00);
                 double _motherRelief = Intent.GetDoubleExtra("motherRelief", 0.00);
+                double _sportsRelief = Intent.GetDoubleExtra("sportsRelief", 0.00);
+                double _medicalVaccination = Intent.GetDoubleExtra("medicalVaccination", 0.00);
+                double _domesticTourismExpenditure = Intent.GetDoubleExtra("domesticTourismExpenditure", 0.00);
                 double _previousLifeStyleRelief = Intent.GetDoubleExtra("previousLifeStyleRelief", 0.00);
                 double _previousSOCSOContribution = Intent.GetDoubleExtra("previousSOCSOContribution", 0.00);
                 double _previousLifeInsurance = Intent.GetDoubleExtra("previousLifeInsurance", 0.00);
                 double _previousBasicEquipment = Intent.GetDoubleExtra("previousBasicEquipment", 0.00);
                 double _previousEducationYourSelf = Intent.GetDoubleExtra("previousEducationYourSelf", 0.00);
-                double _previousMedicalExamintion = Intent.GetDoubleExtra("previousMedicalExamintion", 0.00);
+                double _previousMedicalExamination = Intent.GetDoubleExtra("previousMedicalExamination", 0.00);
                 double _previousMedicalDisease = Intent.GetDoubleExtra("previousMedicalDisease", 0.00);
                 double _previousSmallKidEducation = Intent.GetDoubleExtra("previousSmallKidEducation", 0.00);
                 double _previousBreastFeedingEquipment = Intent.GetDoubleExtra("previousBreastFeedingEquipment", 0.00);
@@ -80,6 +84,9 @@ namespace PayrollParrots
                 double _previousEMInsurance = Intent.GetDoubleExtra("previousEMInsurance", 0.00);
                 double _previousFatherRelief = Intent.GetDoubleExtra("previousFatherRelief", 0.00);
                 double _previousMotherRelief = Intent.GetDoubleExtra("previousMotherRelief", 0.00);
+                double _previousSportsRelief = Intent.GetDoubleExtra("previousSportsRelief", 0.00);
+                double _previousMedicalVaccination = Intent.GetDoubleExtra("previousMedicalVaccination", 0.00);
+                double _previousDomesticTourismExpenditure = Intent.GetDoubleExtra("previousDomesticTourismExpenditure", 0.00);
                 int _monthsRemaining = Intent.GetIntExtra("monthsRemaining", 11);
                 double _zakatByEmployee = Intent.GetDoubleExtra("zakatByEmployee", 0.00);
                 double _zakatByPayroll = Intent.GetDoubleExtra("zakatByPayroll", 0.00);
@@ -126,7 +133,7 @@ namespace PayrollParrots
                 intent.PutExtra("previousLifeInsurance", _previousLifeInsurance);
                 intent.PutExtra("previousBasicEquipment", _previousBasicEquipment);
                 intent.PutExtra("previousEducationYourSelf", _previousEducationYourSelf);
-                intent.PutExtra("previousMedicalExamintion", _previousMedicalExamintion);
+                intent.PutExtra("previousMedicalExamintion", _previousMedicalExamination);
                 intent.PutExtra("previousMedicalDisease", _previousMedicalDisease);
                 intent.PutExtra("previousSmallKidEducation", _previousSmallKidEducation);
                 intent.PutExtra("previousBreastFeedingEquipment", _previousBreastFeedingEquipment);
@@ -134,6 +141,9 @@ namespace PayrollParrots
                 intent.PutExtra("previousEMInsurance", _previousEMInsurance);
                 intent.PutExtra("previousFatherRelief", _previousFatherRelief);
                 intent.PutExtra("previousMotherRelief", _previousMotherRelief);
+                intent.PutExtra("previousSportsRelief", _previousSportsRelief);
+                intent.PutExtra("previousMedicalVaccination", _previousMedicalVaccination);
+                intent.PutExtra("previousDomesticTourismExpenditure", _previousDomesticTourismExpenditure);
                 intent.PutExtra("EPFAdditionalContribution", _EPFAdditionalContribution);
                 intent.PutExtra("EPFContribution", _EPFContribution);
                 intent.PutExtra("EPFAdditionalContribution", _EPFAdditionalContribution);
@@ -151,7 +161,7 @@ namespace PayrollParrots
                 intent.PutExtra("lifeInsurance", _lifeInsurance);
                 intent.PutExtra("basicEquipment", _basicEquipment);
                 intent.PutExtra("educationYourSelf", _educationYourSelf);
-                intent.PutExtra("medicalExamintion", _medicalExamintion);
+                intent.PutExtra("medicalExamintion", _medicalExamination);
                 intent.PutExtra("medicalDisease", _medicalDisease);
                 intent.PutExtra("smallKidEducation", _smallKidEducation);
                 intent.PutExtra("breastFeedingEquipment", _breastFeedingEquipment);
@@ -159,6 +169,9 @@ namespace PayrollParrots
                 intent.PutExtra("EMInsurance", _EMInsurance);
                 intent.PutExtra("fatherRelief", _fatherRelief);
                 intent.PutExtra("motherRelief", _motherRelief);
+                intent.PutExtra("sportsRelief", _sportsRelief);
+                intent.PutExtra("medicalVaccination", _medicalVaccination);
+                intent.PutExtra("domesticTourismExpenditure", _domesticTourismExpenditure);
                 intent.PutExtra("bonus", _bonus);
                 intent.PutExtra("arrears", _arrears);
                 intent.PutExtra("commission", _commission);
@@ -180,13 +193,6 @@ namespace PayrollParrots
                 intent.PutExtra("mapaRelief", _mapaRelief);
                 StartActivity(intent);
             };
-
-            //button-click continue
-            void PlayButton_Click(object sender, EventArgs e)
-            {
-                MediaPlayer _player = MediaPlayer.Create(this, Resource.Drawable.buttonclick);
-                _player.Start();
-            }
         }
     }
 }
