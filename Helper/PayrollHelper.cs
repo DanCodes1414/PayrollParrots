@@ -86,8 +86,8 @@ namespace PayrollParrots.Helper
                         GrossSalary = cursor.GetString(cursor.GetColumnIndexOrThrow(ColumnGross)),
                         NetSalary = cursor.GetString(cursor.GetColumnIndexOrThrow(ColumnNet)),
                         EmployerEPF = cursor.GetString(cursor.GetColumnIndexOrThrow(ColumnEmployerEPF)),
-                        EmployerEIS = cursor.GetString(cursor.GetColumnIndexOrThrow(ColumnEmployerSOCSO)),
-                        EmployerSOCSO = cursor.GetString(cursor.GetColumnIndexOrThrow(ColumnEmployerEIS))
+                        EmployerSOCSO = cursor.GetString(cursor.GetColumnIndexOrThrow(ColumnEmployerSOCSO)),
+                        EmployerEIS = cursor.GetString(cursor.GetColumnIndexOrThrow(ColumnEmployerEIS))
                     };
                 }
                 else
@@ -121,8 +121,8 @@ namespace PayrollParrots.Helper
                         GrossSalary = cursor.GetString(cursor.GetColumnIndexOrThrow(ColumnGross)),
                         NetSalary = cursor.GetString(cursor.GetColumnIndexOrThrow(ColumnNet)),
                         EmployerEPF = cursor.GetString(cursor.GetColumnIndexOrThrow(ColumnEmployerEPF)),
-                        EmployerEIS = cursor.GetString(cursor.GetColumnIndexOrThrow(ColumnEmployerSOCSO)),
-                        EmployerSOCSO = cursor.GetString(cursor.GetColumnIndexOrThrow(ColumnEmployerEIS))
+                        EmployerSOCSO = cursor.GetString(cursor.GetColumnIndexOrThrow(ColumnEmployerSOCSO)),
+                        EmployerEIS = cursor.GetString(cursor.GetColumnIndexOrThrow(ColumnEmployerEIS))
                     });
                 }
             }

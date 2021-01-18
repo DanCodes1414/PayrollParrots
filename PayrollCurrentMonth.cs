@@ -5,6 +5,10 @@ using Android.Text;
 using Android.Widget;
 using static Android.Widget.TextView;
 using PayrollParrots.UsedManyTimes;
+using PayrollParrots.Model;
+using PayrollParrots.PayrollTax;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace PayrollParrots
 {
@@ -12,7 +16,10 @@ namespace PayrollParrots
     public class PayrollCurrentMonth : Activity
     {
         readonly SoundPlayer soundPlayer = new SoundPlayer();
-        readonly TaxCalculation taxCalculation = new TaxCalculation();
+        readonly EPFCalculations EPFCalculations = new EPFCalculations();
+        readonly PayrollItems payrollItems = new PayrollItems();
+        readonly PayrollCategory payrollCategory = new PayrollCategory();
+        readonly EditTextToDouble editTextToDouble = new EditTextToDouble();
         public const double EmployeeMaxAgeForEPFContribution = 60;
         public const double EPFNinePercentRate = 0.09;
         public const double EPFElevenPercentRate = 0.11;
@@ -22,7 +29,6 @@ namespace PayrollParrots
         int _employeeAge;
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            _employeeAge = Intent.GetIntExtra("employeeAge", 0);
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.payroll_current_month);
             //EPF rate
@@ -42,25 +48,21 @@ namespace PayrollParrots
             currentMonthRemuneration_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
             currentMonthRemuneration_.AfterTextChanged += (sender, args) =>
             {
-                (_EPFContribution, _currentMonthRemuneration) = CurrentMonthRemunerationTextChanged_CalculateEPF(sender, _EPFRate);
+                (_EPFContribution, payrollItems.CurrentMonthRemuneration) = CurrentMonthRemunerationTextChanged_CalculateEPF(sender, _EPFRate);
             };
 
             //BIK
             EditText BIK_ = FindViewById<EditText>(Resource.Id.BIK);
-            BIK_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
-            double _BIK = 0.00;
             BIK_.AfterTextChanged += (sender, args) =>
             {
-                double.TryParse(BIK_.Text, out _BIK);
+                payrollItems.BIK = editTextToDouble.EditText_AfterTextChanged(BIK_);
             };
 
             //VOLA
             EditText VOLA_ = FindViewById<EditText>(Resource.Id.VOLA);
-            VOLA_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
-            double _VOLA = 0.00;
             VOLA_.AfterTextChanged += (sender, args) =>
             {
-                double.TryParse(VOLA_.Text, out _VOLA);
+                payrollItems.VOLA = editTextToDouble.EditText_AfterTextChanged(VOLA_);
             };
 
             Button _secondContinue = FindViewById<Button>(Resource.Id.continuePayroll2);
@@ -68,35 +70,26 @@ namespace PayrollParrots
             {
                 soundPlayer.PlaySound_ButtonClick(this);
 
-                int _monthsRemaining = Intent.GetIntExtra("monthsRemaining", 11);
-                double _totalFamilyDeductions = Intent.GetDoubleExtra("totalFamilyDeductions", 0.00);
-                double _kidsU18 = Intent.GetDoubleExtra("kidsU18", 0.00);
-                double _over18inHE = Intent.GetDoubleExtra("over18inHE", 0.00);
-                double _disabledChildren = Intent.GetDoubleExtra("disabledChildren", 0.00);
-                double _disabledChildreninHE = Intent.GetDoubleExtra("disabledChildreninHE", 0.00);
-                double disabledDeduction = Intent.GetDoubleExtra("disabledDeduction", 0.00);
-                double disabledSpouseDeduction = Intent.GetDoubleExtra("disabledSpouseDeduction", 0.00);
-                double spouseNoIncomeDeduction = Intent.GetDoubleExtra("spouseNoIncomeDeduction", 0.00);
+                payrollCategory.NormalRemuneration["CurrentMonthRemuneration"] = payrollItems.CurrentMonthRemuneration;
+                payrollCategory.BenefitInKind["BIK"] = payrollItems.BIK;
+                payrollCategory.ValueOfLivingAccomodation["VOLA"] = payrollItems.VOLA;
+
+                var FamilyDeductionItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("FamilyDeductionCategory"));
                 string _employeeName = Intent.GetStringExtra("employeeName");
+                int _employeeAge = Intent.GetIntExtra("employeeAge", 0);
+                int _monthsRemaining = Intent.GetIntExtra("monthsRemaining", 11);
 
                 Intent intent = new Intent(this, typeof(PayrollAdditionalCurrentMonth));
-                intent.PutExtra("currentMonthRemuneration", _currentMonthRemuneration);
                 intent.PutExtra("EPFContribution", _EPFContribution);
-                intent.PutExtra("BIK", _BIK);
-                intent.PutExtra("VOLA", _VOLA);
                 intent.PutExtra("EPFRate", _EPFRate);
+                intent.PutExtra("FamilyDeductionItems", JsonConvert.SerializeObject(FamilyDeductionItems));
+                intent.PutExtra("NormalRemuneration", JsonConvert.SerializeObject(payrollCategory.NormalRemuneration));
+                intent.PutExtra("BIK", JsonConvert.SerializeObject(payrollCategory.BenefitInKind));
+                intent.PutExtra("VOLA", JsonConvert.SerializeObject(payrollCategory.ValueOfLivingAccomodation));
 
                 intent.PutExtra("employeeAge", _employeeAge);
                 intent.PutExtra("employeeName", _employeeName);
-                intent.PutExtra("totalFamilyDeductions", _totalFamilyDeductions);
                 intent.PutExtra("monthsRemaining", _monthsRemaining);
-                intent.PutExtra("kidsU18", _kidsU18);
-                intent.PutExtra("over18inHE", _over18inHE);
-                intent.PutExtra("disabledChildren", _disabledChildren);
-                intent.PutExtra("disabledChildreninHE", _disabledChildreninHE);
-                intent.PutExtra("disabledDeduction", disabledDeduction);
-                intent.PutExtra("disabledSpouseDeduction", disabledSpouseDeduction);
-                intent.PutExtra("spouseNoIncomeDeduction", spouseNoIncomeDeduction);
                 StartActivity(intent);
             };
         }
@@ -139,7 +132,7 @@ namespace PayrollParrots
                     else
                     {
                         _currentMonthRemuneration = double.Parse(editText.Text);
-                        _EPFContribution = taxCalculation.EmployeeEPFCalculation(_employeeAge, _EPFRate, _currentMonthRemuneration);
+                        _EPFContribution = EPFCalculations.EmployeeEPFCalculation(_employeeAge, _EPFRate, _currentMonthRemuneration);
                         return (_EPFContribution, _currentMonthRemuneration);
                     }
             }

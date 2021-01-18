@@ -1,7 +1,6 @@
 ﻿using System;
 using Android.App;
 using Android.Content;
-using Android.Media;
 using Android.OS;
 using Android.Support.V7.App;
 using Android.Widget;
@@ -81,8 +80,7 @@ namespace PayrollParrots
             alert.SetIcon(Resource.Drawable.Question_Mark);
             alert.SetButton("Delete", (c, ev) =>
             {
-                MediaPlayer player = MediaPlayer.Create(this, Resource.Drawable.alert_sound);
-                player.Start();
+                soundPlayer.PlaySound_AlertWarning(this);
                 Android.App.AlertDialog.Builder dialog2 = new Android.App.AlertDialog.Builder(this);
                 Android.App.AlertDialog alert2 = dialog2.Create();
                 alert2.SetTitle("Delete Employee");
