@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using PayrollParrots.Model;
 
 namespace PayrollParrots
 {
-    public class MTDCalculations
+    public class MTDCalculations : IsApplicableToMTD
     {
+        readonly IsApplicableToMTD isApplicableToMTD;
+        public MTDCalculations(Dictionary<string, double> AllItemsDictionary) : base(AllItemsDictionary)
+        {
+            isApplicableToMTD = new IsApplicableToMTD(AllItemsDictionary);
+        }
+
         public const double EmployeeMaxAgeForEPFContribution = 60;
         public const double SpouseNoIncomeDeduction = 4000;
         public const double MTDMinimumAmmountToNotGoToZero = 10;
@@ -14,19 +20,14 @@ namespace PayrollParrots
         public const double SpouseNoIncomeRebate20To35K = -650;
         public const double SpouseGetIncomeRebate20To35K = -250;
 
-        public double MTDCalculation(Dictionary<string, double> FamilyDeductionItems, Dictionary<string, double> NormalRemunerationItems,
-            Dictionary<string, double> BIKItems, Dictionary<string, double> VOLAItems, Dictionary<string, double> AdditionalRemunerationItems,
-            Dictionary<string, double> DeductionItems, Dictionary<string, double> RebateItems, Dictionary<string, double> PreviousRemunerationItems,
-            Dictionary<string, double> PreviousBIKItems, Dictionary<string, double> PreviousVOLAItems, Dictionary<string, double> PreviousDeductionItems,
-            Dictionary<string, double> PreviousRebateItems, int _monthsRemaining, double _SOCSOContribution, double _previousSOCSOContribution,
+        public double MTDCalculation(PayrollFamilyDeductions FamilyDeductionItems, int _monthsRemaining, double _SOCSOContribution, double _previousSOCSOContribution,
             double _previousEPFContribution, double _MTDPrevious, double _EPFContribution, double _EPFAdditionalContribution)
         {
             int n = _monthsRemaining;
 
-            double P = PAndPAddCalculation(FamilyDeductionItems, NormalRemunerationItems, BIKItems, VOLAItems, AdditionalRemunerationItems, DeductionItems, PreviousRemunerationItems,
-            PreviousBIKItems, PreviousVOLAItems, PreviousDeductionItems, n, _SOCSOContribution, _previousSOCSOContribution, _previousEPFContribution, _EPFContribution, _EPFAdditionalContribution, true);
+            double P = PAndPAddCalculation(FamilyDeductionItems, n, _SOCSOContribution, _previousSOCSOContribution, _previousEPFContribution, _EPFContribution, _EPFAdditionalContribution, true);
 
-            double Z = PreviousRebateItems.Sum(x => x.Value);
+            double Z = isApplicableToMTD.PreviousZakatByEmployee + isApplicableToMTD.PreviousZakatViaPayroll + isApplicableToMTD.PreviousDepartureLevy;
             double X = _MTDPrevious;
 
             (double M, double R, double B) = MRBCalculation(P, FamilyDeductionItems);
@@ -36,7 +37,7 @@ namespace PayrollParrots
             {
                 CurrentMonthMTD = 0;
             }
-            double NetMTD = CurrentMonthMTD - RebateItems.Sum(x => x.Value);
+            double NetMTD = CurrentMonthMTD - isApplicableToMTD.ZakatByEmployee - isApplicableToMTD.ZakatViaPayroll - isApplicableToMTD.DepartureLevy;
 
             if (NetMTD < 0.00)
             {
@@ -45,13 +46,12 @@ namespace PayrollParrots
 
             double YearlyMTD = X + (CurrentMonthMTD * (n + 1));
 
-            double PAdd = PAndPAddCalculation(FamilyDeductionItems, NormalRemunerationItems, BIKItems, VOLAItems, AdditionalRemunerationItems, DeductionItems, PreviousRemunerationItems,
-            PreviousBIKItems, PreviousVOLAItems, PreviousDeductionItems, n, _SOCSOContribution, _previousSOCSOContribution, _previousEPFContribution, _EPFContribution, _EPFAdditionalContribution, false);
+            double PAdd = PAndPAddCalculation(FamilyDeductionItems, n, _SOCSOContribution, _previousSOCSOContribution, _previousEPFContribution, _EPFContribution, _EPFAdditionalContribution, false);
 
             (double Madd, double Radd, double Badd) = MRBCalculation(PAdd, FamilyDeductionItems);
 
             double CS = Math.Floor(((PAdd - Madd) * Radd + Badd) * 100) * 0.01;
-            if (P < 35001.00 && FamilyDeductionItems["SpouseNotGettingIncome"] == SpouseNoIncomeDeduction)
+            if (P < 35001.00 && FamilyDeductionItems.SpouseNotGettingIncome == SpouseNoIncomeDeduction)
             {
                 CS += SpouseNoIncomeRebate;
             }
@@ -86,10 +86,7 @@ namespace PayrollParrots
             return RoundedMTD;
         }
 
-        public double PAndPAddCalculation(Dictionary<string, double> FamilyDeductionItems, Dictionary<string, double> NormalRemunerationItems,
-            Dictionary<string, double> BIKItems, Dictionary<string, double> VOLAItems, Dictionary<string, double> AdditionalRemunerationItems,
-            Dictionary<string, double> DeductionItems, Dictionary<string, double> PreviousRemunerationItems,
-            Dictionary<string, double> PreviousBIKItems, Dictionary<string, double> PreviousVOLAItems, Dictionary<string, double> PreviousDeductionItems,
+        public double PAndPAddCalculation(PayrollFamilyDeductions FamilyDeductionItems,
             int n, double _SOCSOContribution, double _previousSOCSOContribution,
             double _previousEPFContribution, double _EPFContribution, double _EPFAdditionalContribution, bool POrPAdd)
         {
@@ -99,17 +96,17 @@ namespace PayrollParrots
             double _CheckingEPFAdditionalContributionOverLimit = Math.Min(4000 - _previousEPFContribution - _EPFContribution, _EPFAdditionalContribution);
 
             //Y
-            double Y = PreviousRemunerationItems["PreviousMonthsRemuneration"] + PreviousVOLAItems["PreviousVOLA"] + PreviousBIKItems["PreviousBIK"];
+            double Y = isApplicableToMTD.PreviousMonthsRemuneration + isApplicableToMTD.PreviousVOLA + isApplicableToMTD.PreviousBIK;
             //K
             double K = _previousEPFContribution;
             //∑(Y-K)
             double Y_K = Y - K;
             //Y1
-            double Y1 = NormalRemunerationItems["CurrentMonthRemuneration"] + VOLAItems["VOLA"] + BIKItems["BIK"];
+            double Y1 = isApplicableToMTD.CurrentMonthRemuneration + isApplicableToMTD.VOLA + isApplicableToMTD.BIK;
             //K1
             double K1 = _CheckingEPFContributionOverLimit;
             //Yt
-            double Yt = AdditionalRemunerationItems.Sum(x => x.Value);
+            double Yt = isApplicableToMTD.Bonus + isApplicableToMTD.Commission + isApplicableToMTD.OthersNotSubjectToSOCSOAndEIS + isApplicableToMTD.OthersSubjectToEPFAndSOCSOAndEIS + isApplicableToMTD.OthersNotSubjectToEPF + isApplicableToMTD.Arrears;
             //Kt
             double Kt = _CheckingEPFAdditionalContributionOverLimit;
             //Y2
@@ -127,11 +124,11 @@ namespace PayrollParrots
             //D
             double D = 9000.00;
             //FamilyDeductions
-            double SDSQC = FamilyDeductionItems["totalFamilyDeductions"];
+            double SDSQC = FamilyDeductionItems.TotalFamilyDeductions;
             //PreviousDeductions
-            double LP = PreviousDeductionItems.Sum(x => x.Value) + _previousSOCSOContribution;
+            double LP = isApplicableToMTD.PreviousTotalDeductions + _previousSOCSOContribution;
             //CurrentMonthDeduction
-            double LP1 = DeductionItems.Sum(x => x.Value) + _SOCSOContribution;
+            double LP1 = isApplicableToMTD.TotalDeductions + _SOCSOContribution;
             switch (POrPAdd)
             {
                 case true:
@@ -152,13 +149,13 @@ namespace PayrollParrots
             }
         }
 
-        public (double, double, double) MRBCalculation(double P, Dictionary<string, double> FamilyDeductionItems)
+        public (double, double, double) MRBCalculation(double P, PayrollFamilyDeductions FamilyDeductionItems)
         {
             double M;
             double R;
             double B;
 
-            double SpouseNotGettingIncome = FamilyDeductionItems["SpouseNotGettingIncome"];
+            double SpouseNotGettingIncome = FamilyDeductionItems.SpouseNotGettingIncome;
             if (P < 5001)
             {
                 M = 0;

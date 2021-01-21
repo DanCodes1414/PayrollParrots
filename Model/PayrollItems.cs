@@ -15,7 +15,6 @@
         public double OthersNotSubjectToEPF { get; set; }
         public double OthersNotSubjectToSOCSOAndEIS { get; set; }
         public double OthersSubjectToEPFAndSOCSOAndEIS { get; set; }
-        public double SpouseNotWorkingDeduction { get; set; }
         public double LifeStyleRelief { get; set; }
         public double SportsRelief { get; set; }
         public double LifeInsurance { get; set; }
@@ -61,6 +60,5 @@
         public double PreviousZakatByEmployee { get; set; }
         public double PreviousZakatViaPayroll { get; set; }
         public double PreviousDepartureLevy { get; set; }
-
     }
 }

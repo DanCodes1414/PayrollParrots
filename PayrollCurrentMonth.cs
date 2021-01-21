@@ -8,7 +8,6 @@ using PayrollParrots.UsedManyTimes;
 using PayrollParrots.Model;
 using PayrollParrots.PayrollTax;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace PayrollParrots
 {
@@ -16,15 +15,13 @@ namespace PayrollParrots
     public class PayrollCurrentMonth : Activity
     {
         readonly SoundPlayer soundPlayer = new SoundPlayer();
-        readonly EPFCalculations EPFCalculations = new EPFCalculations();
         readonly PayrollItems payrollItems = new PayrollItems();
-        readonly PayrollCategory payrollCategory = new PayrollCategory();
+        PayrollCategory payrollCategory;
         readonly EditTextToDouble editTextToDouble = new EditTextToDouble();
         public const double EmployeeMaxAgeForEPFContribution = 60;
         public const double EPFNinePercentRate = 0.09;
         public const double EPFElevenPercentRate = 0.11;
         double _EPFRate = 0.11;
-        double _currentMonthRemuneration = 0.00;
         double _EPFContribution;
         int _employeeAge;
         protected override void OnCreate(Bundle savedInstanceState)
@@ -36,11 +33,13 @@ namespace PayrollParrots
             EPFRate9.CheckedChange += (sender, e) =>
             {
                 double _EPFRate = EPFRate_CheckedChanged(sender, e);
+                (_EPFContribution, payrollItems.CurrentMonthRemuneration) = EPFRateCheckedChanged_CalculateEPF(sender, _EPFRate);
             };
             RadioButton EPFRate11 = FindViewById<RadioButton>(Resource.Id.radio11rate);
             EPFRate11.CheckedChange += (sender, e) =>
             {
                 double _EPFRate = EPFRate_CheckedChanged(sender, e);
+                (_EPFContribution, payrollItems.CurrentMonthRemuneration) = EPFRateCheckedChanged_CalculateEPF(sender, _EPFRate);
             };
 
             //currentmonthremu
@@ -70,11 +69,9 @@ namespace PayrollParrots
             {
                 soundPlayer.PlaySound_ButtonClick(this);
 
-                payrollCategory.NormalRemuneration["CurrentMonthRemuneration"] = payrollItems.CurrentMonthRemuneration;
-                payrollCategory.BenefitInKind["BIK"] = payrollItems.BIK;
-                payrollCategory.ValueOfLivingAccomodation["VOLA"] = payrollItems.VOLA;
+                PayrollCategory payrollCategory = new PayrollCategory(payrollItems);
 
-                var FamilyDeductionItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("FamilyDeductionCategory"));
+                var FamilyDeductionItems = JsonConvert.DeserializeObject<PayrollFamilyDeductions>(Intent.GetStringExtra("FamilyDeductionCategory"));
                 string _employeeName = Intent.GetStringExtra("employeeName");
                 int _employeeAge = Intent.GetIntExtra("employeeAge", 0);
                 int _monthsRemaining = Intent.GetIntExtra("monthsRemaining", 11);
@@ -125,18 +122,37 @@ namespace PayrollParrots
                     {
                         editText.SetText("0", BufferType.Editable);
                         editText.Text.Remove(0);
-                        _currentMonthRemuneration = 0.00;
+                        payrollItems.CurrentMonthRemuneration = 0.00;
                         double _EPFContribution = 0.00;
-                        return (_EPFContribution, _currentMonthRemuneration);
+                        return (_EPFContribution, payrollItems.CurrentMonthRemuneration);
                     }
                     else
                     {
-                        _currentMonthRemuneration = double.Parse(editText.Text);
-                        _EPFContribution = EPFCalculations.EmployeeEPFCalculation(_employeeAge, _EPFRate, _currentMonthRemuneration);
-                        return (_EPFContribution, _currentMonthRemuneration);
+                        payrollCategory = new PayrollCategory(payrollItems);
+                        payrollItems.CurrentMonthRemuneration = double.Parse(editText.Text);
+                        EPFCalculations EPFCalculations = new EPFCalculations(payrollItems, payrollCategory.AdditionalRemuneration);
+                        _EPFContribution = EPFCalculations.EmployeeEPFCalculation(_employeeAge, _EPFRate);
+                        return (_EPFContribution, payrollItems.CurrentMonthRemuneration);
                     }
             }
-            return (_EPFContribution, _currentMonthRemuneration);
+            return (_EPFContribution, payrollItems.CurrentMonthRemuneration);
+        }
+
+        //In case user types normal remuneration then changes epf rate
+        public (double, double) EPFRateCheckedChanged_CalculateEPF(object sender, double _EPFRate)
+        {
+            RadioButton radioButton = sender as RadioButton;
+            _employeeAge = Intent.GetIntExtra("employeeAge", 0);
+
+            switch (radioButton.Id)
+            {
+                case Resource.Id.radio11rate:
+                    payrollCategory = new PayrollCategory(payrollItems);
+                    EPFCalculations EPFCalculations = new EPFCalculations(payrollItems, payrollCategory.AdditionalRemuneration);
+                    _EPFContribution = EPFCalculations.EmployeeEPFCalculation(_employeeAge, _EPFRate);
+                    return (_EPFContribution, payrollItems.CurrentMonthRemuneration);
+            }
+            return (_EPFContribution, payrollItems.CurrentMonthRemuneration);
         }
     }
 }

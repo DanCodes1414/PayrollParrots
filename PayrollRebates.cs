@@ -14,7 +14,6 @@ namespace PayrollParrots
     {
         readonly SoundPlayer soundPlayer = new SoundPlayer();
         readonly PayrollItems payrollItems = new PayrollItems();
-        readonly PayrollCategory payrollCategory = new PayrollCategory();
         readonly EditTextToDouble editTextToDouble = new EditTextToDouble();
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -45,13 +44,11 @@ namespace PayrollParrots
             Button _fifthContinue = FindViewById<Button>(Resource.Id.continuePayroll5);
             _fifthContinue.Click += (sender, e) =>
             {
-                payrollCategory.Rebates["ZakatByEmployee"] = payrollItems.ZakatByEmployee;
-                payrollCategory.Rebates["ZakatViaPayroll"] = payrollItems.ZakatViaPayroll;
-                payrollCategory.Rebates["DepartureLevy"] = payrollItems.DepartureLevy;
-
                 soundPlayer.PlaySound_ButtonClick(this);
 
-                var FamilyDeductionItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("FamilyDeductionItems"));
+                PayrollCategory payrollCategory = new PayrollCategory(payrollItems);
+
+                var FamilyDeductionItems = JsonConvert.DeserializeObject<PayrollFamilyDeductions>(Intent.GetStringExtra("FamilyDeductionItems"));
                 var NormalRemunerationItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("NormalRemuneration"));
                 var BIKItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("BIK"));
                 var VOLAItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("VOLA"));

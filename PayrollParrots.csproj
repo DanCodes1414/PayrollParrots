@@ -87,6 +87,7 @@
     <Compile Include="PayrollTax\EPFCalculations.cs" />
     <Compile Include="PayrollTax\SOCSOAndEISCalculations.cs" />
     <Compile Include="UsedManyTimes\EditTextToDouble.cs" />
+    <Compile Include="Model\PayrollType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

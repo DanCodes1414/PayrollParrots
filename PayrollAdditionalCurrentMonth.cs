@@ -14,9 +14,8 @@ namespace PayrollParrots
     public class PayrollAdditionalCurrentMonth : Activity
     {
         readonly SoundPlayer soundPlayer = new SoundPlayer();
-        readonly EPFCalculations EPFCalculations = new EPFCalculations();
         readonly PayrollItems payrollItems = new PayrollItems();
-        readonly PayrollCategory payrollCategory = new PayrollCategory();
+        EPFCalculations EPFCalculations;
         readonly EditTextToDouble editTextToDouble = new EditTextToDouble();
         public const double EmployeeMaxAgeForEPFContribution = 60;
         public const double EPFNinePercentRate = 0.09;
@@ -68,22 +67,19 @@ namespace PayrollParrots
                 payrollItems.OthersSubjectToEPFAndSOCSOAndEIS = editTextToDouble.EditText_AfterTextChanged(others_);
             };
 
-            var FamilyDeductionItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("FamilyDeductionItems"));
-            var NormalRemunerationItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("NormalRemuneration"));
-            var BIKItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("BIK"));
-            var VOLAItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("VOLA"));
-
             Button _thirdContinue = FindViewById<Button>(Resource.Id.continuePayroll3);
             _thirdContinue.Click += (sender, e) =>
             {
                 soundPlayer.PlaySound_ButtonClick(this);
 
-                payrollCategory.AdditionalRemuneration["Bonus"] = payrollItems.Bonus;
-                payrollCategory.AdditionalRemuneration["Arrears"] = payrollItems.Arrears;
-                payrollCategory.AdditionalRemuneration["Commission"] = payrollItems.Commission;
-                payrollCategory.AdditionalRemuneration["OthersNotSubjectToEPF"] = payrollItems.OthersNotSubjectToEPF;
-                payrollCategory.AdditionalRemuneration["OthersNotSubjectToSOCSOAndEIS"] = payrollItems.OthersNotSubjectToSOCSOAndEIS;
-                payrollCategory.AdditionalRemuneration["OthersSubjectToEPFAndSOCSOAndEIS"] = payrollItems.OthersSubjectToEPFAndSOCSOAndEIS;
+                PayrollCategory payrollCategory = new PayrollCategory(payrollItems);
+
+                var FamilyDeductionItems = JsonConvert.DeserializeObject<PayrollFamilyDeductions>(Intent.GetStringExtra("FamilyDeductionItems"));
+                var NormalRemunerationItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("NormalRemuneration"));
+                var BIKItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("BIK"));
+                var VOLAItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("VOLA"));
+
+                payrollItems.CurrentMonthRemuneration = NormalRemunerationItems["CurrentMonthRemuneration"];
 
                 double _EPFContribution = Intent.GetDoubleExtra("EPFContribution", 0.00);
                 double _EPFRate = Intent.GetDoubleExtra("EPFRate", 0.11);
@@ -92,7 +88,8 @@ namespace PayrollParrots
                 int _monthsRemaining = Intent.GetIntExtra("monthsRemaining", 11);
 
                 //additional EPF
-                double _EPFAdditionalContribution = EPFCalculations.EmployeeEPFAdditionalCalculation(_employeeAge, _EPFRate, _EPFContribution, NormalRemunerationItems, payrollCategory.AdditionalRemuneration);
+                EPFCalculations = new EPFCalculations(payrollItems, payrollCategory.AdditionalRemuneration);
+                double _EPFAdditionalContribution = EPFCalculations.EmployeeEPFAdditionalCalculation(_employeeAge, _EPFRate, _EPFContribution);
 
                 Intent intent = new Intent(this, typeof(PayrollDeductions));
                 intent.PutExtra("EPFAdditionalContribution", _EPFAdditionalContribution);

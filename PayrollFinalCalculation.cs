@@ -20,9 +20,10 @@ namespace PayrollParrots
     public class PayrollFinalCalculation : Activity
     {
         readonly SoundPlayer soundPlayer = new SoundPlayer();
-        readonly MTDCalculations MTDCalculations = new MTDCalculations();
-        readonly SOCSOAndEISCalculations SOCSOAndEISCalculations = new SOCSOAndEISCalculations();
-        readonly EPFCalculations EPFCalculations = new EPFCalculations();
+        MTDCalculations MTDCalculations;
+        readonly PayrollItems payrollItems = new PayrollItems();
+        EPFCalculations EPFCalculations;
+        SOCSOAndEISCalculations SOCSOAndEISCalculations;
         public Payroll payroll;
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -40,7 +41,7 @@ namespace PayrollParrots
             double _EPFContribution = Intent.GetDoubleExtra("EPFContribution", 0.00);
             double _EPFAdditionalContribution = Intent.GetDoubleExtra("EPFAdditionalContribution", 0.00);
 
-            var FamilyDeductionItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("FamilyDeductionItems"));
+            var FamilyDeductionItems = JsonConvert.DeserializeObject<PayrollFamilyDeductions>(Intent.GetStringExtra("FamilyDeductionItems"));
             var NormalRemunerationItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("NormalRemuneration"));
             var BIKItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("BIK"));
             var VOLAItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("VOLA"));
@@ -52,6 +53,8 @@ namespace PayrollParrots
             var PreviousVOLAItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("PreviousVOLA"));
             var PreviousDeductionItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("PreviousDeductions"));
             var PreviousRebateItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("PreviousRebates"));
+
+            var DictionaryContainingAllItems = NormalRemunerationItems.Union(BIKItems).Union(VOLAItems).Union(AdditionalRemunerationItems).Union(DeductionItems).Union(RebateItems).Union(PreviousRemunerationItems).Union(PreviousBIKItems).Union(PreviousVOLAItems).Union(PreviousDeductionItems).Union(PreviousRebateItems).ToDictionary(k => k.Key, v => v.Value);
 
             EditText name = FindViewById<EditText>(Resource.Id.name);
             EditText finalPCB = FindViewById<EditText>(Resource.Id.finalPCB);
@@ -87,29 +90,33 @@ namespace PayrollParrots
 
             int n = _monthsRemaining;
 
+            SOCSOAndEISCalculations = new SOCSOAndEISCalculations(NormalRemunerationItems, AdditionalRemunerationItems);
+
             //EIS Calculation
-            double EIS = SOCSOAndEISCalculations.EISCalculation(_employeeAge, NormalRemunerationItems, AdditionalRemunerationItems);
+            double EIS = SOCSOAndEISCalculations.EISCalculation(_employeeAge);
             double employerEIS = EIS;
 
             //MTD Calculation
-            double RoundedMTD = MTDCalculations.MTDCalculation(FamilyDeductionItems, NormalRemunerationItems, BIKItems, VOLAItems, AdditionalRemunerationItems, DeductionItems, RebateItems,
-                PreviousRemunerationItems, PreviousBIKItems, PreviousVOLAItems, PreviousDeductionItems, PreviousRebateItems, _monthsRemaining, _SOCSOContribution, _previousSOCSOContribution,
+            MTDCalculations = new MTDCalculations(DictionaryContainingAllItems);
+            double RoundedMTD = MTDCalculations.MTDCalculation(FamilyDeductionItems, _monthsRemaining, _SOCSOContribution, _previousSOCSOContribution,
                 _previousEPFContribution, _MTDPrevious, _EPFContribution, _EPFAdditionalContribution);
+
+            //EPF
+            double EPF = _EPFContribution + _EPFAdditionalContribution;
 
             //Gross Salary
             double GrossSalary = NormalRemunerationItems["CurrentMonthRemuneration"] + AdditionalRemunerationItems.Sum(x => x.Value);
 
             //Net Salary
-            double NetSalary = GrossSalary - _SOCSOContribution - _EPFAdditionalContribution - _EPFContribution - EIS - RebateItems["ZakatViaPayroll"] - RoundedMTD;
-
-            //EPF
-            double EPF = _EPFContribution + _EPFAdditionalContribution;
+            double NetSalary = GrossSalary - _SOCSOContribution - EPF - EIS - RebateItems["ZakatViaPayroll"] - RoundedMTD;
 
             //employer EPF
-            double employerEPF = EPFCalculations.EmployerEPFCalculation(_employeeAge, NormalRemunerationItems, AdditionalRemunerationItems);
+            payrollItems.CurrentMonthRemuneration = NormalRemunerationItems["CurrentMonthRemuneration"];
+            EPFCalculations = new EPFCalculations(payrollItems, AdditionalRemunerationItems);
+            double employerEPF = EPFCalculations.EmployerEPFCalculation(_employeeAge);
 
             //Employer SOCSO
-            double employerSOCSO = SOCSOAndEISCalculations.EmployerSOCSOCalculation(_employeeAge, NormalRemunerationItems, AdditionalRemunerationItems);
+            double employerSOCSO = SOCSOAndEISCalculations.EmployerSOCSOCalculation(_employeeAge);
 
             //print to layout
             name.Text = $"Name: {_employeeName}";

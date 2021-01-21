@@ -15,7 +15,7 @@ namespace PayrollParrots
     public class PayrollFamily : Activity
     {
         readonly SoundPlayer soundPlayer = new SoundPlayer();
-        PayrollFamilyDeductions payrollFamilyDeductions = new PayrollFamilyDeductions();
+        readonly PayrollFamilyDeductions payrollFamilyDeductions = new PayrollFamilyDeductions();
         private int monthsRemaining;
 
         protected override void OnCreate(Bundle savedInstanceState)
@@ -133,24 +133,12 @@ namespace PayrollParrots
                 }
                 else
                 {
-                    double totalFamilyDeductions = (payrollFamilyDeductions.KidsUnder18 * 2000) + (payrollFamilyDeductions.Over18InHigherEducation * 8000) + (payrollFamilyDeductions.DisabledKids * 6000) + (payrollFamilyDeductions.DisabledKidsinHigherEducation * 14000) + (payrollFamilyDeductions.KidsUnder18Split * 1000) + (payrollFamilyDeductions.Over18InHigherEducationSplit * 4000) + (payrollFamilyDeductions.DisabledKidsSplit * 3000) + (payrollFamilyDeductions.DisabledKidsinHigherEducationSplit * 7000) + payrollFamilyDeductions.DisabledIndividual + payrollFamilyDeductions.DisabledSpouse + payrollFamilyDeductions.SpouseNotGettingIncome;
-                    payrollFamilyDeductions.FamilyDeductions["KidsUnder18"] = payrollFamilyDeductions.KidsUnder18;
-                    payrollFamilyDeductions.FamilyDeductions["Over18InHigherEducation"] = payrollFamilyDeductions.Over18InHigherEducation;
-                    payrollFamilyDeductions.FamilyDeductions["DisabledKids"] = payrollFamilyDeductions.DisabledKids;
-                    payrollFamilyDeductions.FamilyDeductions["DisabledKidsinHigherEducation"] = payrollFamilyDeductions.DisabledKidsinHigherEducation;
-                    payrollFamilyDeductions.FamilyDeductions["KidsUnder18Split"] = payrollFamilyDeductions.KidsUnder18Split;
-                    payrollFamilyDeductions.FamilyDeductions["Over18InHigherEducationSplit"] = payrollFamilyDeductions.Over18InHigherEducationSplit;
-                    payrollFamilyDeductions.FamilyDeductions["DisabledKidsSplit"] = payrollFamilyDeductions.DisabledKidsSplit;
-                    payrollFamilyDeductions.FamilyDeductions["DisabledKidsinHigherEducationSplit"] = payrollFamilyDeductions.DisabledKidsinHigherEducationSplit;
-                    payrollFamilyDeductions.FamilyDeductions["DisabledIndividual"] = payrollFamilyDeductions.DisabledIndividual;
-                    payrollFamilyDeductions.FamilyDeductions["DisabledSpouse"] = payrollFamilyDeductions.DisabledSpouse;
-                    payrollFamilyDeductions.FamilyDeductions["SpouseNotGettingIncome"] = payrollFamilyDeductions.SpouseNotGettingIncome;
-                    payrollFamilyDeductions.FamilyDeductions["totalFamilyDeductions"] = totalFamilyDeductions;
+                    payrollFamilyDeductions.TotalFamilyDeductions = (payrollFamilyDeductions.KidsUnder18 * 2000) + (payrollFamilyDeductions.Over18InHigherEducation * 8000) + (payrollFamilyDeductions.DisabledKids * 6000) + (payrollFamilyDeductions.DisabledKidsinHigherEducation * 14000) + (payrollFamilyDeductions.KidsUnder18Split * 1000) + (payrollFamilyDeductions.Over18InHigherEducationSplit * 4000) + (payrollFamilyDeductions.DisabledKidsSplit * 3000) + (payrollFamilyDeductions.DisabledKidsinHigherEducationSplit * 7000) + payrollFamilyDeductions.DisabledIndividual + payrollFamilyDeductions.DisabledSpouse + payrollFamilyDeductions.SpouseNotGettingIncome;
 
                     soundPlayer.PlaySound_ButtonClick(this);
 
                     Intent intent = new Intent(this, typeof(PayrollCurrentMonth));
-                    intent.PutExtra("FamilyDeductionCategory", JsonConvert.SerializeObject(payrollFamilyDeductions.FamilyDeductions));
+                    intent.PutExtra("FamilyDeductionCategory", JsonConvert.SerializeObject(payrollFamilyDeductions));
                     intent.PutExtra("employeeAge", _employeeAge);
                     intent.PutExtra("employeeName", _employeeName);
                     intent.PutExtra("monthsRemaining", monthsRemaining);
@@ -186,6 +174,10 @@ namespace PayrollParrots
             {
                 payrollFamilyDeductions.SpouseNotGettingIncome = 4000.00;
             }
+            else
+            {
+                payrollFamilyDeductions.SpouseNotGettingIncome = 0.00;
+            }
         }
 
         private void SpouseAndSelfDisabled_RadioCheckedChanged(object sender, CompoundButton.CheckedChangeEventArgs e)
@@ -216,98 +208,42 @@ namespace PayrollParrots
         public void NumberOfKids_TextChanged(object sender, TextChangedEventArgs e)
         {
             EditText editText = sender as EditText;
-            switch (editText.Id)
+            if (editText.Length() == 0)
             {
-                case Resource.Id.u18kids:
-                    if (editText.Length() == 0)
-                    {
-                        editText.SetText("0", BufferType.Editable);
-                        editText.Text.Remove(0);
-                    }
-                    else
-                    {
+                editText.SetText("0", BufferType.Editable);
+                editText.Text.Remove(0);
+            }
+            else
+            {
+                switch (editText.Id)
+                {
+                    case Resource.Id.u18kids:
                         payrollFamilyDeductions.KidsUnder18 = int.Parse(editText.Text);
-                    }
-                    break;
-                case Resource.Id.over18inHE:
-                    if (editText.Length() == 0)
-                    {
-                        editText.SetText("0", BufferType.Editable);
-                        editText.Text.Remove(0);
-                    }
-                    else
-                    {
+                        break;
+                    case Resource.Id.over18inHE:
                         payrollFamilyDeductions.Over18InHigherEducation = int.Parse(editText.Text);
-                    }
-                    break;
-                case Resource.Id.disabledChildren:
-                    if (editText.Length() == 0)
-                    {
-                        editText.SetText("0", BufferType.Editable);
-                        editText.Text.Remove(0);
-                    }
-                    else
-                    {
+                        break;
+                    case Resource.Id.disabledChildren:
                         payrollFamilyDeductions.DisabledKids = int.Parse(editText.Text);
-                    }
-                    break;
-                case Resource.Id.disabledChildreninHE:
-                    if (editText.Length() == 0)
-                    {
-                        editText.SetText("0", BufferType.Editable);
-                        editText.Text.Remove(0);
-                    }
-                    else
-                    {
+                        break;
+                    case Resource.Id.disabledChildreninHE:
                         payrollFamilyDeductions.DisabledKidsinHigherEducation = int.Parse(editText.Text);
-                    }
-                    break;
-                case Resource.Id.u18kidssplit:
-                    if (editText.Length() == 0)
-                    {
-                        editText.SetText("0", BufferType.Editable);
-                        editText.Text.Remove(0);
-                    }
-                    else
-                    {
+                        break;
+                    case Resource.Id.u18kidssplit:
                         payrollFamilyDeductions.KidsUnder18Split = int.Parse(editText.Text);
-                    }
-                    break;
-                case Resource.Id.over18inHEsplit:
-                    if (editText.Length() == 0)
-                    {
-                        editText.SetText("0", BufferType.Editable);
-                        editText.Text.Remove(0);
-                    }
-                    else
-                    {
+                        break;
+                    case Resource.Id.over18inHEsplit:
                         payrollFamilyDeductions.Over18InHigherEducationSplit = int.Parse(editText.Text);
-                    }
-                    break;
-                case Resource.Id.disabledChildrensplit:
-                    if (editText.Length() == 0)
-                    {
-                        editText.SetText("0", BufferType.Editable);
-                        editText.Text.Remove(0);
-                    }
-                    else
-                    {
+                        break;
+                    case Resource.Id.disabledChildrensplit:
                         payrollFamilyDeductions.DisabledKidsSplit = int.Parse(editText.Text);
-                    }
-                    break;
-                case Resource.Id.disabledChildreninHEsplit:
-                    if (editText.Length() == 0)
-                    {
-                        editText.SetText("0", BufferType.Editable);
-                        editText.Text.Remove(0);
-                    }
-                    else
-                    {
+                        break;
+                    case Resource.Id.disabledChildreninHEsplit:
                         payrollFamilyDeductions.DisabledKidsinHigherEducationSplit = int.Parse(editText.Text);
-                    }
-                    break;
-                default:
-                    break;
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 

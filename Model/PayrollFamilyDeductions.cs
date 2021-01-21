@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-namespace PayrollParrots.Model
+﻿namespace PayrollParrots.Model
 {
     public class PayrollFamilyDeductions
     {
@@ -14,12 +13,10 @@ namespace PayrollParrots.Model
         public double Over18InHigherEducationSplit { get; set; }
         public double DisabledKidsSplit { get; set; }
         public double DisabledKidsinHigherEducationSplit { get; set; }
-
-        public Dictionary<string, double> FamilyDeductions { get; set; }
+        public double TotalFamilyDeductions { get; set; }
 
         public PayrollFamilyDeductions()
         {
-            FamilyDeductions = new Dictionary<string, double>();
         }
     }
 }

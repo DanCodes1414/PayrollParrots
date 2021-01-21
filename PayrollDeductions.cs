@@ -15,17 +15,17 @@ namespace PayrollParrots
     public class PayrollDeductions : Activity
     {
         readonly SoundPlayer soundPlayer = new SoundPlayer();
-        readonly  SOCSOAndEISCalculations SOCSOAndEISCalculations= new SOCSOAndEISCalculations();
+        SOCSOAndEISCalculations SOCSOAndEISCalculations;
         readonly ValidatingDeductions validatingDeductions = new ValidatingDeductions();
         readonly PayrollItems payrollItems = new PayrollItems();
-        readonly PayrollCategory payrollCategory = new PayrollCategory();
         readonly EditTextToDouble editTextToDouble = new EditTextToDouble();
         public const double EmployeeMaxAgeForEPFContribution = 60;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.payroll_deductions);
-            var FamilyDeductionItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("FamilyDeductionItems"));
+
+            var FamilyDeductionItems = JsonConvert.DeserializeObject<PayrollFamilyDeductions>(Intent.GetStringExtra("FamilyDeductionItems"));
             var NormalRemunerationItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("NormalRemuneration"));
             var BIKItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("BIK"));
             var VOLAItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("VOLA"));
@@ -47,7 +47,8 @@ namespace PayrollParrots
             };
 
             //SOCSOContribution
-            double _SOCSOContribution = SOCSOAndEISCalculations.EmployeeSOCSOCalculation(_employeeAge, NormalRemunerationItems, AdditionalRemunerationItems);
+            SOCSOAndEISCalculations = new SOCSOAndEISCalculations(NormalRemunerationItems, AdditionalRemunerationItems);
+            double _SOCSOContribution = SOCSOAndEISCalculations.EmployeeSOCSOCalculation(_employeeAge);
             
             //lifeInsurance
             EditText lifeInsurance_ = FindViewById<EditText>(Resource.Id.lifeInsurance);
@@ -204,26 +205,9 @@ namespace PayrollParrots
                 }
                 else
                 {
-                    payrollCategory.Deductions["LifeStyleRelief"] = payrollItems.LifeStyleRelief;
-                    payrollCategory.Deductions["SportsRelief"] = payrollItems.SportsRelief;
-                    payrollCategory.Deductions["LifeInsurance"] = payrollItems.LifeInsurance;
-                    payrollCategory.Deductions["SupportingEquipment"] = payrollItems.SupportingEquipment;
-                    payrollCategory.Deductions["EducationFeesForSelf"] = payrollItems.EducationFeesForSelf;
-                    payrollCategory.Deductions["MedicalExamination"] = payrollItems.MedicalExamination;
-                    payrollCategory.Deductions["MedicalVaccination"] = payrollItems.MedicalVaccination;
-                    payrollCategory.Deductions["MedicalDisease"] = payrollItems.MedicalDisease;
-                    payrollCategory.Deductions["SSPN"] = payrollItems.SSPN;
-                    payrollCategory.Deductions["PRS"] = payrollItems.PRS;
-                    payrollCategory.Deductions["KindergartenAndChildCareFees"] = payrollItems.KindergartenAndChildCareFees;
-                    payrollCategory.Deductions["BreastFeedingEquipment"] = payrollItems.BreastFeedingEquipment;
-                    payrollCategory.Deductions["AlimonyToFormerWife"] = payrollItems.AlimonyToFormerWife;
-                    payrollCategory.Deductions["EducationAndMedicalInsurance"] = payrollItems.EducationAndMedicalInsurance;
-                    payrollCategory.Deductions["FatherRelief"] = payrollItems.FatherRelief;
-                    payrollCategory.Deductions["MotherRelief"] = payrollItems.MotherRelief;
-                    payrollCategory.Deductions["MedicalExpenseForParents"] = payrollItems.MedicalExpenseForParents;
-                    payrollCategory.Deductions["DomesticTourismExpenditure"] = payrollItems.DomesticTourismExpenditure;
-
                     soundPlayer.PlaySound_ButtonClick(this);
+
+                    PayrollCategory payrollCategory = new PayrollCategory(payrollItems);
 
                     int _monthsRemaining = Intent.GetIntExtra("monthsRemaining", 11);
                     double _EPFContribution = Intent.GetDoubleExtra("EPFContribution", 0.00);
@@ -231,7 +215,6 @@ namespace PayrollParrots
                     string _employeeName = Intent.GetStringExtra("employeeName");
 
                     Intent intent = new Intent(this, typeof(PayrollRebates));
-
                     intent.PutExtra("FamilyDeductionItems", JsonConvert.SerializeObject(FamilyDeductionItems));
                     intent.PutExtra("NormalRemuneration", JsonConvert.SerializeObject(NormalRemunerationItems));
                     intent.PutExtra("BIK", JsonConvert.SerializeObject(BIKItems));

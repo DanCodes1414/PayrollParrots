@@ -16,14 +16,13 @@ namespace PayrollParrots
         readonly SoundPlayer soundPlayer = new SoundPlayer();
         readonly ValidatingDeductions validatingDeductions = new ValidatingDeductions();
         readonly PayrollItems payrollItems = new PayrollItems();
-        readonly PayrollCategory payrollCategory = new PayrollCategory();
         readonly EditTextToDouble editTextToDouble = new EditTextToDouble();
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.payroll_previous_deductions);
 
-            var FamilyDeductionItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("FamilyDeductionItems"));
+            var FamilyDeductionItems = JsonConvert.DeserializeObject<PayrollFamilyDeductions>(Intent.GetStringExtra("FamilyDeductionItems"));
             var NormalRemunerationItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("NormalRemuneration"));
             var BIKItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("BIK"));
             var VOLAItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("VOLA"));
@@ -230,26 +229,9 @@ namespace PayrollParrots
                 }
                 else
                 {
-                    payrollCategory.PreviousDeductions["PreviousLifeStyleRelief"] = payrollItems.PreviousLifeStyleRelief;
-                    payrollCategory.PreviousDeductions["PreviousSportsRelief"] = payrollItems.PreviousSportsRelief;
-                    payrollCategory.PreviousDeductions["PreviousLifeInsurance"] = payrollItems.PreviousLifeInsurance;
-                    payrollCategory.PreviousDeductions["PreviousSupportingEquipment"] = payrollItems.PreviousSupportingEquipment;
-                    payrollCategory.PreviousDeductions["PreviousEducationFeesForSelf"] = payrollItems.PreviousEducationFeesForSelf;
-                    payrollCategory.PreviousDeductions["PreviousMedicalExamination"] = payrollItems.PreviousMedicalExamination;
-                    payrollCategory.PreviousDeductions["PreviousMedicalVaccination"] = payrollItems.PreviousMedicalVaccination;
-                    payrollCategory.PreviousDeductions["PreviousMedicalDisease"] = payrollItems.PreviousMedicalDisease;
-                    payrollCategory.PreviousDeductions["PreviousSSPN"] = payrollItems.PreviousSSPN;
-                    payrollCategory.PreviousDeductions["PreviousPRS"] = payrollItems.PreviousPRS;
-                    payrollCategory.PreviousDeductions["PreviousKindergartenAndChildCareFees"] = payrollItems.PreviousKindergartenAndChildCareFees;
-                    payrollCategory.PreviousDeductions["PreviousBreastFeedingEquipment"] = payrollItems.PreviousBreastFeedingEquipment;
-                    payrollCategory.PreviousDeductions["PreviousAlimonyToFormerWife"] = payrollItems.PreviousAlimonyToFormerWife;
-                    payrollCategory.PreviousDeductions["PreviousEducationAndMedicalInsurance"] = payrollItems.PreviousEducationAndMedicalInsurance;
-                    payrollCategory.PreviousDeductions["PreviousFatherRelief"] = payrollItems.PreviousFatherRelief;
-                    payrollCategory.PreviousDeductions["PreviousMotherRelief"] = payrollItems.PreviousMotherRelief;
-                    payrollCategory.PreviousDeductions["PreviousMedicalExpenseForParents"] = payrollItems.PreviousMedicalExpenseForParents;
-                    payrollCategory.PreviousDeductions["PreviousDomesticTourismExpenditure"] = payrollItems.PreviousDomesticTourismExpenditure;
-
                     soundPlayer.PlaySound_ButtonClick(this);
+
+                    PayrollCategory payrollCategory = new PayrollCategory(payrollItems);
 
                     double _SOCSOContribution = Intent.GetDoubleExtra("SOCSOContribution", 0.00);
                     int _monthsRemaining = Intent.GetIntExtra("monthsRemaining", 11);

@@ -1,16 +1,23 @@
 ﻿using System;
+using PayrollParrots.Model;
 using System.Collections.Generic;
 
 namespace PayrollParrots.PayrollTax
 {
-    public class SOCSOAndEISCalculations
+    public class SOCSOAndEISCalculations : IsApplicableToSOCSOAndEIS
     {
+        readonly IsApplicableToSOCSOAndEIS isApplicableToSOCSOAndEIS;
+        public SOCSOAndEISCalculations(Dictionary<string, double> NormalRemunerationItems, Dictionary<string, double> AdditionalRemunerationItems) : base(NormalRemunerationItems, AdditionalRemunerationItems)
+        {
+            isApplicableToSOCSOAndEIS = new IsApplicableToSOCSOAndEIS(NormalRemunerationItems, AdditionalRemunerationItems);
+        }
+
         public const double EmployeeMaxAgeForEPFContribution = 60;
-        public double EmployeeSOCSOCalculation(int _employeeAge, Dictionary<string, double> NormalRemunerationItems, Dictionary<string, double> AdditionalRemunerationItems)
+        public double EmployeeSOCSOCalculation(int _employeeAge)
         {
             double _SOCSOContribution;
 
-            double SOCSOWage = NormalRemunerationItems["CurrentMonthRemuneration"] + AdditionalRemunerationItems["Arrears"] + AdditionalRemunerationItems["Commission"] + AdditionalRemunerationItems["OthersNotSubjectToEPF"] + AdditionalRemunerationItems["OthersSubjectToEPFAndSOCSOAndEIS"];
+            double SOCSOWage = isApplicableToSOCSOAndEIS.WageSOCSOAndEIS;
 
             if (_employeeAge < EmployeeMaxAgeForEPFContribution)
             {
@@ -203,10 +210,10 @@ namespace PayrollParrots.PayrollTax
             return _SOCSOContribution;
         }
 
-        public double EmployerSOCSOCalculation(int _employeeAge, Dictionary<string, double> NormalRemunerationItems, Dictionary<string, double> AdditionalRemunerationItems)
+        public double EmployerSOCSOCalculation(int _employeeAge)
         {
             double employerSOCSO;
-            double SOCSOWage = NormalRemunerationItems["CurrentMonthRemuneration"] + AdditionalRemunerationItems["Commission"] + AdditionalRemunerationItems["Arrears"] + AdditionalRemunerationItems["OthersNotSubjectToEPF"] + AdditionalRemunerationItems["OthersSubjectToEPFAndSOCSOAndEIS"];
+            double SOCSOWage = isApplicableToSOCSOAndEIS.WageSOCSOAndEIS;
 
             if (_employeeAge < EmployeeMaxAgeForEPFContribution)
             {
@@ -577,10 +584,10 @@ namespace PayrollParrots.PayrollTax
             return employerSOCSO;
         }
 
-        public double EISCalculation(int _employeeAge, Dictionary<string, double> NormalRemunerationItems, Dictionary<string, double> AdditionalRemunerationItems)
+        public double EISCalculation(int _employeeAge)
         {
             double EIS;
-            double WageEIS = NormalRemunerationItems["CurrentMonthRemuneration"] + AdditionalRemunerationItems["Commission"] + AdditionalRemunerationItems["Arrears"] + AdditionalRemunerationItems["OthersSubjectToEPFAndSOCSOAndEIS"] + AdditionalRemunerationItems["OthersNotSubjectToEPF"];
+            double WageEIS = isApplicableToSOCSOAndEIS.WageSOCSOAndEIS;
 
             if (WageEIS <= 30)
             {

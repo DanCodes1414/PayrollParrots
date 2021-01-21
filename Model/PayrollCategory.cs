@@ -4,29 +4,105 @@ namespace PayrollParrots.Model
 {
     public class PayrollCategory
     {
-        public PayrollCategory()
+        public PayrollCategory(PayrollItems payrollItems)
         {
-            Deductions = new Dictionary<string, double>();
+            Deductions = new Dictionary<string, double>
+            {
+                ["LifeStyleRelief"] = payrollItems.LifeStyleRelief,
+                ["SportsRelief"] = payrollItems.SportsRelief,
+                ["LifeInsurance"] = payrollItems.LifeInsurance,
+                ["SupportingEquipment"] = payrollItems.SupportingEquipment,
+                ["EducationFeesForSelf"] = payrollItems.EducationFeesForSelf,
+                ["MedicalExamination"] = payrollItems.MedicalExamination,
+                ["MedicalVaccination"] = payrollItems.MedicalVaccination,
+                ["MedicalDisease"] = payrollItems.MedicalDisease,
+                ["SSPN"] = payrollItems.SSPN,
+                ["PRS"] = payrollItems.PRS,
+                ["KindergartenAndChildCareFees"] = payrollItems.KindergartenAndChildCareFees,
+                ["BreastFeedingEquipment"] = payrollItems.BreastFeedingEquipment,
+                ["AlimonyToFormerWife"] = payrollItems.AlimonyToFormerWife,
+                ["EducationAndMedicalInsurance"] = payrollItems.EducationAndMedicalInsurance,
+                ["FatherRelief"] = payrollItems.FatherRelief,
+                ["MotherRelief"] = payrollItems.MotherRelief,
+                ["MedicalExpenseForParents"] = payrollItems.MedicalExpenseForParents,
+                ["DomesticTourismExpenditure"] = payrollItems.DomesticTourismExpenditure,
+            };
 
-            NormalRemuneration = new Dictionary<string, double>();
+            NormalRemuneration = new Dictionary<string, double>
+            {
+                ["CurrentMonthRemuneration"] = payrollItems.CurrentMonthRemuneration
+            };
 
-            AdditionalRemuneration = new Dictionary<string, double>();
+            AdditionalRemuneration = new Dictionary<string, double>
+            {
+                ["Bonus"] = payrollItems.Bonus,
+                ["Arrears"] = payrollItems.Arrears,
+                ["Commission"] = payrollItems.Commission,
+                ["OthersNotSubjectToEPF"] = payrollItems.OthersNotSubjectToEPF,
+                ["OthersNotSubjectToSOCSOAndEIS"] = payrollItems.OthersNotSubjectToSOCSOAndEIS,
+                ["OthersSubjectToEPFAndSOCSOAndEIS"] = payrollItems.OthersSubjectToEPFAndSOCSOAndEIS
+            };
 
-            Rebates = new Dictionary<string, double>();
+            Rebates = new Dictionary<string, double>
+            {
+                ["ZakatByEmployee"] = payrollItems.ZakatByEmployee,
+                ["ZakatViaPayroll"] = payrollItems.ZakatViaPayroll,
+                ["DepartureLevy"] = payrollItems.DepartureLevy
+            };
 
-            BenefitInKind = new Dictionary<string, double>();
+            BenefitInKind = new Dictionary<string, double>
+            {
+                ["BIK"] = payrollItems.BIK
+            };
 
-            ValueOfLivingAccomodation = new Dictionary<string, double>();
+            ValueOfLivingAccomodation = new Dictionary<string, double>
+            {
+                ["VOLA"] = payrollItems.VOLA
+            };
 
-            PreviousDeductions = new Dictionary<string, double>();
+            PreviousDeductions = new Dictionary<string, double>
+            {
+                ["PreviousLifeStyleRelief"] = payrollItems.PreviousLifeStyleRelief,
+                ["PreviousSportsRelief"] = payrollItems.PreviousSportsRelief,
+                ["PreviousLifeInsurance"] = payrollItems.PreviousLifeInsurance,
+                ["PreviousSupportingEquipment"] = payrollItems.PreviousSupportingEquipment,
+                ["PreviousEducationFeesForSelf"] = payrollItems.PreviousEducationFeesForSelf,
+                ["PreviousMedicalExamination"] = payrollItems.PreviousMedicalExamination,
+                ["PreviousMedicalVaccination"] = payrollItems.PreviousMedicalVaccination,
+                ["PreviousMedicalDisease"] = payrollItems.PreviousMedicalDisease,
+                ["PreviousSSPN"] = payrollItems.PreviousSSPN,
+                ["PreviousPRS"] = payrollItems.PreviousPRS,
+                ["PreviousKindergartenAndChildCareFees"] = payrollItems.PreviousKindergartenAndChildCareFees,
+                ["PreviousBreastFeedingEquipment"] = payrollItems.PreviousBreastFeedingEquipment,
+                ["PreviousAlimonyToFormerWife"] = payrollItems.PreviousAlimonyToFormerWife,
+                ["PreviousEducationAndMedicalInsurance"] = payrollItems.PreviousEducationAndMedicalInsurance,
+                ["PreviousFatherRelief"] = payrollItems.PreviousFatherRelief,
+                ["PreviousMotherRelief"] = payrollItems.PreviousMotherRelief,
+                ["PreviousMedicalExpenseForParents"] = payrollItems.PreviousMedicalExpenseForParents,
+                ["PreviousDomesticTourismExpenditure"] = payrollItems.PreviousDomesticTourismExpenditure,
+            };
 
-            PreviousRemuneration = new Dictionary<string, double>();
+            PreviousRemuneration = new Dictionary<string, double>
+            {
+                ["PreviousMonthsRemuneration"] = payrollItems.PreviousMonthsRemuneration
+            };
 
-            PreviousRebates = new Dictionary<string, double>();
+            PreviousRebates = new Dictionary<string, double>
+            {
+                ["PreviousZakatByEmployee"] = payrollItems.PreviousZakatByEmployee,
+                ["PreviousZakatViaPayroll"] = payrollItems.PreviousZakatViaPayroll,
+                ["PreviousDepartureLevy"] = payrollItems.PreviousDepartureLevy
+            };
 
-            PreviousBenefitInKind = new Dictionary<string, double>();
+            PreviousBenefitInKind = new Dictionary<string, double>
+            {
+                ["PreviousBIK"] = payrollItems.PreviousBIK
+            };
 
-            PreviousValueOfLivingAccomodation = new Dictionary<string, double>();
+            PreviousValueOfLivingAccomodation = new Dictionary<string, double>
+            {
+                ["PreviousVOLA"] = payrollItems.PreviousVOLA
+            };
         }
 
         public Dictionary<string, double> Deductions { get; set; }
