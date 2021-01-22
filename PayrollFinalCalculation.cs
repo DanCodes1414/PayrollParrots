@@ -91,6 +91,7 @@ namespace PayrollParrots
             int n = _monthsRemaining;
 
             SOCSOAndEISCalculations = new SOCSOAndEISCalculations(NormalRemunerationItems, AdditionalRemunerationItems);
+            payrollItems.CurrentMonthRemuneration = NormalRemunerationItems["CurrentMonthRemuneration"];
 
             //EIS Calculation
             double EIS = SOCSOAndEISCalculations.EISCalculation(_employeeAge);
@@ -105,13 +106,12 @@ namespace PayrollParrots
             double EPF = _EPFContribution + _EPFAdditionalContribution;
 
             //Gross Salary
-            double GrossSalary = NormalRemunerationItems["CurrentMonthRemuneration"] + AdditionalRemunerationItems.Sum(x => x.Value);
+            double GrossSalary = payrollItems.CurrentMonthRemuneration + AdditionalRemunerationItems.Sum(x => x.Value);
 
             //Net Salary
             double NetSalary = GrossSalary - _SOCSOContribution - EPF - EIS - RebateItems["ZakatViaPayroll"] - RoundedMTD;
 
             //employer EPF
-            payrollItems.CurrentMonthRemuneration = NormalRemunerationItems["CurrentMonthRemuneration"];
             EPFCalculations = new EPFCalculations(payrollItems, AdditionalRemunerationItems);
             double employerEPF = EPFCalculations.EmployerEPFCalculation(_employeeAge);
 
@@ -151,51 +151,51 @@ namespace PayrollParrots
                 EmployerSOCSO = employerSOCSO.ToString(),
                 EmployerEIS = employerEIS.ToString()
             };
-            if (n == 11)
+            if (n == (int)Months.January)
             {
                 payroll.Month = Months.January.ToString();
             }
-            else if (n == 10)
+            else if (n == (int)Months.Febuary)
             {
                 payroll.Month = Months.Febuary.ToString();
             }
-            else if (n == 9)
+            else if (n == (int)Months.March)
             {
                 payroll.Month = Months.March.ToString();
             }
-            else if (n == 8)
+            else if (n == (int)Months.April)
             {
                 payroll.Month = Months.April.ToString();
             }
-            else if (n == 7)
+            else if (n == (int)Months.May)
             {
                 payroll.Month = Months.May.ToString();
             }
-            else if (n == 6)
+            else if (n == (int)Months.June)
             {
                 payroll.Month = Months.June.ToString();
             }
-            else if (n == 5)
+            else if (n == (int)Months.July)
             {
                 payroll.Month = Months.July.ToString();
             }
-            else if (n == 4)
+            else if (n == (int)Months.August)
             {
                 payroll.Month = Months.August.ToString();
             }
-            else if (n == 3)
+            else if (n == (int)Months.September)
             {
                 payroll.Month = Months.September.ToString();
             }
-            else if (n == 2)
+            else if (n == (int)Months.October)
             {
                 payroll.Month = Months.October.ToString();
             }
-            else if (n == 1)
+            else if (n == (int)Months.November)
             {
                 payroll.Month = Months.November.ToString();
             }
-            else if (n == 0)
+            else if (n == (int)Months.December)
             {
                 payroll.Month = Months.December.ToString();
             }

@@ -155,6 +155,7 @@ namespace PayrollParrots.Model
         {
             CurrentMonthRemuneration = NormalRemunerationItems["CurrentMonthRemuneration"];
             Commission = AdditionalRemunerationItems["Commission"];
+            Arrears = AdditionalRemunerationItems["Arrears"];
             OthersNotSubjectToEPF = AdditionalRemunerationItems["OthersNotSubjectToEPF"];
             OthersSubjectToEPFAndSOCSOAndEIS = AdditionalRemunerationItems["OthersSubjectToEPFAndSOCSOAndEIS"];
             WageSOCSOAndEIS = CurrentMonthRemuneration + Arrears + Commission + OthersNotSubjectToEPF + OthersSubjectToEPFAndSOCSOAndEIS;

@@ -251,51 +251,51 @@ namespace PayrollParrots
         {
             if (((Spinner)sender).SelectedItem.ToString() == Months.January.ToString())
             {
-                monthsRemaining = 11;
+                monthsRemaining = (int)Months.January;
             }
             else if (((Spinner)sender).SelectedItem.ToString() == Months.Febuary.ToString())
             {
-                monthsRemaining = 10;
+                monthsRemaining = (int)Months.Febuary;
             }
             else if (((Spinner)sender).SelectedItem.ToString() == Months.March.ToString())
             {
-                monthsRemaining = 9;
+                monthsRemaining = (int)Months.March;
             }
             else if (((Spinner)sender).SelectedItem.ToString() == Months.April.ToString())
             {
-                monthsRemaining = 8;
+                monthsRemaining = (int)Months.April;
             }
             else if (((Spinner)sender).SelectedItem.ToString() == Months.May.ToString())
             {
-                monthsRemaining = 7;
+                monthsRemaining = (int)Months.May;
             }
             else if (((Spinner)sender).SelectedItem.ToString() == Months.June.ToString())
             {
-                monthsRemaining = 6;
+                monthsRemaining = (int)Months.June;
             }
             else if (((Spinner)sender).SelectedItem.ToString() == Months.July.ToString())
             {
-                monthsRemaining = 5;
+                monthsRemaining = (int)Months.July;
             }
             else if (((Spinner)sender).SelectedItem.ToString() == Months.August.ToString())
             {
-                monthsRemaining = 4;
+                monthsRemaining = (int)Months.August;
             }
             else if (((Spinner)sender).SelectedItem.ToString() == Months.September.ToString())
             {
-                monthsRemaining = 3;
+                monthsRemaining = (int)Months.September;
             }
             else if (((Spinner)sender).SelectedItem.ToString() == Months.October.ToString())
             {
-                monthsRemaining = 2;
+                monthsRemaining = (int)Months.October;
             }
             else if (((Spinner)sender).SelectedItem.ToString() == Months.November.ToString())
             {
-                monthsRemaining = 1;
+                monthsRemaining = (int)Months.November;
             }
             else if (((Spinner)sender).SelectedItem.ToString() == Months.December.ToString())
             {
-                monthsRemaining = 0;
+                monthsRemaining = (int)Months.December;
             }
             return monthsRemaining;
         }

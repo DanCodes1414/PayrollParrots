@@ -15,18 +15,18 @@ namespace PayrollParrots
 {
     public enum Months
     {
-        January,
-        Febuary,
-        March,
-        April,
-        May,
-        June,
-        July,
-        August,
-        September,
-        October,
-        November,
-        December
+        January = 11,
+        Febuary = 10,
+        March = 9,
+        April = 8,
+        May = 7,
+        June = 6,
+        July = 5,
+        August = 4,
+        September = 3,
+        October = 2,
+        November = 1,
+        December = 0
     }
 
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
