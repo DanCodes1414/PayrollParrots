@@ -13,6 +13,7 @@ using PayrollParrots.PayrollTax;
 using PayrollParrots.UsedManyTimes;
 using System.Collections.Generic;
 using System.Linq;
+using System.Globalization;
 
 namespace PayrollParrots
 {
@@ -88,7 +89,7 @@ namespace PayrollParrots
                 return false;
             });
 
-            int n = _monthsRemaining;
+            int currentMonthInNumberFormat = 12 - _monthsRemaining;
 
             SOCSOAndEISCalculations = new SOCSOAndEISCalculations(NormalRemunerationItems, AdditionalRemunerationItems);
             payrollItems.CurrentMonthRemuneration = NormalRemunerationItems["CurrentMonthRemuneration"];
@@ -100,7 +101,7 @@ namespace PayrollParrots
             //MTD Calculation
             MTDCalculations = new MTDCalculations(DictionaryContainingAllItems);
             double RoundedMTD = MTDCalculations.MTDCalculation(FamilyDeductionItems, _monthsRemaining, _SOCSOContribution, _previousSOCSOContribution,
-                _previousEPFContribution, _MTDPrevious, _EPFContribution, _EPFAdditionalContribution);
+                                _previousEPFContribution, _MTDPrevious, _EPFContribution, _EPFAdditionalContribution);
 
             //EPF
             double EPF = _EPFContribution + _EPFAdditionalContribution;
@@ -149,56 +150,9 @@ namespace PayrollParrots
                 NetSalary = NetSalary.ToString(),
                 EmployerEPF = employerEPF.ToString(),
                 EmployerSOCSO = employerSOCSO.ToString(),
-                EmployerEIS = employerEIS.ToString()
+                EmployerEIS = employerEIS.ToString(),
+                Month = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(currentMonthInNumberFormat)
             };
-            if (n == (int)Months.January)
-            {
-                payroll.Month = Months.January.ToString();
-            }
-            else if (n == (int)Months.Febuary)
-            {
-                payroll.Month = Months.Febuary.ToString();
-            }
-            else if (n == (int)Months.March)
-            {
-                payroll.Month = Months.March.ToString();
-            }
-            else if (n == (int)Months.April)
-            {
-                payroll.Month = Months.April.ToString();
-            }
-            else if (n == (int)Months.May)
-            {
-                payroll.Month = Months.May.ToString();
-            }
-            else if (n == (int)Months.June)
-            {
-                payroll.Month = Months.June.ToString();
-            }
-            else if (n == (int)Months.July)
-            {
-                payroll.Month = Months.July.ToString();
-            }
-            else if (n == (int)Months.August)
-            {
-                payroll.Month = Months.August.ToString();
-            }
-            else if (n == (int)Months.September)
-            {
-                payroll.Month = Months.September.ToString();
-            }
-            else if (n == (int)Months.October)
-            {
-                payroll.Month = Months.October.ToString();
-            }
-            else if (n == (int)Months.November)
-            {
-                payroll.Month = Months.November.ToString();
-            }
-            else if (n == (int)Months.December)
-            {
-                payroll.Month = Months.December.ToString();
-            }
 
             Button _saveDetails = FindViewById<Button>(Resource.Id.saveDetails);
 

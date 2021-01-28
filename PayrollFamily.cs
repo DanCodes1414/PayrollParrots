@@ -53,7 +53,7 @@ namespace PayrollParrots
             spinnerMonth.SetSelection(monthToday - 1);
             spinnerMonth.ItemSelected += (sender, e) =>
             {
-                MonthSelctedNotTodaysMonth(sender, e);
+                MonthSelctedNotCurrentMonth(sender, e);
                 monthsRemaining = SpinnerMonth_ItemSelected(sender, e);
             };
 
@@ -301,7 +301,7 @@ namespace PayrollParrots
         }
 
         //alert pop-up for if another month selected from spinner
-        private void MonthSelctedNotTodaysMonth(object sender, AdapterView.ItemSelectedEventArgs e)
+        private void MonthSelctedNotCurrentMonth(object sender, AdapterView.ItemSelectedEventArgs e)
         {
             DateTime dateToday = DateTime.Now;
             int monthToday = dateToday.Month;

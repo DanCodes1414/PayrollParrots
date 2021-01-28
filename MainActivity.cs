@@ -117,62 +117,62 @@ namespace PayrollParrots
             string month = "";
             if (((Spinner)sender).SelectedItem.ToString() == Months.January.ToString())
             {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.January.ToString())).ToArray();
+                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.January.ToString())).OrderBy(y => y.Name).ToArray();
                 month = Months.January.ToString();
             }
             else if (((Spinner)sender).SelectedItem.ToString() == Months.Febuary.ToString())
             {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.Febuary.ToString())).ToArray();
+                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.Febuary.ToString())).OrderBy(y => y.Name).ToArray();
                 month = Months.Febuary.ToString();
             }
             else if (((Spinner)sender).SelectedItem.ToString() == Months.March.ToString())
             {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.March.ToString())).ToArray();
+                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.March.ToString())).OrderBy(y => y.Name).ToArray();
                 month = Months.March.ToString();
             }
             else if (((Spinner)sender).SelectedItem.ToString() == Months.April.ToString())
             {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.April.ToString())).ToArray();
+                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.April.ToString())).OrderBy(y => y.Name).ToArray();
                 month = Months.April.ToString();
             }
             else if (((Spinner)sender).SelectedItem.ToString() == Months.May.ToString())
             {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.May.ToString())).ToArray();
+                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.May.ToString())).OrderBy(y => y.Name).ToArray();
                 month = Months.May.ToString();
             }
             else if (((Spinner)sender).SelectedItem.ToString() == Months.June.ToString())
             {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.June.ToString())).ToArray();
+                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.June.ToString())).OrderBy(y => y.Name).ToArray();
                 month = Months.June.ToString();
             }
             else if (((Spinner)sender).SelectedItem.ToString() == Months.July.ToString())
             {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.July.ToString())).ToArray();
+                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.July.ToString())).OrderBy(y => y.Name).ToArray();
                 month = Months.July.ToString();
             }
             else if (((Spinner)sender).SelectedItem.ToString() == Months.August.ToString())
             {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.August.ToString())).ToArray();
+                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.August.ToString())).OrderBy(y => y.Name).ToArray();
                 month = Months.August.ToString();
             }
             else if (((Spinner)sender).SelectedItem.ToString() == Months.September.ToString())
             {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.September.ToString())).ToArray();
+                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.September.ToString())).OrderBy(y => y.Name).ToArray();
                 month = Months.September.ToString();
             }
             else if (((Spinner)sender).SelectedItem.ToString() == Months.October.ToString())
             {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.October.ToString())).ToArray();
+                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.October.ToString())).OrderBy(y => y.Name).ToArray();
                 month = Months.October.ToString();
             }
             else if (((Spinner)sender).SelectedItem.ToString() == Months.November.ToString())
             {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.November.ToString())).ToArray();
+                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.November.ToString())).OrderBy(y => y.Name).ToArray();
                 month = Months.November.ToString();
             }
             else if (((Spinner)sender).SelectedItem.ToString() == Months.December.ToString())
             {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.December.ToString())).ToArray();
+                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.December.ToString())).OrderBy(y => y.Name).ToArray();
                 month = Months.December.ToString();
             }
             if (listitem.Length > 0)
