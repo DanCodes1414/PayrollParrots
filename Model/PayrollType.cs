@@ -135,7 +135,7 @@ namespace PayrollParrots.Model
             OthersNotSubjectToSOCSOAndEIS = AdditionalRemunerationItems["OthersNotSubjectToSOCSOAndEIS"];
             OthersSubjectToEPFAndSOCSOAndEIS = AdditionalRemunerationItems["OthersSubjectToEPFAndSOCSOAndEIS"];
             TotalAdditionalRemuneration = Bonus + Arrears + Commission + OthersNotSubjectToSOCSOAndEIS + OthersSubjectToEPFAndSOCSOAndEIS;
-            AdditionalRemunerationWithoutBonus = Arrears + Commission + OthersNotSubjectToSOCSOAndEIS + OthersSubjectToEPFAndSOCSOAndEIS;
+            RemunerationWithoutBonus = CurrentMonthRemuneration + Arrears + Commission + OthersNotSubjectToSOCSOAndEIS + OthersSubjectToEPFAndSOCSOAndEIS;
             WageEPF = CurrentMonthRemuneration + Arrears + Commission + Bonus + OthersNotSubjectToSOCSOAndEIS + OthersSubjectToEPFAndSOCSOAndEIS;
         }
         public double CurrentMonthRemuneration;
@@ -145,7 +145,7 @@ namespace PayrollParrots.Model
         public double OthersNotSubjectToSOCSOAndEIS;
         public double OthersSubjectToEPFAndSOCSOAndEIS;
         public double TotalAdditionalRemuneration;
-        public double AdditionalRemunerationWithoutBonus;
+        public double RemunerationWithoutBonus;
         public double WageEPF;
     }
 

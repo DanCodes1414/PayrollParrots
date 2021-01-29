@@ -195,7 +195,7 @@ namespace PayrollParrots.PayrollTax
             double employerEPFRate;
 
             double additionalRemuneration = isApplicableToEPF.TotalAdditionalRemuneration;
-            double additionalRemunerationWithoutBonus = isApplicableToEPF.AdditionalRemunerationWithoutBonus;
+            double remunerationWithoutBonus = isApplicableToEPF.RemunerationWithoutBonus;
             double currentMonthNetRemuneration = isApplicableToEPF.WageEPF;
 
             if (_employeeAge < EmployeeMaxAgeForEPFContribution)
@@ -217,7 +217,7 @@ namespace PayrollParrots.PayrollTax
                     double EPFWage1 = Math.Ceiling(currentMonthNetRemuneration * 0.05) * 20;
                     employerEPF = Math.Ceiling(EPFWage1 * employerEPFRate);
                 }
-                else if (additionalRemunerationWithoutBonus <= 5000 && additionalRemuneration > 5000)
+                else if (remunerationWithoutBonus <= 5000 && currentMonthNetRemuneration > 5000)
                 {
                     double EPFWage1 = Math.Ceiling(currentMonthNetRemuneration * 0.01) * 100;
                     employerEPF = Math.Ceiling(EPFWage1 * employerEPFRate);
@@ -253,7 +253,7 @@ namespace PayrollParrots.PayrollTax
                     double EPFWage1 = Math.Ceiling(currentMonthNetRemuneration * 0.05) * 20;
                     employerEPF = Math.Ceiling(EPFWage1 * employerEPFRate);
                 }
-                else if (additionalRemunerationWithoutBonus <= 5000 && additionalRemuneration > 5000)
+                else if (remunerationWithoutBonus <= 5000 && additionalRemuneration > 5000)
                 {
                     double EPFWage1 = Math.Ceiling(currentMonthNetRemuneration * 0.01) * 100;
                     employerEPF = Math.Ceiling(EPFWage1 * employerEPFRate);
