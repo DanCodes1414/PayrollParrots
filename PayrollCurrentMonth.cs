@@ -3,7 +3,6 @@ using Android.Content;
 using Android.OS;
 using Android.Text;
 using Android.Widget;
-using static Android.Widget.TextView;
 using PayrollParrots.UsedManyTimes;
 using PayrollParrots.Model;
 using PayrollParrots.PayrollTax;
@@ -120,8 +119,7 @@ namespace PayrollParrots
                 case Resource.Id.currentMonthRemuneration:
                     if (editText.Length() == 0)
                     {
-                        editText.SetText("0", BufferType.Editable);
-                        editText.Text.Remove(0);
+                        editText.Text.Equals("");
                         payrollItems.CurrentMonthRemuneration = 0.00;
                         double _EPFContribution = 0.00;
                         return (_EPFContribution, payrollItems.CurrentMonthRemuneration);

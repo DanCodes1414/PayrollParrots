@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Android.Views;
 using System.Linq;
 using PayrollParrots.UsedManyTimes;
+using AlertDialog = Android.App.AlertDialog;
 
 namespace PayrollParrots
 {
@@ -60,7 +61,7 @@ namespace PayrollParrots
             listfilter = (ListView)FindViewById(Resource.Id.filterList);
             _txtLabel.Visibility = ViewStates.Invisible;
 
-            spinnerMonth.ItemSelected += BindDataFilter;
+            spinnerMonth.ItemSelected += BindDataFilterTest;
 
             Button _startPayroll = FindViewById<Button>(Resource.Id.startPayroll);
 
@@ -73,108 +74,49 @@ namespace PayrollParrots
         //pop-up when item in list is clicked
         private void List_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
         {
-            Android.App.AlertDialog.Builder dialog = new Android.App.AlertDialog.Builder(this);
-            Android.App.AlertDialog alert = dialog.Create();
-            alert.SetTitle("Review or Delete?");
-            alert.SetMessage("Would you like to see your employee's details or delete this employee?");
-            alert.SetIcon(Resource.Drawable.Question_Mark);
-            alert.SetButton("Delete", (c, ev) =>
-            {
-                soundPlayer.PlaySound_AlertWarning(this);
-                Android.App.AlertDialog.Builder dialog2 = new Android.App.AlertDialog.Builder(this);
-                Android.App.AlertDialog alert2 = dialog2.Create();
-                alert2.SetTitle("Delete Employee");
-                alert2.SetMessage("Are you sure!");
-                alert2.SetIcon(Resource.Drawable.Warning_Sign);
-                alert2.SetButton("yes", (c, ev) =>
+            AlertDialog.Builder dialogReviewOrDelete = new AlertDialog.Builder(this)
+                .SetTitle("Review or Delete?")
+                .SetMessage("Would you like to see your employee's details or delete this employee?")
+                .SetIcon(Resource.Drawable.Question_Mark)
+                .SetPositiveButton("Delete", (c, ev) =>
                 {
-                    payroll = listitem[e.Position];
-                    PayrollHelper.DeletePayroll(this, payroll);
+                    soundPlayer.PlaySound_AlertWarning(this);
+                    AlertDialog.Builder dialogDelete = new AlertDialog.Builder(this)
+                    .SetTitle("Delete Employee")
+                    .SetMessage("Are you sure!")
+                    .SetIcon(Resource.Drawable.Warning_Sign)
+                    .SetPositiveButton("yes", (c, ev) =>
+                    {
+                        payroll = listitem[e.Position];
+                        PayrollHelper.DeletePayroll(this, payroll);
 
-                    soundPlayer.PlaySound_DeleteEmployee(this);
+                        soundPlayer.PlaySound_DeleteEmployee(this);
 
-                    StartActivity(new Intent(this, typeof(MainActivity)));
-                    Toast.MakeText(this, "Employee Deleted Sucessfully!", ToastLength.Short).Show();
-                    GC.Collect();
-                });
-                alert2.SetButton2("no", (c, ev) => { });
-                alert2.Show();
-            });
-            alert.SetButton2("Review", (c, ev) =>
-            {
-                payroll = PayrollHelper.SelectPayroll(this, listitem[e.Position].Id);
-                var intent = new Intent(this, typeof(PayrollReview));
-                intent.PutExtra("payroll", JsonConvert.SerializeObject(payroll));
-                StartActivity(intent);
-            });
-            alert.SetButton3("Cancel", (c, ev) => { });
+                        StartActivity(new Intent(this, typeof(MainActivity)));
+                        Toast.MakeText(this, "Employee Deleted Sucessfully!", ToastLength.Short).Show();
+                        GC.Collect();
+                    })
+                    .SetNegativeButton("no", (c, ev) => { });
 
-            alert.Show();
+                    AlertDialog alertDelete = dialogDelete.Create();
+                    alertDelete.Show();
+                })
+                .SetNegativeButton("Review", (c, ev) =>
+                {
+                    payroll = PayrollHelper.SelectPayroll(this, listitem[e.Position].Id);
+                    var intent = new Intent(this, typeof(PayrollReview));
+                    intent.PutExtra("payroll", JsonConvert.SerializeObject(payroll));
+                    StartActivity(intent);
+                })
+                .SetNeutralButton("Cancel", (c, ev) => { });
+
+            AlertDialog alertReviewOrDelete = dialogReviewOrDelete.Create();
+            alertReviewOrDelete.Show();
         }
 
-        private void BindDataFilter(object sender, AdapterView.ItemSelectedEventArgs e)
+        private void BindDataFilterTest(object sender, AdapterView.ItemSelectedEventArgs e)
         {
-            string month = "";
-            if (((Spinner)sender).SelectedItem.ToString() == Months.January.ToString())
-            {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.January.ToString())).OrderBy(y => y.Name).ToArray();
-                month = Months.January.ToString();
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.Febuary.ToString())
-            {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.Febuary.ToString())).OrderBy(y => y.Name).ToArray();
-                month = Months.Febuary.ToString();
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.March.ToString())
-            {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.March.ToString())).OrderBy(y => y.Name).ToArray();
-                month = Months.March.ToString();
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.April.ToString())
-            {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.April.ToString())).OrderBy(y => y.Name).ToArray();
-                month = Months.April.ToString();
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.May.ToString())
-            {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.May.ToString())).OrderBy(y => y.Name).ToArray();
-                month = Months.May.ToString();
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.June.ToString())
-            {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.June.ToString())).OrderBy(y => y.Name).ToArray();
-                month = Months.June.ToString();
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.July.ToString())
-            {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.July.ToString())).OrderBy(y => y.Name).ToArray();
-                month = Months.July.ToString();
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.August.ToString())
-            {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.August.ToString())).OrderBy(y => y.Name).ToArray();
-                month = Months.August.ToString();
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.September.ToString())
-            {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.September.ToString())).OrderBy(y => y.Name).ToArray();
-                month = Months.September.ToString();
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.October.ToString())
-            {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.October.ToString())).OrderBy(y => y.Name).ToArray();
-                month = Months.October.ToString();
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.November.ToString())
-            {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.November.ToString())).OrderBy(y => y.Name).ToArray();
-                month = Months.November.ToString();
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.December.ToString())
-            {
-                listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(Months.December.ToString())).OrderBy(y => y.Name).ToArray();
-                month = Months.December.ToString();
-            }
+            listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(((Spinner)sender).SelectedItem.ToString())).OrderBy(y => y.Name).ToArray();
             if (listitem.Length > 0)
             {
                 listfilter.Visibility = ViewStates.Visible;
@@ -187,7 +129,7 @@ namespace PayrollParrots
             {
                 listfilter.Visibility = ViewStates.Invisible;
                 _txtLabel.Visibility = ViewStates.Visible;
-                _txtLabel.Text = "No employees for " + month + "!!";
+                _txtLabel.Text = "No employees for " + ((Spinner)sender).SelectedItem.ToString() + "!!";
             }
         }
     }

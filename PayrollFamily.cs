@@ -4,10 +4,10 @@ using Android.Content;
 using Android.OS;
 using Android.Widget;
 using Android.Text;
-using static Android.Widget.TextView;
 using PayrollParrots.UsedManyTimes;
 using PayrollParrots.Model;
 using Newtonsoft.Json;
+using System.Globalization;
 
 namespace PayrollParrots
 {
@@ -32,11 +32,11 @@ namespace PayrollParrots
             };
 
             //age
-            EditText birthDay_ = FindViewById<EditText>(Resource.Id.employeeAge);
+            EditText employeeAge_ = FindViewById<EditText>(Resource.Id.employeeAge);
             int _employeeAge = 0;
-            birthDay_.AfterTextChanged += (sender, e) =>
+            employeeAge_.AfterTextChanged += (sender, e) =>
             {
-                int.TryParse(birthDay_.Text, out _employeeAge);
+                int.TryParse(employeeAge_.Text, out _employeeAge);
             };
 
             //payroll month
@@ -210,8 +210,7 @@ namespace PayrollParrots
             EditText editText = sender as EditText;
             if (editText.Length() == 0)
             {
-                editText.SetText("0", BufferType.Editable);
-                editText.Text.Remove(0);
+                editText.Text.Equals("");
             }
             else
             {
@@ -249,54 +248,7 @@ namespace PayrollParrots
 
         private int SpinnerMonth_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
-            if (((Spinner)sender).SelectedItem.ToString() == Months.January.ToString())
-            {
-                monthsRemaining = (int)Months.January;
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.Febuary.ToString())
-            {
-                monthsRemaining = (int)Months.Febuary;
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.March.ToString())
-            {
-                monthsRemaining = (int)Months.March;
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.April.ToString())
-            {
-                monthsRemaining = (int)Months.April;
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.May.ToString())
-            {
-                monthsRemaining = (int)Months.May;
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.June.ToString())
-            {
-                monthsRemaining = (int)Months.June;
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.July.ToString())
-            {
-                monthsRemaining = (int)Months.July;
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.August.ToString())
-            {
-                monthsRemaining = (int)Months.August;
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.September.ToString())
-            {
-                monthsRemaining = (int)Months.September;
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.October.ToString())
-            {
-                monthsRemaining = (int)Months.October;
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.November.ToString())
-            {
-                monthsRemaining = (int)Months.November;
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.December.ToString())
-            {
-                monthsRemaining = (int)Months.December;
-            }
+            monthsRemaining = 11 - (int)((Spinner)sender).SelectedItemId;
             return monthsRemaining;
         }
 
@@ -306,86 +258,43 @@ namespace PayrollParrots
             DateTime dateToday = DateTime.Now;
             int monthToday = dateToday.Month;
 
-            if (((Spinner)sender).SelectedItem.ToString() == Months.January.ToString() && monthToday != 1)
-            {
-                MonthChanged_AlertPopUp(sender, e, Months.January.ToString(), monthToday);
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.Febuary.ToString() && monthToday != 2)
-            {
-                MonthChanged_AlertPopUp(sender, e, Months.Febuary.ToString(), monthToday);
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.March.ToString() && monthToday != 3)
-            {
-                MonthChanged_AlertPopUp(sender, e, Months.March.ToString(), monthToday);
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.April.ToString() && monthToday != 4)
-            {
-                MonthChanged_AlertPopUp(sender, e, Months.April.ToString(), monthToday);
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.May.ToString() && monthToday != 5)
-            {
-                MonthChanged_AlertPopUp(sender, e, Months.May.ToString(), monthToday);
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.June.ToString() && monthToday != 6)
-            {
-                MonthChanged_AlertPopUp(sender, e, Months.June.ToString(), monthToday);
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.July.ToString() && monthToday != 7)
-            {
-                MonthChanged_AlertPopUp(sender, e, Months.July.ToString(), monthToday);
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.August.ToString() && monthToday != 8)
-            {
-                MonthChanged_AlertPopUp(sender, e, Months.August.ToString(), monthToday);
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.September.ToString() && monthToday != 9)
-            {
-                MonthChanged_AlertPopUp(sender, e, Months.September.ToString(), monthToday);
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.October.ToString() && monthToday != 10)
-            {
-                MonthChanged_AlertPopUp(sender, e, Months.October.ToString(), monthToday);
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.November.ToString() && monthToday != 11)
-            {
-                MonthChanged_AlertPopUp(sender, e, Months.November.ToString(), monthToday);
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.December.ToString() && monthToday != 12)
-            {
-                MonthChanged_AlertPopUp(sender, e, Months.December.ToString(), monthToday);
-            }
+            MonthChanged_AlertPopUp(sender, ((Spinner)sender).SelectedItem.ToString(), monthToday);
         }
 
-        private void MonthChanged_AlertPopUp(object sender, AdapterView.ItemSelectedEventArgs e, string month, int monthToday)
+        private void MonthChanged_AlertPopUp(object sender, string month, int monthToday)
         {
-            static string AlertTitle(string month)
+            static string MonthAlertTitle(string month)
             {
                 string ItIsNot = "It is not " + month + "!";
                 return ItIsNot;
             }
 
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-            AlertDialog alert = dialog.Create();
+            int MonthSelectedInNumberFormat = DateTime.ParseExact(month, "MMMM", CultureInfo.CurrentCulture).Month;
 
             const string AlertMessage = "Are you sure you want to change the month?";
-            string ItIsNot = AlertTitle(month);
+            string ItIsNot = MonthAlertTitle(month);
 
-            alert.SetTitle(ItIsNot);
-            alert.SetMessage(AlertMessage);
-            alert.SetIcon(Resource.Drawable.Warning_Sign);
-            alert.SetButton("Yes", (c, ev) =>
+            switch (MonthSelectedInNumberFormat == monthToday)
             {
-                monthsRemaining = SpinnerMonth_ItemSelected(sender, e);
-            });
-            alert.SetButton2("No", (c, ev) =>
-            {
-                ((Spinner)sender).SetSelection(monthToday - 1);
-                monthsRemaining = 12 - monthToday;
-            });
+                case false:
+                    AlertDialog.Builder dialogMonthChanged = new AlertDialog.Builder(this)
+                        .SetTitle(ItIsNot)
+                        .SetMessage(AlertMessage)
+                        .SetIcon(Resource.Drawable.Warning_Sign)
+                        .SetPositiveButton("Yes", (c, ev) => {})
+                        .SetNegativeButton("No", (c, ev) =>
+                        {
+                            ((Spinner)sender).SetSelection(monthToday - 1);
+                        });
 
-            soundPlayer.PlaySound_AlertWarning(this);
+                    soundPlayer.PlaySound_AlertWarning(this);
 
-            alert.Show();
+                    AlertDialog alertMonthChanged = dialogMonthChanged.Create();
+                    alertMonthChanged.Show();
+                    break;
+                case true:
+                    break;
+            }
         }
     }
 }
