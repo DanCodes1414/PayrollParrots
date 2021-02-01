@@ -17,7 +17,7 @@ namespace PayrollParrots
     public enum Months
     {
         January = 11,
-        Febuary = 10,
+        February = 10,
         March = 9,
         April = 8,
         May = 7,
@@ -61,7 +61,7 @@ namespace PayrollParrots
             listfilter = (ListView)FindViewById(Resource.Id.filterList);
             _txtLabel.Visibility = ViewStates.Invisible;
 
-            spinnerMonth.ItemSelected += BindDataFilterTest;
+            spinnerMonth.ItemSelected += BindDataFilter;
 
             Button _startPayroll = FindViewById<Button>(Resource.Id.startPayroll);
 
@@ -114,7 +114,7 @@ namespace PayrollParrots
             alertReviewOrDelete.Show();
         }
 
-        private void BindDataFilterTest(object sender, AdapterView.ItemSelectedEventArgs e)
+        private void BindDataFilter(object sender, AdapterView.ItemSelectedEventArgs e)
         {
             listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(((Spinner)sender).SelectedItem.ToString())).OrderBy(y => y.Name).ToArray();
             if (listitem.Length > 0)
