@@ -1,29 +1,23 @@
 ﻿using System;
 using Android.App;
 using Android.Content;
-using Android.Media;
 using Android.OS;
 using Android.Widget;
 using Android.Text;
-using static Android.Widget.TextView;
+using PayrollParrots.UsedManyTimes;
+using PayrollParrots.Model;
+using Newtonsoft.Json;
+using System.Globalization;
 
 namespace PayrollParrots
 {
     [Activity(Label = "PayrollFamily")]
     public class PayrollFamily : Activity
     {
-        private int _kidsU18;
-        private int _over18inHE;
-        private int _disabledChildren;
-        private int _disabledChildreninHE;
-        private int _kidsU18split;
-        private int _over18inHEsplit;
-        private int _disabledChildrensplit;
-        private int _disabledChildreninHEsplit;
-        double disabledDeduction = 0.00;
-        double disabledSpouseDeduction = 0.00;
-        double spouseNoIncomeDeduction = 0.00;
+        readonly SoundPlayer soundPlayer = new SoundPlayer();
+        readonly PayrollFamilyDeductions payrollFamilyDeductions = new PayrollFamilyDeductions();
         private int monthsRemaining;
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -38,11 +32,11 @@ namespace PayrollParrots
             };
 
             //age
-            EditText birthDay_ = FindViewById<EditText>(Resource.Id.employeeAge);
+            EditText employeeAge_ = FindViewById<EditText>(Resource.Id.employeeAge);
             int _employeeAge = 0;
-            birthDay_.AfterTextChanged += (sender, e) =>
+            employeeAge_.AfterTextChanged += (sender, e) =>
             {
-                int.TryParse(birthDay_.Text, out _employeeAge);
+                int.TryParse(employeeAge_.Text, out _employeeAge);
             };
 
             //payroll month
@@ -56,58 +50,10 @@ namespace PayrollParrots
             int monthToday = dateToday.Month;
             monthsRemaining = 12 - monthToday;
 
-            //setting spinner to display todays month
-            if (monthToday == 1)
-            {
-                spinnerMonth.SetSelection(0);
-            }
-            else if (monthToday == 2)
-            {
-                spinnerMonth.SetSelection(1);
-            }
-            else if (monthToday == 3)
-            {
-                spinnerMonth.SetSelection(2);
-            }
-            else if (monthToday == 4)
-            {
-                spinnerMonth.SetSelection(3);
-            }
-            else if (monthToday == 5)
-            {
-                spinnerMonth.SetSelection(4);
-            }
-            else if (monthToday == 6)
-            {
-                spinnerMonth.SetSelection(5);
-            }
-            else if (monthToday == 7)
-            {
-                spinnerMonth.SetSelection(6);
-            }
-            else if (monthToday == 8)
-            {
-                spinnerMonth.SetSelection(7);
-            }
-            else if (monthToday == 9)
-            {
-                spinnerMonth.SetSelection(8);
-            }
-            else if (monthToday == 10)
-            {
-                spinnerMonth.SetSelection(9);
-            }
-            else if (monthToday == 11)
-            {
-                spinnerMonth.SetSelection(10);
-            }
-            else if (monthToday == 12)
-            {
-                spinnerMonth.SetSelection(11);
-            }
+            spinnerMonth.SetSelection(monthToday - 1);
             spinnerMonth.ItemSelected += (sender, e) =>
             {
-                MonthSelctedNotTodaysMonth(sender, e);
+                MonthSelctedNotCurrentMonth(sender, e);
                 monthsRemaining = SpinnerMonth_ItemSelected(sender, e);
             };
 
@@ -187,37 +133,30 @@ namespace PayrollParrots
                 }
                 else
                 {
-                    double totalFamilyDeductions = (_kidsU18 * 2000) + (_over18inHE * 8000) + (_disabledChildren * 6000) + (_disabledChildreninHE * 14000) + (_kidsU18split * 1000) + (_over18inHEsplit * 4000) + (_disabledChildrensplit * 3000) + (_disabledChildreninHEsplit * 7000) + disabledDeduction + disabledSpouseDeduction + spouseNoIncomeDeduction;
-                    PlayButton_Click(sender, e);
+                    payrollFamilyDeductions.TotalFamilyDeductions = (payrollFamilyDeductions.KidsUnder18 * 2000) + (payrollFamilyDeductions.Over18InHigherEducation * 8000) + (payrollFamilyDeductions.DisabledKids * 6000) + (payrollFamilyDeductions.DisabledKidsinHigherEducation * 14000) + (payrollFamilyDeductions.KidsUnder18Split * 1000) + (payrollFamilyDeductions.Over18InHigherEducationSplit * 4000) + (payrollFamilyDeductions.DisabledKidsSplit * 3000) + (payrollFamilyDeductions.DisabledKidsinHigherEducationSplit * 7000) + payrollFamilyDeductions.DisabledIndividual + payrollFamilyDeductions.DisabledSpouse + payrollFamilyDeductions.SpouseNotGettingIncome;
+
+                    soundPlayer.PlaySound_ButtonClick(this);
+
                     Intent intent = new Intent(this, typeof(PayrollCurrentMonth));
+                    intent.PutExtra("FamilyDeductionCategory", JsonConvert.SerializeObject(payrollFamilyDeductions));
                     intent.PutExtra("employeeAge", _employeeAge);
                     intent.PutExtra("employeeName", _employeeName);
-                    intent.PutExtra("totalFamilyDeductions", totalFamilyDeductions);
                     intent.PutExtra("monthsRemaining", monthsRemaining);
-                    intent.PutExtra("kidsU18", _kidsU18);
-                    intent.PutExtra("over18inHE", _over18inHE);
-                    intent.PutExtra("disabledChildren", _disabledChildren);
-                    intent.PutExtra("disabledChildreninHE", _disabledChildreninHE);
-                    intent.PutExtra("disabledDeduction", disabledDeduction);
-                    intent.PutExtra("disabledSpouseDeduction", disabledSpouseDeduction);
-                    intent.PutExtra("spouseNoIncomeDeduction", spouseNoIncomeDeduction);
                     StartActivity(intent);
                 }
             };
 
-            //button-click sound
-            void PlayButton_Click(object sender, EventArgs e)
-            {
-                MediaPlayer _player = MediaPlayer.Create(this, Resource.Drawable.buttonclick);
-                _player.Start();
-            }
-
-            //check if have spouse
+            //check if user can check disbled spouse as yes
             bool disabledSpouseCanCheck()
             {
                 if ((spinnerMaritalStatus.SelectedItem.ToString() == "Single" | spinnerMaritalStatus.SelectedItem.ToString() == "Divorce/Widower/Widow") && (spouseDisabledTrue.Checked == true))
                 {
-                    errorView.Error = "You don't have a spouse";
+                    errorView.Error = "You don't have a spouse!";
+                    return false;
+                }
+                else if (spinnerMaritalStatus.SelectedItem.ToString() == "Married and spouse working" && (spouseDisabledTrue.Checked == true))
+                {
+                    errorView.Error = "Deduction for disabled spouse only applicable if your spouse is not working";
                     return false;
                 }
                 else
@@ -233,7 +172,11 @@ namespace PayrollParrots
 
             if (((Spinner)sender).SelectedItem.ToString() == "Married and spouse not working")
             {
-                spouseNoIncomeDeduction = 4000.00;
+                payrollFamilyDeductions.SpouseNotGettingIncome = 4000.00;
+            }
+            else
+            {
+                payrollFamilyDeductions.SpouseNotGettingIncome = 0.00;
             }
         }
 
@@ -245,16 +188,16 @@ namespace PayrollParrots
                 switch (radioButton.Id)
                 {
                     case Resource.Id.radioDisabledTrue:
-                        disabledDeduction = 6000.00;
+                        payrollFamilyDeductions.DisabledIndividual = 6000.00;
                         break;
                     case Resource.Id.radioSpouseDisabledTrue:
-                        disabledSpouseDeduction = 3500.00;
+                        payrollFamilyDeductions.DisabledSpouse = 5000.00;
                         break;
                     case Resource.Id.radioDisabledFalse:
-                        disabledDeduction = 0.00;
+                        payrollFamilyDeductions.DisabledIndividual = 0.00;
                         break;
                     case Resource.Id.radioSpouseDisabledFalse:
-                        disabledSpouseDeduction = 0.00;
+                        payrollFamilyDeductions.DisabledSpouse = 0.00;
                         break;
                     default:
                         break;
@@ -265,385 +208,92 @@ namespace PayrollParrots
         public void NumberOfKids_TextChanged(object sender, TextChangedEventArgs e)
         {
             EditText editText = sender as EditText;
-            switch (editText.Id)
+            if (editText.Length() == 0)
             {
-                case Resource.Id.u18kids:
-                    if (editText.Length() == 0)
-                    {
-                        editText.SetText("0", BufferType.Editable);
-                        editText.Text.Remove(0);
-                    }
-                    else
-                    {
-                        _kidsU18 = int.Parse(editText.Text);
-                    }
-                    break;
-                case Resource.Id.over18inHE:
-                    if (editText.Length() == 0)
-                    {
-                        editText.SetText("0", BufferType.Editable);
-                        editText.Text.Remove(0);
-                    }
-                    else
-                    {
-                        _over18inHE = int.Parse(editText.Text);
-                    }
-                    break;
-                case Resource.Id.disabledChildren:
-                    if (editText.Length() == 0)
-                    {
-                        editText.SetText("0", BufferType.Editable);
-                        editText.Text.Remove(0);
-                    }
-                    else
-                    {
-                        _disabledChildren = int.Parse(editText.Text);
-                    }
-                    break;
-                case Resource.Id.disabledChildreninHE:
-                    if (editText.Length() == 0)
-                    {
-                        editText.SetText("0", BufferType.Editable);
-                        editText.Text.Remove(0);
-                    }
-                    else
-                    {
-                        _disabledChildreninHE = int.Parse(editText.Text);
-                    }
-                    break;
-                case Resource.Id.u18kidssplit:
-                    if (editText.Length() == 0)
-                    {
-                        editText.SetText("0", BufferType.Editable);
-                        editText.Text.Remove(0);
-                    }
-                    else
-                    {
-                        _kidsU18split = int.Parse(editText.Text);
-                    }
-                    break;
-                case Resource.Id.over18inHEsplit:
-                    if (editText.Length() == 0)
-                    {
-                        editText.SetText("0", BufferType.Editable);
-                        editText.Text.Remove(0);
-                    }
-                    else
-                    {
-                        _over18inHEsplit = int.Parse(editText.Text);
-                    }
-                    break;
-                case Resource.Id.disabledChildrensplit:
-                    if (editText.Length() == 0)
-                    {
-                        editText.SetText("0", BufferType.Editable);
-                        editText.Text.Remove(0);
-                    }
-                    else
-                    {
-                        _disabledChildrensplit = int.Parse(editText.Text);
-                    }
-                    break;
-                case Resource.Id.disabledChildreninHEsplit:
-                    if (editText.Length() == 0)
-                    {
-                        editText.SetText("0", BufferType.Editable);
-                        editText.Text.Remove(0);
-                    }
-                    else
-                    {
-                        _disabledChildreninHEsplit = int.Parse(editText.Text);
-                    }
-                    break;
-                default:
-                    break;
+                editText.Text.Equals("");
+            }
+            else
+            {
+                switch (editText.Id)
+                {
+                    case Resource.Id.u18kids:
+                        payrollFamilyDeductions.KidsUnder18 = int.Parse(editText.Text);
+                        break;
+                    case Resource.Id.over18inHE:
+                        payrollFamilyDeductions.Over18InHigherEducation = int.Parse(editText.Text);
+                        break;
+                    case Resource.Id.disabledChildren:
+                        payrollFamilyDeductions.DisabledKids = int.Parse(editText.Text);
+                        break;
+                    case Resource.Id.disabledChildreninHE:
+                        payrollFamilyDeductions.DisabledKidsinHigherEducation = int.Parse(editText.Text);
+                        break;
+                    case Resource.Id.u18kidssplit:
+                        payrollFamilyDeductions.KidsUnder18Split = int.Parse(editText.Text);
+                        break;
+                    case Resource.Id.over18inHEsplit:
+                        payrollFamilyDeductions.Over18InHigherEducationSplit = int.Parse(editText.Text);
+                        break;
+                    case Resource.Id.disabledChildrensplit:
+                        payrollFamilyDeductions.DisabledKidsSplit = int.Parse(editText.Text);
+                        break;
+                    case Resource.Id.disabledChildreninHEsplit:
+                        payrollFamilyDeductions.DisabledKidsinHigherEducationSplit = int.Parse(editText.Text);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
         private int SpinnerMonth_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
-
-            if (((Spinner)sender).SelectedItem.ToString() == Months.January.ToString())
-            {
-                monthsRemaining = 11;
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.Febuary.ToString())
-            {
-                monthsRemaining = 10;
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.March.ToString())
-            {
-                monthsRemaining = 9;
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.April.ToString())
-            {
-                monthsRemaining = 8;
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.May.ToString())
-            {
-                monthsRemaining = 7;
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.June.ToString())
-            {
-                monthsRemaining = 6;
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.July.ToString())
-            {
-                monthsRemaining = 5;
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.August.ToString())
-            {
-                monthsRemaining = 4;
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.September.ToString())
-            {
-                monthsRemaining = 3;
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.October.ToString())
-            {
-                monthsRemaining = 2;
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.November.ToString())
-            {
-                monthsRemaining = 1;
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.December.ToString())
-            {
-                monthsRemaining = 0;
-            }
+            monthsRemaining = 11 - (int)((Spinner)sender).SelectedItemId;
             return monthsRemaining;
         }
 
-        //pop-up for if another month selected from spinner
-        private void/*int*/ MonthSelctedNotTodaysMonth(object sender, AdapterView.ItemSelectedEventArgs e)
+        //alert pop-up for if another month selected from spinner
+        private void MonthSelctedNotCurrentMonth(object sender, AdapterView.ItemSelectedEventArgs e)
         {
-            static string AlertTitle(string month)
+            DateTime dateToday = DateTime.Now;
+            int monthToday = dateToday.Month;
+
+            MonthChanged_AlertPopUp(sender, ((Spinner)sender).SelectedItem.ToString(), monthToday);
+        }
+
+        private void MonthChanged_AlertPopUp(object sender, string month, int monthToday)
+        {
+            static string MonthAlertTitle(string month)
             {
                 string ItIsNot = "It is not " + month + "!";
                 return ItIsNot;
             }
-            DateTime dateToday = DateTime.Now;
-            int monthToday = dateToday.Month;
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-            AlertDialog alert = dialog.Create();
+
+            int MonthSelectedInNumberFormat = DateTime.ParseExact(month, "MMMM", CultureInfo.CurrentCulture).Month;
+
             const string AlertMessage = "Are you sure you want to change the month?";
-            string ItIsNot;
+            string ItIsNot = MonthAlertTitle(month);
 
-            if (((Spinner)sender).SelectedItem.ToString() == Months.January.ToString() && monthToday != 1)
+            switch (MonthSelectedInNumberFormat == monthToday)
             {
-                ItIsNot = AlertTitle(Months.January.ToString());
-                alert.SetTitle(ItIsNot);
-                alert.SetMessage(AlertMessage);
-                alert.SetIcon(Resource.Drawable.Warning_Sign);
-                alert.SetButton("Yes", (c, ev) =>
-                {
-                    monthsRemaining = 11;
-                });
-                alert.SetButton2("No", (c, ev) =>
-                {
-                    ((Spinner)sender).SetSelection(monthToday - 1);
-                    monthsRemaining = 12 - monthToday;
-                });
+                case false:
+                    AlertDialog.Builder dialogMonthChanged = new AlertDialog.Builder(this)
+                        .SetTitle(ItIsNot)
+                        .SetMessage(AlertMessage)
+                        .SetIcon(Resource.Drawable.Warning_Sign)
+                        .SetPositiveButton("Yes", (c, ev) => {})
+                        .SetNegativeButton("No", (c, ev) =>
+                        {
+                            ((Spinner)sender).SetSelection(monthToday - 1);
+                        });
 
-                alert.Show();
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.Febuary.ToString() && monthToday != 2)
-            {
-                ItIsNot = AlertTitle(Months.Febuary.ToString());
-                alert.SetTitle(ItIsNot);
-                alert.SetMessage(AlertMessage);
-                alert.SetIcon(Resource.Drawable.Warning_Sign);
-                alert.SetButton("Yes", (c, ev) =>
-                {
-                    monthsRemaining = 10;
-                });
-                alert.SetButton2("No", (c, ev) =>
-                {
-                    ((Spinner)sender).SetSelection(monthToday - 1);
-                    monthsRemaining = 12 - monthToday;
-                });
+                    soundPlayer.PlaySound_AlertWarning(this);
 
-                alert.Show();
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.March.ToString() && monthToday != 3)
-            {
-                ItIsNot = AlertTitle(Months.March.ToString());
-                alert.SetTitle(ItIsNot);
-                alert.SetMessage(AlertMessage);
-                alert.SetIcon(Resource.Drawable.Warning_Sign);
-                alert.SetButton("Yes", (c, ev) =>
-                {
-                    monthsRemaining = 9;
-                });
-                alert.SetButton2("No", (c, ev) =>
-                {
-                    ((Spinner)sender).SetSelection(monthToday - 1);
-                    monthsRemaining = 12 - monthToday;
-                });
-
-                alert.Show();
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.April.ToString() && monthToday != 4)
-            {
-                ItIsNot = AlertTitle(Months.April.ToString());
-                alert.SetTitle(ItIsNot);
-                alert.SetMessage(AlertMessage);
-                alert.SetIcon(Resource.Drawable.Warning_Sign);
-                alert.SetButton("Yes", (c, ev) =>
-                {
-                    monthsRemaining = 8;
-                });
-                alert.SetButton2("No", (c, ev) =>
-                {
-                    ((Spinner)sender).SetSelection(monthToday - 1);
-                    monthsRemaining = 12 - monthToday;
-                });
-
-                alert.Show();
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.May.ToString() && monthToday != 5)
-            {
-                ItIsNot = AlertTitle(Months.May.ToString());
-                alert.SetTitle(ItIsNot);
-                alert.SetMessage(AlertMessage);
-                alert.SetIcon(Resource.Drawable.Warning_Sign);
-                alert.SetButton("Yes", (c, ev) =>
-                {
-                    monthsRemaining = 7;
-                });
-                alert.SetButton2("No", (c, ev) =>
-                {
-                    ((Spinner)sender).SetSelection(monthToday - 1);
-                    monthsRemaining = 12 - monthToday;
-                });
-
-                alert.Show();
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.June.ToString() && monthToday != 6)
-            {
-                ItIsNot = AlertTitle(Months.June.ToString());
-                alert.SetTitle(ItIsNot);
-                alert.SetMessage(AlertMessage);
-                alert.SetIcon(Resource.Drawable.Warning_Sign);
-                alert.SetButton("Yes", (c, ev) =>
-                {
-                    monthsRemaining = 6;
-                });
-                alert.SetButton2("No", (c, ev) =>
-                {
-                    ((Spinner)sender).SetSelection(monthToday - 1);
-                    monthsRemaining = 12 - monthToday;
-                });
-
-                alert.Show();
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.July.ToString() && monthToday != 7)
-            {
-                ItIsNot = AlertTitle(Months.July.ToString());
-                alert.SetTitle(ItIsNot);
-                alert.SetMessage(AlertMessage);
-                alert.SetIcon(Resource.Drawable.Warning_Sign);
-                alert.SetButton("Yes", (c, ev) =>
-                {
-                    monthsRemaining = 5;
-                });
-                alert.SetButton2("No", (c, ev) =>
-                {
-                    ((Spinner)sender).SetSelection(monthToday - 1);
-                    monthsRemaining = 12 - monthToday;
-                });
-
-                alert.Show();
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.August.ToString() && monthToday != 8)
-            {
-                ItIsNot = AlertTitle(Months.August.ToString());
-                alert.SetTitle(ItIsNot);
-                alert.SetMessage(AlertMessage);
-                alert.SetIcon(Resource.Drawable.Warning_Sign);
-                alert.SetButton("Yes", (c, ev) =>
-                {
-                    monthsRemaining = 4;
-                });
-                alert.SetButton2("No", (c, ev) =>
-                {
-                    ((Spinner)sender).SetSelection(monthToday - 1);
-                    monthsRemaining = 12 - monthToday;
-                });
-
-                alert.Show();
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.September.ToString() && monthToday != 9)
-            {
-                ItIsNot = AlertTitle(Months.September.ToString());
-                alert.SetTitle(ItIsNot);
-                alert.SetMessage(AlertMessage);
-                alert.SetIcon(Resource.Drawable.Warning_Sign);
-                alert.SetButton("Yes", (c, ev) =>
-                {
-                    monthsRemaining = 3;
-                });
-                alert.SetButton2("No", (c, ev) =>
-                {
-                    ((Spinner)sender).SetSelection(monthToday - 1);
-                    monthsRemaining = 12 - monthToday;
-                });
-
-                alert.Show();
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.October.ToString() && monthToday != 10)
-            {
-                ItIsNot = AlertTitle(Months.October.ToString());
-                alert.SetTitle(ItIsNot);
-                alert.SetMessage(AlertMessage);
-                alert.SetIcon(Resource.Drawable.Warning_Sign);
-                alert.SetButton("Yes", (c, ev) =>
-                {
-                    monthsRemaining = 2;
-                });
-                alert.SetButton2("No", (c, ev) =>
-                {
-                    ((Spinner)sender).SetSelection(monthToday - 1);
-                    monthsRemaining = 12 - monthToday;
-                });
-
-                alert.Show();
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.November.ToString() && monthToday != 11)
-            {
-                ItIsNot = AlertTitle(Months.November.ToString());
-                alert.SetTitle(ItIsNot);
-                alert.SetMessage(AlertMessage);
-                alert.SetIcon(Resource.Drawable.Warning_Sign);
-                alert.SetButton("Yes", (c, ev) =>
-                {
-                    monthsRemaining = 1;
-                });
-                alert.SetButton2("No", (c, ev) =>
-                {
-                    ((Spinner)sender).SetSelection(monthToday - 1);
-                    monthsRemaining = 12 - monthToday;
-                });
-
-                alert.Show();
-            }
-            else if (((Spinner)sender).SelectedItem.ToString() == Months.December.ToString() && monthToday != 12)
-            {
-                ItIsNot = AlertTitle(Months.December.ToString());
-                alert.SetTitle(ItIsNot);
-                alert.SetMessage(AlertMessage);
-                alert.SetIcon(Resource.Drawable.Warning_Sign);
-                alert.SetButton("Yes", (c, ev) =>
-                {
-                    monthsRemaining = 0;
-                });
-                alert.SetButton2("No", (c, ev) =>
-                {
-                    ((Spinner)sender).SetSelection(monthToday - 1);
-                    monthsRemaining = 12 - monthToday;
-                });
-
-                alert.Show();
+                    AlertDialog alertMonthChanged = dialogMonthChanged.Create();
+                    alertMonthChanged.Show();
+                    break;
+                case true:
+                    break;
             }
         }
     }

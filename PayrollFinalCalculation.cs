@@ -2,7 +2,6 @@
 using Android.App;
 using Android.Content;
 using Android.Graphics;
-using Android.Media;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
@@ -10,77 +9,53 @@ using PayrollParrots.Model;
 using PayrollParrots.Helper;
 using NL.DionSegijn.Konfetti;
 using Newtonsoft.Json;
+using PayrollParrots.PayrollTax;
+using PayrollParrots.UsedManyTimes;
+using System.Collections.Generic;
+using System.Linq;
+using System.Globalization;
 
 namespace PayrollParrots
 {
     [Activity(Label = "PayrollFinalCalculation")]
     public class PayrollFinalCalculation : Activity
     {
-        public const double EmployeeMaxAgeForEPFContribution = 60;
+        readonly SoundPlayer soundPlayer = new SoundPlayer();
+        MTDCalculations MTDCalculations;
+        readonly PayrollItems payrollItems = new PayrollItems();
+        EPFCalculations EPFCalculations;
+        SOCSOAndEISCalculations SOCSOAndEISCalculations;
         public Payroll payroll;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.payroll_final_calculation);
+
+            int _employeeAge = Intent.GetIntExtra("employeeAge", 0);
+            string _employeeName = Intent.GetStringExtra("employeeName");
             int _monthsRemaining = Intent.GetIntExtra("monthsRemaining", 11);
-            double _currentMonthRemuneration = Intent.GetDoubleExtra("currentMonthRemuneration", 0.00);
-            double _BIK = Intent.GetDoubleExtra("BIK", 0.00);
-            double _VOLA = Intent.GetDoubleExtra("VOLA", 0.00);
-            double _totalFamilyDeductions = Intent.GetDoubleExtra("totalFamilyDeductions", 0.00);
-            double _bonus = Intent.GetDoubleExtra("bonus", 0.00);
-            double _arrears = Intent.GetDoubleExtra("arrears", 0.00);
-            double _commission = Intent.GetDoubleExtra("commission", 0.00);
-            double _othersEPFNO = Intent.GetDoubleExtra("othersNoEPF", 0.00);
-            double _others = Intent.GetDoubleExtra("others", 0.00);
-            double _lifeStyleRelief = Intent.GetDoubleExtra("lifeStyleRelief", 0.00);
+
             double _SOCSOContribution = Intent.GetDoubleExtra("SOCSOContribution", 0.00);
-            double _lifeInsurance = Intent.GetDoubleExtra("lifeInsurance", 0.00);
-            double _basicEquipment = Intent.GetDoubleExtra("basicEquipment", 0.00);
-            double _educationYourSelf = Intent.GetDoubleExtra("educationYourSelf", 0.00);
-            double _medicalExamintion = Intent.GetDoubleExtra("medicalExamintion", 0.00);
-            double _medicalDisease = Intent.GetDoubleExtra("medicalDisease", 0.00);
-            double _smallKidEducation = Intent.GetDoubleExtra("smallKidEducation", 0.00);
-            double _breastFeedingEquipment = Intent.GetDoubleExtra("breastFeedingEquipment", 0.00);
-            double _alimonyFormerWife = Intent.GetDoubleExtra("alimonyFormerWife", 0.00);
-            double _EMInsurance = Intent.GetDoubleExtra("EMInsurance", 0.00);
-            double _fatherRelief = Intent.GetDoubleExtra("fatherRelief", 0.00);
-            double _motherRelief = Intent.GetDoubleExtra("motherRelief", 0.00);
-            double _previousLifeStyleRelief = Intent.GetDoubleExtra("previousLifeStyleRelief", 0.00);
             double _previousSOCSOContribution = Intent.GetDoubleExtra("previousSOCSOContribution", 0.00);
-            double _previousLifeInsurance = Intent.GetDoubleExtra("previousLifeInsurance", 0.00);
-            double _previousBasicEquipment = Intent.GetDoubleExtra("previousBasicEquipment", 0.00);
-            double _previousEducationYourSelf = Intent.GetDoubleExtra("previousEducationYourSelf", 0.00);
-            double _previousMedicalExamintion = Intent.GetDoubleExtra("previousMedicalExamintion", 0.00);
-            double _previousMedicalDisease = Intent.GetDoubleExtra("previousMedicalDisease", 0.00);
-            double _previousSmallKidEducation = Intent.GetDoubleExtra("previousSmallKidEducation", 0.00);
-            double _previousBreastFeedingEquipment = Intent.GetDoubleExtra("previousBreastFeedingEquipment", 0.00);
-            double _previousAlimonyFormerWife = Intent.GetDoubleExtra("previousAlimonyFormerWife", 0.00);
-            double _previousEMInsurance = Intent.GetDoubleExtra("previousEMInsurance", 0.00);
-            double _previousFatherRelief = Intent.GetDoubleExtra("previousFatherRelief", 0.00);
-            double _previousMotherRelief = Intent.GetDoubleExtra("previousMotherRelief", 0.00);
-            double _zakatByEmployee = Intent.GetDoubleExtra("zakatByEmployee", 0.00);
-            double _zakatByPayroll = Intent.GetDoubleExtra("zakatByPayroll", 0.00);
-            double _departureLevy = Intent.GetDoubleExtra("departureLevy", 0.00);
-            double _previousMonthsRemuneration = Intent.GetDoubleExtra("previousMonthsRemuneration", 0.00);
             double _previousEPFContribution = Intent.GetDoubleExtra("previousEPFContribution", 0.00);
-            double _previousBIK = Intent.GetDoubleExtra("previousBIK", 0.00);
-            double _previousVOLA = Intent.GetDoubleExtra("previousVOLA", 0.00);
             double _MTDPrevious = Intent.GetDoubleExtra("MTDPrevious", 0.00);
             double _EPFContribution = Intent.GetDoubleExtra("EPFContribution", 0.00);
             double _EPFAdditionalContribution = Intent.GetDoubleExtra("EPFAdditionalContribution", 0.00);
-            double spouseNoIncomeDeduction = Intent.GetDoubleExtra("spouseNoIncomeDeduction", 0.00);
-            double _previousZakatByEmployee = Intent.GetDoubleExtra("previousZakatByEmployee", 0.00);
-            double _previousZakatByPayroll = Intent.GetDoubleExtra("previousZakatByPayroll", 0.00);
-            double _previousDepartureLevy = Intent.GetDoubleExtra("previousDepartureLevy", 0.00);
-            double _OthersEISNO = Intent.GetDoubleExtra("othersNoEIS", 0.00);
-            double _mapaRelief = Intent.GetDoubleExtra("mapaRelief", 0.00);
-            double _previousMapaRelief = Intent.GetDoubleExtra("previousMapaRelief", 0.00);
-            double _SSPN = Intent.GetDoubleExtra("SSPN", 0.00);
-            double _previousSSPN = Intent.GetDoubleExtra("previousSSPN", 0.00);
-            double _PRS = Intent.GetDoubleExtra("PRS", 0.00);
-            double _previousPRS = Intent.GetDoubleExtra("previousPRS", 0.00);
-            int _employeeAge = Intent.GetIntExtra("employeeAge", 0);
-            string _employeeName = Intent.GetStringExtra("employeeName");
+
+            var FamilyDeductionItems = JsonConvert.DeserializeObject<PayrollFamilyDeductions>(Intent.GetStringExtra("FamilyDeductionItems"));
+            var NormalRemunerationItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("NormalRemuneration"));
+            var BIKItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("BIK"));
+            var VOLAItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("VOLA"));
+            var AdditionalRemunerationItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("AdditionalRemuneration"));
+            var DeductionItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("Deductions"));
+            var RebateItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("Rebates"));
+            var PreviousRemunerationItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("PreviousRemuneration"));
+            var PreviousBIKItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("PreviousBIK"));
+            var PreviousVOLAItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("PreviousVOLA"));
+            var PreviousDeductionItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("PreviousDeductions"));
+            var PreviousRebateItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("PreviousRebates"));
+
+            var DictionaryContainingAllItems = NormalRemunerationItems.Union(BIKItems).Union(VOLAItems).Union(AdditionalRemunerationItems).Union(DeductionItems).Union(RebateItems).Union(PreviousRemunerationItems).Union(PreviousBIKItems).Union(PreviousVOLAItems).Union(PreviousDeductionItems).Union(PreviousRebateItems).ToDictionary(k => k.Key, v => v.Value);
 
             EditText name = FindViewById<EditText>(Resource.Id.name);
             EditText finalPCB = FindViewById<EditText>(Resource.Id.finalPCB);
@@ -114,46 +89,35 @@ namespace PayrollParrots
                 return false;
             });
 
-            int n = _monthsRemaining;
+            int currentMonthInNumberFormat = 12 - _monthsRemaining;
+
+            SOCSOAndEISCalculations = new SOCSOAndEISCalculations(NormalRemunerationItems, AdditionalRemunerationItems);
+            payrollItems.CurrentMonthRemuneration = NormalRemunerationItems["CurrentMonthRemuneration"];
 
             //EIS Calculation
-            double WageEIS = _currentMonthRemuneration + _commission + _arrears + _others + _othersEPFNO;
-
-            TaxCalculation taxCalculation = new TaxCalculation();
-            double EIS = taxCalculation.EISCalculation(WageEIS, _employeeAge);
+            double EIS = SOCSOAndEISCalculations.EISCalculation(_employeeAge);
             double employerEIS = EIS;
 
             //MTD Calculation
-            double RoundedMTD = taxCalculation.PCBCalculation(_monthsRemaining, _currentMonthRemuneration, _BIK, _VOLA, _totalFamilyDeductions,
-            _bonus, _arrears, _commission, _othersEPFNO, _others, _lifeStyleRelief, _SOCSOContribution,
-            _lifeInsurance, _basicEquipment, _educationYourSelf, _medicalExamintion, _medicalDisease, _smallKidEducation,
-            _breastFeedingEquipment, _alimonyFormerWife, _EMInsurance, _fatherRelief, _motherRelief, _previousLifeStyleRelief,
-            _previousSOCSOContribution, _previousLifeInsurance, _previousBasicEquipment, _previousEducationYourSelf,
-            _previousMedicalExamintion, _previousMedicalDisease, _previousSmallKidEducation, _previousBreastFeedingEquipment,
-            _previousAlimonyFormerWife, _previousEMInsurance, _previousFatherRelief, _previousMotherRelief, spouseNoIncomeDeduction,
-            _zakatByEmployee, _zakatByPayroll, _departureLevy, _previousMonthsRemuneration, _previousEPFContribution,
-            _previousBIK, _previousVOLA, _MTDPrevious, _EPFContribution, _EPFAdditionalContribution, _previousZakatByEmployee,
-            _previousZakatByPayroll, _previousDepartureLevy, _OthersEISNO, _mapaRelief, _previousMapaRelief, _SSPN,
-            _previousSSPN, _PRS, _previousPRS);
-
-            //Gross Salary
-            double GrossSalary = WageEIS + _bonus + _OthersEISNO;
-
-            //Net Salary
-            double NetSalary = GrossSalary - _SOCSOContribution - _EPFAdditionalContribution - _EPFContribution - EIS - _zakatByPayroll - RoundedMTD;
+            MTDCalculations = new MTDCalculations(DictionaryContainingAllItems);
+            double RoundedMTD = MTDCalculations.MTDCalculation(FamilyDeductionItems, _monthsRemaining, _SOCSOContribution, _previousSOCSOContribution,
+                                _previousEPFContribution, _MTDPrevious, _EPFContribution, _EPFAdditionalContribution);
 
             //EPF
             double EPF = _EPFContribution + _EPFAdditionalContribution;
 
-            double additionalRemuneration = _bonus + _commission + _OthersEISNO + _others + _arrears;
-            double additionalRemunerationWithoutBonus = _commission + _OthersEISNO + _others + _arrears;
+            //Gross Salary
+            double GrossSalary = payrollItems.CurrentMonthRemuneration + AdditionalRemunerationItems.Sum(x => x.Value);
+
+            //Net Salary
+            double NetSalary = GrossSalary - _SOCSOContribution - EPF - EIS - RebateItems["ZakatViaPayroll"] - RoundedMTD;
 
             //employer EPF
-            double employerEPF = taxCalculation.EmployerEPFCalculation(_employeeAge, _currentMonthRemuneration, additionalRemuneration, additionalRemunerationWithoutBonus);
+            EPFCalculations = new EPFCalculations(payrollItems, AdditionalRemunerationItems);
+            double employerEPF = EPFCalculations.EmployerEPFCalculation(_employeeAge);
 
             //Employer SOCSO
-            double SOCSOWage = _currentMonthRemuneration + _arrears + _commission + _othersEPFNO + _others;
-            double employerSOCSO = taxCalculation.EmployerSOCSOCalculation(SOCSOWage, _employeeAge);
+            double employerSOCSO = SOCSOAndEISCalculations.EmployerSOCSOCalculation(_employeeAge);
 
             //print to layout
             name.Text = $"Name: {_employeeName}";
@@ -186,74 +150,20 @@ namespace PayrollParrots
                 NetSalary = NetSalary.ToString(),
                 EmployerEPF = employerEPF.ToString(),
                 EmployerSOCSO = employerSOCSO.ToString(),
-                EmployerEIS = employerEIS.ToString()
+                EmployerEIS = employerEIS.ToString(),
+                Month = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(currentMonthInNumberFormat)
             };
-            if (n == 11)
-            {
-                payroll.Month = Months.January.ToString();
-            }
-            else if (n == 10)
-            {
-                payroll.Month = Months.Febuary.ToString();
-            }
-            else if (n == 9)
-            {
-                payroll.Month = Months.March.ToString();
-            }
-            else if (n == 8)
-            {
-                payroll.Month = Months.April.ToString();
-            }
-            else if (n == 7)
-            {
-                payroll.Month = Months.May.ToString();
-            }
-            else if (n == 6)
-            {
-                payroll.Month = Months.June.ToString();
-            }
-            else if (n == 5)
-            {
-                payroll.Month = Months.July.ToString();
-            }
-            else if (n == 4)
-            {
-                payroll.Month = Months.August.ToString();
-            }
-            else if (n == 3)
-            {
-                payroll.Month = Months.September.ToString();
-            }
-            else if (n == 2)
-            {
-                payroll.Month = Months.October.ToString();
-            }
-            else if (n == 1)
-            {
-                payroll.Month = Months.November.ToString();
-            }
-            else if (n == 0)
-            {
-                payroll.Month = Months.December.ToString();
-            }
 
             Button _saveDetails = FindViewById<Button>(Resource.Id.saveDetails);
 
-            _saveDetails.Click += PlayButton_Click;
             _saveDetails.Click += (sender, e) => {
+                soundPlayer.PlaySound_ButtonClick(this);
                 //save to database
                 PayrollHelper.InsertPayrollData(this, payroll);
                 var payrollData = new Intent(this, typeof(MainActivity));
                 payrollData.PutExtra("payroll", JsonConvert.SerializeObject(payroll));
                 StartActivity(payrollData);
             };
-
-            //button-click sound
-            void PlayButton_Click(object sender, EventArgs e)
-            {
-                MediaPlayer _player = MediaPlayer.Create(this, Resource.Drawable.buttonclick);
-                _player.Start();
-            }
         }
     }
 }

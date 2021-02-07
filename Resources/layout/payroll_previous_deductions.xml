@@ -14,7 +14,15 @@
 		android:layout_height="wrap_content"
 		android:id="@+id/previousLifeStyleRelief"
 		android:hint="LifeStyle Relief[Up to RM2500]"
-		android:textSize="34px"
+		android:textSize="28px"
+		android:inputType="numberDecimal"
+        android:maxLength="20"/>
+	<EditText
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/previousSportsRelief"
+		android:hint="Sports Relief[Up to RM500]"
+		android:textSize="28px"
 		android:inputType="numberDecimal"
         android:maxLength="20"/>
 	<EditText
@@ -22,7 +30,7 @@
 		android:layout_height="wrap_content"
 		android:id="@+id/previousSOCSOContribution"
 		android:hint="SOCSO Contribution[Up to RM250]"
-		android:textSize="34px"
+		android:textSize="28px"
 		android:inputType="numberDecimal"
         android:maxLength="20"/>
 	<EditText
@@ -30,7 +38,7 @@
 		android:layout_height="wrap_content"
 		android:id="@+id/previouslifeInsurance"
 		android:hint="Life Insurance[Up to RM3000]"
-		android:textSize="34px"
+		android:textSize="28px"
 		android:inputType="numberDecimal"
         android:maxLength="20"/>
 	<EditText
@@ -38,7 +46,7 @@
 		android:layout_height="wrap_content"
 		android:id="@+id/previousBasicEquipment"
 		android:hint="Supporting equipment[Up to RM6000]"
-		android:textSize="34px"
+		android:textSize="28px"
 		android:inputType="numberDecimal"
         android:maxLength="20"/>
 	<EditText
@@ -46,23 +54,31 @@
 		android:layout_height="wrap_content"
 		android:id="@+id/previousEducationYourSelf"
 		android:hint="Education Fees For Yourself[Up to RM7000]"
-		android:textSize="34px"
+		android:textSize="28px"
 		android:inputType="numberDecimal"
         android:maxLength="20"/>
 	<EditText
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:id="@+id/previousMedicalExamintion"
-		android:hint="Complete medical examination[Up to RM500]"
-		android:textSize="34px"
+		android:id="@+id/previousMedicalExamination"
+		android:hint="Complete medical examination[Up to RM1000]"
+		android:textSize="28px"
+		android:inputType="numberDecimal"
+        android:maxLength="20"/>
+	<EditText
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/previousMedicalVaccination"
+		android:hint="Medical Expenses For Vaccination[Up to RM1000]"
+		android:textSize="28px"
 		android:inputType="numberDecimal"
         android:maxLength="20"/>
 	<EditText
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:id="@+id/previousMedicalDisease"
-		android:hint="Medical expenses for serious diseases[Up to RM6000]"
-		android:textSize="34px"
+		android:hint="Medical Expenses For Serious Diseases[Up to RM8000]"
+		android:textSize="28px"
 		android:inputType="numberDecimal"
         android:maxLength="20"/>
 	<EditText
@@ -70,7 +86,7 @@
 		android:layout_height="wrap_content"
 		android:id="@+id/previousSSPN"
 		android:hint="Net deposit in SSPN[Up to RM8000]"
-		android:textSize="34px"
+		android:textSize="28px"
 		android:inputType="numberDecimal"
         android:maxLength="20"/>
 	<EditText
@@ -78,15 +94,15 @@
 		android:layout_height="wrap_content"
 		android:id="@+id/previousPRS"
 		android:hint="Private Retirement Scheme Contributions[Up to RM3000]"
-		android:textSize="34px"
+		android:textSize="28px"
 		android:inputType="numberDecimal"
         android:maxLength="20"/>
 	<EditText
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:id="@+id/previousSmallKidEducation"
-		android:hint="Fees to childcare centres or kindergartens[Up to RM2000]"
-		android:textSize="34px"
+		android:hint="Fees to childcare centres or kindergartens[Up to RM3000]"
+		android:textSize="28px"
 		android:inputType="numberDecimal"
         android:maxLength="20"/>
 	<EditText
@@ -94,7 +110,7 @@
 		android:layout_height="wrap_content"
 		android:id="@+id/previousBreastFeedingEquipment"
 		android:hint="Breastfeeding equipment[Up to RM1000]"
-		android:textSize="34px"
+		android:textSize="28px"
 		android:inputType="numberDecimal"
         android:maxLength="20"/>
 	<EditText
@@ -102,7 +118,7 @@
 		android:layout_height="wrap_content"
 		android:id="@+id/previousAlimonyFormerWife"
 		android:hint="Payment of alimony to former wife[Up to RM4000]"
-		android:textSize="34px"
+		android:textSize="28px"
 		android:inputType="numberDecimal"
         android:maxLength="20"/>
 	<EditText
@@ -110,7 +126,7 @@
 		android:layout_height="wrap_content"
 		android:id="@+id/previousEMInsurance"
 		android:hint="Education and medical insurance premiums[Up to RM3000]"
-		android:textSize="34px"
+		android:textSize="28px"
 		android:inputType="numberDecimal"
         android:maxLength="20"/>
 	<EditText
@@ -118,7 +134,7 @@
 		android:layout_height="wrap_content"
 		android:id="@+id/previousFatherRelief"
 		android:hint="Father Relief[Up to RM1500]"
-		android:textSize="34px"
+		android:textSize="28px"
 		android:inputType="numberDecimal"
         android:maxLength="20"/>
 	<EditText
@@ -126,15 +142,23 @@
 		android:layout_height="wrap_content"
 		android:id="@+id/previousMotherRelief"
 		android:hint="Mother Relief[Up to RM1500]"
-		android:textSize="34px"
+		android:textSize="28px"
 		android:inputType="numberDecimal"
         android:maxLength="20"/>
 	<EditText
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:id="@+id/previousMapaRelief"
-		android:hint="Medical expenses for own parents[Up to RM5000]"
-		android:textSize="34px"
+		android:hint="Medical expenses for own parents[Up to RM8000]"
+		android:textSize="28px"
+		android:inputType="numberDecimal"
+        android:maxLength="20"/>
+	<EditText
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/previousDomesticTourismExpenditure"
+		android:hint="Domestic Tourism Expenditure[Up to RM1000]"
+		android:textSize="28px"
 		android:inputType="numberDecimal"
         android:maxLength="20"/>
 	<TextView

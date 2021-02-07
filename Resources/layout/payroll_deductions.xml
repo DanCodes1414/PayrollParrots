@@ -20,6 +20,14 @@
 	<EditText
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
+		android:id="@+id/sportsRelief"
+		android:hint="Sports Relief[Up to RM500]"
+		android:textSize="34px"
+		android:inputType="numberDecimal"
+        android:maxLength="20"/>
+	<EditText
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
 		android:id="@+id/lifeInsurance"
 		android:hint="Life Insurance[Up to RM3000]"
 		android:textSize="34px"
@@ -44,8 +52,16 @@
 	<EditText
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:id="@+id/medicalExamintion"
-		android:hint="Complete Medical Examination[Up to RM500]"
+		android:id="@+id/medicalExamination"
+		android:hint="Complete Medical Examination[Up to RM1000]"
+		android:textSize="34px"
+		android:inputType="numberDecimal"
+        android:maxLength="20"/>
+	<EditText
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/medicalVaccination"
+		android:hint="Complete Medical Vaccination[Up to RM1000]"
 		android:textSize="34px"
 		android:inputType="numberDecimal"
         android:maxLength="20"/>
@@ -53,7 +69,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:id="@+id/medicalDisease"
-		android:hint="Medical Expenses For Serious Diseases[Up to RM6000]"
+		android:hint="Medical Expenses For Serious Diseases[Up to RM8000]"
 		android:textSize="34px"
 		android:inputType="numberDecimal"
         android:maxLength="20"/>
@@ -77,7 +93,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:id="@+id/smallKidEducation"
-		android:hint="Fees To Childcare Centres Or Kindergartens[Up to RM2000]"
+		android:hint="Fees To Childcare Centres Or Kindergartens[Up to RM3000]"
 		android:textSize="34px"
 		android:inputType="numberDecimal"
         android:maxLength="20"/>
@@ -125,7 +141,15 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:id="@+id/mapaRelief"
-		android:hint="Medical Expenses For Own Parents[Up to RM5000]"
+		android:hint="Medical Expenses For Own Parents[Up to RM8000]"
+		android:textSize="34px"
+		android:inputType="numberDecimal"
+        android:maxLength="20"/>
+	<EditText
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/domesticTourismExpenditure"
+		android:hint="Domestic Tourism Expenditure[Up to RM1000]"
 		android:textSize="34px"
 		android:inputType="numberDecimal"
         android:maxLength="20"/>
