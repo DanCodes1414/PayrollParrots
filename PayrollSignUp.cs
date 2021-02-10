@@ -62,15 +62,11 @@ namespace PayrollParrots
 
                     soundPlayer.PlaySound_ButtonClick(this);
 
-                    //SaveSharedPreference.SetUserName(this, "logged in");
-
                     PayrollAccountDetails.InsertAccountDetails(this, payrollAccount, DatabaseName);
 
                     Toast.MakeText(this, "Account Created! Login now!", ToastLength.Long).Show();
 
                     StartActivity(new Intent(this, typeof(PayrollLogin)));
-                    //intent.PutExtra("email", DatabaseName);
-                    //StartActivity(intent);
                 }
             };
         }
