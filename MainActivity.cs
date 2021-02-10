@@ -5,7 +5,7 @@ using Android.OS;
 using Android.Support.V7.App;
 using Android.Widget;
 using PayrollParrots.Model;
-using PayrollParrots.Helper;
+using PayrollParrots.DataBase;
 using Newtonsoft.Json;
 using Android.Views;
 using System.Linq;
@@ -30,7 +30,7 @@ namespace PayrollParrots
         December = 0
     }
 
-    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
+    [Activity(Label = "@string/app_name")]
     public class MainActivity : AppCompatActivity
     {
         readonly SoundPlayer soundPlayer = new SoundPlayer();
@@ -44,6 +44,16 @@ namespace PayrollParrots
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.activity_main);
+
+            string email = Intent.GetStringExtra("email");
+
+            Button logOut = FindViewById<Button>(Resource.Id.logOut);
+
+            logOut.Click += (sender, e) => {
+                soundPlayer.PlaySound_ButtonClick(this);
+                SaveSharedPreference.SetUserName(this, null);
+                StartActivity(new Intent(this, typeof(PayrollLogin)));
+            };
 
             //get todays month
             DateTime dateToday = DateTime.Now;
@@ -61,18 +71,23 @@ namespace PayrollParrots
             listfilter = (ListView)FindViewById(Resource.Id.filterList);
             _txtLabel.Visibility = ViewStates.Invisible;
 
-            spinnerMonth.ItemSelected += BindDataFilter;
+            spinnerMonth.ItemSelected += (sender, e) =>
+            {
+                BindDataFilter(sender, email);
+            };
 
             Button _startPayroll = FindViewById<Button>(Resource.Id.startPayroll);
 
             _startPayroll.Click += (sender, e) => {
                 soundPlayer.PlaySound_ButtonClick(this);
-                StartActivity(new Intent(this, typeof(PayrollFamily)));
+                Intent intent = new Intent(this, typeof(PayrollFamily));
+                intent.PutExtra("email", email);
+                StartActivity(intent);
             };
         }
 
         //pop-up when item in list is clicked
-        private void List_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
+        private void List_ItemClick(AdapterView.ItemClickEventArgs e, string email)
         {
             AlertDialog.Builder dialogReviewOrDelete = new AlertDialog.Builder(this)
                 .SetTitle("Review or Delete?")
@@ -88,7 +103,7 @@ namespace PayrollParrots
                     .SetPositiveButton("yes", (c, ev) =>
                     {
                         payroll = listitem[e.Position];
-                        PayrollHelper.DeletePayroll(this, payroll);
+                        PayrollEmployeeDetails.DeletePayroll(this, payroll, email);
 
                         soundPlayer.PlaySound_DeleteEmployee(this);
 
@@ -103,7 +118,7 @@ namespace PayrollParrots
                 })
                 .SetNegativeButton("Review", (c, ev) =>
                 {
-                    payroll = PayrollHelper.SelectPayroll(this, listitem[e.Position].Id);
+                    payroll = PayrollEmployeeDetails.SelectPayroll(this, listitem[e.Position].Id, email);
                     var intent = new Intent(this, typeof(PayrollReview));
                     intent.PutExtra("payroll", JsonConvert.SerializeObject(payroll));
                     StartActivity(intent);
@@ -114,22 +129,26 @@ namespace PayrollParrots
             alertReviewOrDelete.Show();
         }
 
-        private void BindDataFilter(object sender, AdapterView.ItemSelectedEventArgs e)
+        private void BindDataFilter(object sender, string email)
         {
-            listitem = PayrollHelper.GetPayrollList(this).Where(x => x.Month.Contains(((Spinner)sender).SelectedItem.ToString())).OrderBy(y => y.Name).ToArray();
+            string selectedMonth = ((Spinner)sender).SelectedItem.ToString();
+            listitem = PayrollEmployeeDetails.GetPayrollList(this, email).Where(x => x.Month.Contains(selectedMonth)).OrderBy(y => y.Name).ToArray();
             if (listitem.Length > 0)
             {
                 listfilter.Visibility = ViewStates.Visible;
                 _txtLabel.Visibility = ViewStates.Invisible;
                 adapter = new GridPayroll(this, listitem);
                 listfilter.Adapter = adapter;
-                listfilter.ItemClick += List_ItemClick;
+                listfilter.ItemClick += (sender, e) =>
+                {
+                    List_ItemClick(e, email);
+                };
             }
             else
             {
                 listfilter.Visibility = ViewStates.Invisible;
                 _txtLabel.Visibility = ViewStates.Visible;
-                _txtLabel.Text = "No employees for " + ((Spinner)sender).SelectedItem.ToString() + "!!";
+                _txtLabel.Text = "No employees for " + selectedMonth + "!!";
             }
         }
     }

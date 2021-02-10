@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "6n/7HdjeLxqvDk1uWBM1rPdk/Vjaxhj9AVs7ylTbfHrjwgftagmsiMtSoxqTKjOuSq6ngF37BXZc1U1/yUuziA==",
+  "dgSpecHash": "I7ZehKK2l5XVdFudz7/ajgFxgYKwT9TeKkR040wc2pksd04jD+YIaX+IASz0Hju6YhPgnjzZfy+WgDvCf0OaNg==",
   "success": true,
   "projectFilePath": "/Users/danyalqureshi/Projects/PayrollParrots/PayrollParrots/PayrollParrots.csproj",
   "expectedPackageFiles": [
     "/Users/danyalqureshi/.nuget/packages/karamunting.android.danielmartinus.konfetti/1.2.5/karamunting.android.danielmartinus.konfetti.1.2.5.nupkg.sha512",
     "/Users/danyalqureshi/.nuget/packages/newtonsoft.json/12.0.3/newtonsoft.json.12.0.3.nupkg.sha512",
     "/Users/danyalqureshi/.nuget/packages/system.numerics.vectors/4.5.0/system.numerics.vectors.4.5.0.nupkg.sha512",
+    "/Users/danyalqureshi/.nuget/packages/xam.plugins.settings/3.1.1/xam.plugins.settings.3.1.1.nupkg.sha512",
     "/Users/danyalqureshi/.nuget/packages/xamarin.android.arch.core.common/1.1.1.3/xamarin.android.arch.core.common.1.1.1.3.nupkg.sha512",
     "/Users/danyalqureshi/.nuget/packages/xamarin.android.arch.core.runtime/1.1.1.3/xamarin.android.arch.core.runtime.1.1.1.3.nupkg.sha512",
     "/Users/danyalqureshi/.nuget/packages/xamarin.android.arch.lifecycle.common/1.1.1.3/xamarin.android.arch.lifecycle.common.1.1.1.3.nupkg.sha512",
@@ -45,7 +46,7 @@
     "/Users/danyalqureshi/.nuget/packages/xamarin.android.support.versionedparcelable/28.0.0.3/xamarin.android.support.versionedparcelable.28.0.0.3.nupkg.sha512",
     "/Users/danyalqureshi/.nuget/packages/xamarin.android.support.viewpager/28.0.0.3/xamarin.android.support.viewpager.28.0.0.3.nupkg.sha512",
     "/Users/danyalqureshi/.nuget/packages/xamarin.essentials/1.6.0/xamarin.essentials.1.6.0.nupkg.sha512",
-    "/Users/danyalqureshi/.nuget/packages/xamarin.forms/4.8.0.1821/xamarin.forms.4.8.0.1821.nupkg.sha512",
+    "/Users/danyalqureshi/.nuget/packages/xamarin.forms/4.8.0.1560/xamarin.forms.4.8.0.1560.nupkg.sha512",
     "/Users/danyalqureshi/.nuget/packages/xamarin.jetbrains.annotations/13.0.0.2/xamarin.jetbrains.annotations.13.0.0.2.nupkg.sha512",
     "/Users/danyalqureshi/.nuget/packages/xamarin.kotlin.stdlib/1.4.10/xamarin.kotlin.stdlib.1.4.10.nupkg.sha512",
     "/Users/danyalqureshi/.nuget/packages/xamarin.kotlin.stdlib.common/1.4.10/xamarin.kotlin.stdlib.common.1.4.10.nupkg.sha512"

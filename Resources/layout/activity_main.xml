@@ -3,11 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <TextView  
-        android:id="@+id/testttt"
-        android:textColor="#FF0000"
-        android:layout_width="match_parent"  
-        android:layout_height="wrap_content" /> 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+	    <Button
+		    android:id="@+id/logOut"
+		    android:text="LogOut"
+		    android:textColor="#FFFFFF"
+		    android:textSize="15sp"
+		    android:layout_width="65dp"
+		    android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+		    android:background="@drawable/round_button"/>
+    </RelativeLayout>
     <Spinner
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
@@ -26,7 +34,7 @@
         android:id="@+id/noEmployees"
         android:textColor="#FF0000"
         android:layout_width="match_parent"  
-        android:layout_height="wrap_content" />  
+        android:layout_height="wrap_content"/>  
     <Button
         android:id="@+id/startPayroll"
         android:layout_width="match_parent"

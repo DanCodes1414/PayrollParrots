@@ -15,7 +15,7 @@ androidsdkpath=/users/danyalqureshi/library/developer/xamarin/android-sdk-macosx
 androidndkpath=
 javasdkpath=/users/danyalqureshi/library/developer/xamarin/jdk/microsoft_dist_openjdk_1.8.0.25/
 androidsequencepointsmode=none
-xamarinandroidversion=11.1.0-17
+xamarinandroidversion=11.1.0-26
 monosymbolarchive=false
 androiduselatestplatformsdk=false
 targetframeworkversion=v9.0
@@ -24,7 +24,7 @@ androidgeneratejnimarshalmethods=false
 os=unix
 androidincludedebugsymbols=true
 androidpackagenamingpolicy=lowercasecrc64
-_nugetassetstimestamp=637449950275298891
+_nugetassetstimestamp=637484717270559334
 typemapkind=strings-asm
 androidsupportedabis=arm64-v8a
 armeabi-v7a

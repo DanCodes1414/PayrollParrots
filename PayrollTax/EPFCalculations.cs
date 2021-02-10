@@ -7,7 +7,7 @@ namespace PayrollParrots.PayrollTax
     public class EPFCalculations : IsApplicableToEPF
     {
         readonly IsApplicableToEPF isApplicableToEPF;
-        public EPFCalculations(PayrollItems payrollItems, Dictionary<string, double> AdditionalRemunerationItems) :base(payrollItems, AdditionalRemunerationItems)
+        public EPFCalculations(PayrollItems payrollItems, Dictionary<string, double> AdditionalRemunerationItems) : base(payrollItems, AdditionalRemunerationItems)
         {
             isApplicableToEPF = new IsApplicableToEPF(payrollItems, AdditionalRemunerationItems);
         }

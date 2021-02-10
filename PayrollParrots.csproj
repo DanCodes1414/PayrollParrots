@@ -62,8 +62,8 @@
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\PayrollGlobal.cs" />
-    <Compile Include="Helper\PayrollHelper.cs" />
-    <Compile Include="Helper\DataStore.cs" />
+    <Compile Include="DataBase\PayrollEmployeeDetails.cs" />
+    <Compile Include="DataBase\DataStore.cs" />
     <Compile Include="PayrollTax\MTDCalculation.cs" />
     <Compile Include="PayrollAdditionalCurrentMonth.cs" />
     <Compile Include="PayrollCurrentMonth.cs" />
@@ -87,6 +87,11 @@
     <Compile Include="PayrollTax\SOCSOAndEISCalculations.cs" />
     <Compile Include="UsedManyTimes\EditTextToDouble.cs" />
     <Compile Include="Model\PayrollType.cs" />
+    <Compile Include="DataBase\PayrollAccountDetails.cs" />
+    <Compile Include="PayrollLogin.cs" />
+    <Compile Include="PayrollSignUp.cs" />
+    <Compile Include="Model\PayrollAccount.cs" />
+    <Compile Include="UsedManyTimes\SaveSharedPreferences.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -187,6 +192,18 @@
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\payroll_login.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\payroll_signup.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\round_button.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />
@@ -210,6 +227,9 @@
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
       <Version>4.8.0.1560</Version>
+    </PackageReference>
+    <PackageReference Include="Xam.Plugins.Settings">
+      <Version>3.1.1</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

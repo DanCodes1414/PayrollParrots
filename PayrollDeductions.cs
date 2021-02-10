@@ -49,7 +49,7 @@ namespace PayrollParrots
             //SOCSOContribution
             SOCSOAndEISCalculations = new SOCSOAndEISCalculations(NormalRemunerationItems, AdditionalRemunerationItems);
             double _SOCSOContribution = SOCSOAndEISCalculations.EmployeeSOCSOCalculation(_employeeAge);
-            
+
             //lifeInsurance
             EditText lifeInsurance_ = FindViewById<EditText>(Resource.Id.lifeInsurance);
             lifeInsurance_.AfterTextChanged += (sender, args) =>
@@ -213,6 +213,7 @@ namespace PayrollParrots
                     double _EPFContribution = Intent.GetDoubleExtra("EPFContribution", 0.00);
                     double _EPFAdditionalContribution = Intent.GetDoubleExtra("EPFAdditionalContribution", 0.00);
                     string _employeeName = Intent.GetStringExtra("employeeName");
+                    string email = Intent.GetStringExtra("email");
 
                     Intent intent = new Intent(this, typeof(PayrollRebates));
                     intent.PutExtra("FamilyDeductionItems", JsonConvert.SerializeObject(FamilyDeductionItems));
@@ -228,6 +229,7 @@ namespace PayrollParrots
                     intent.PutExtra("EPFAdditionalContribution", _EPFAdditionalContribution);
                     intent.PutExtra("EPFContribution", _EPFContribution);
                     intent.PutExtra("SOCSOContribution", _SOCSOContribution);
+                    intent.PutExtra("email", email);
                     StartActivity(intent);
                 }
             };

@@ -74,6 +74,7 @@ namespace PayrollParrots
                 string _employeeName = Intent.GetStringExtra("employeeName");
                 int _employeeAge = Intent.GetIntExtra("employeeAge", 0);
                 int _monthsRemaining = Intent.GetIntExtra("monthsRemaining", 11);
+                string email = Intent.GetStringExtra("email");
 
                 Intent intent = new Intent(this, typeof(PayrollAdditionalCurrentMonth));
                 intent.PutExtra("EPFContribution", _EPFContribution);
@@ -86,6 +87,7 @@ namespace PayrollParrots
                 intent.PutExtra("employeeAge", _employeeAge);
                 intent.PutExtra("employeeName", _employeeName);
                 intent.PutExtra("monthsRemaining", _monthsRemaining);
+                intent.PutExtra("email", email);
                 StartActivity(intent);
             };
         }
