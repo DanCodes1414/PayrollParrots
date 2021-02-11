@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using PayrollParrots.Model;
+using PayrollParrots.UsedManyTimes;
 
 namespace PayrollParrots
 {
@@ -19,6 +20,7 @@ namespace PayrollParrots
         public const double SpouseGetIncomeRebate = -400;
         public const double SpouseNoIncomeRebate20To35K = -650;
         public const double SpouseGetIncomeRebate20To35K = -250;
+        public const double EPFMaxContribution = 4000;
 
         public double MTDCalculation(PayrollFamilyDeductions FamilyDeductionItems, int _monthsRemaining, double _SOCSOContribution, double _previousSOCSOContribution,
             double _previousEPFContribution, double _MTDPrevious, double _EPFContribution, double _EPFAdditionalContribution)
@@ -37,9 +39,9 @@ namespace PayrollParrots
             {
                 CurrentMonthMTD = 0;
             }
-            double NetMTD = CurrentMonthMTD - isApplicableToMTD.ZakatByEmployee - isApplicableToMTD.ZakatViaPayroll - isApplicableToMTD.DepartureLevy;
 
-            if (NetMTD < 0.00)
+            double NetMTD = CurrentMonthMTD - isApplicableToMTD.ZakatByEmployee - isApplicableToMTD.ZakatViaPayroll - isApplicableToMTD.DepartureLevy;
+            if (NumberChecks.IsNegative(NetMTD))
             {
                 NetMTD = 0;
             }
@@ -63,7 +65,7 @@ namespace PayrollParrots
             {
             }
 
-            if (CS < 0)
+            if (NumberChecks.IsNegative(CS))
             {
                 CS = 0;
             }
@@ -77,7 +79,7 @@ namespace PayrollParrots
 
             double MTD = additionalRemunerationMTD + NetMTD;
 
-            if (MTD < 0)
+            if (NumberChecks.IsNegative(MTD))
             {
                 MTD = 0;
             }
@@ -92,8 +94,8 @@ namespace PayrollParrots
         {
             double P;
 
-            double _CheckingEPFContributionOverLimit = Math.Min(4000 - _previousEPFContribution, _EPFContribution);
-            double _CheckingEPFAdditionalContributionOverLimit = Math.Min(4000 - _previousEPFContribution - _EPFContribution, _EPFAdditionalContribution);
+            double _CheckingEPFContributionOverLimit = Math.Min(EPFMaxContribution - _previousEPFContribution, _EPFContribution);
+            double _CheckingEPFAdditionalContributionOverLimit = Math.Min(EPFMaxContribution - _previousEPFContribution - _EPFContribution, _EPFAdditionalContribution);
 
             //Y
             double Y = isApplicableToMTD.PreviousMonthsRemuneration + isApplicableToMTD.PreviousVOLA + isApplicableToMTD.PreviousBIK;
@@ -113,7 +115,7 @@ namespace PayrollParrots
             double Y2 = Y1;
             //K2
             double K2;
-            if (n != 0)
+            if (!NumberChecks.IsZero(n))
             {
                 K2 = Math.Floor(Math.Min(K1, (4000 - K - K1) / n) * 100) * 0.01;
             }
@@ -133,7 +135,7 @@ namespace PayrollParrots
             {
                 case true:
                     P = Math.Floor((Y_K + (Y1 - K1) + ((Y2 - K2) * n) - D - SDSQC - LP - LP1) * 100) * 0.01;
-                    if (P < 0.00)
+                    if (NumberChecks.IsNegative(P))
                     {
                         P = 0;
                     }
@@ -141,7 +143,7 @@ namespace PayrollParrots
                 case false:
                     K2 = Math.Floor(Math.Min(K1, (4000 - K - K1 - Kt) / n) * 100) * 0.01;
                     P = Math.Floor((Y_K + (Y1 - K1) + ((Y2 - K2) * n) + (Yt - Kt) - D - SDSQC - LP - LP1) * 100) * 0.01;
-                    if (Yt == 0.00)
+                    if (NumberChecks.IsZero(Yt) | NumberChecks.IsNegative(P))
                     {
                         P = 0;
                     }

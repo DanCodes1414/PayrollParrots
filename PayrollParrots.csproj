@@ -92,6 +92,8 @@
     <Compile Include="PayrollSignUp.cs" />
     <Compile Include="Model\PayrollAccount.cs" />
     <Compile Include="UsedManyTimes\SaveSharedPreferences.cs" />
+    <Compile Include="UsedManyTimes\NumberChecks.cs" />
+    <Compile Include="UsedManyTimes\DeductionLimits.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

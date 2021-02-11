@@ -23,6 +23,7 @@ namespace PayrollParrots
         double _EPFRate = 0.11;
         double _EPFContribution;
         int _employeeAge;
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -119,7 +120,7 @@ namespace PayrollParrots
             switch (editText.Id)
             {
                 case Resource.Id.currentMonthRemuneration:
-                    if (editText.Length() == 0)
+                    if (NumberChecks.IsZero(editText.Length()))
                     {
                         editText.Text.Equals("");
                         payrollItems.CurrentMonthRemuneration = 0.00;

@@ -16,10 +16,10 @@ namespace PayrollParrots
         readonly SoundPlayer soundPlayer = new SoundPlayer();
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            if (SaveSharedPreference.GetUserName(this).Length > 0)
+            if (SaveSharedPreference.GetDataBaseName(this).Length > 0)
             {
                 Intent intent = new Intent(this, typeof(MainActivity));
-                string DatabaseName = SaveSharedPreference.GetUserName(this).Replace("@", "").Replace(".", "") + ".db";
+                string DatabaseName = SaveSharedPreference.GetDataBaseName(this).Replace("@", "").Replace(".", "") + ".db";
                 intent.PutExtra("email", DatabaseName);
                 StartActivity(intent);
             }
@@ -52,7 +52,7 @@ namespace PayrollParrots
                 {
                     Toast.MakeText(this, "Login Successful", ToastLength.Short).Show();
                     soundPlayer.PlaySound_ButtonClick(this);
-                    SaveSharedPreference.SetUserName(this, DatabaseName);
+                    SaveSharedPreference.SetDataBaseName(this, DatabaseName);
 
                     Intent intent = new Intent(this, typeof(MainActivity));
                     intent.PutExtra("email", DatabaseName);

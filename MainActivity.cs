@@ -51,7 +51,7 @@ namespace PayrollParrots
 
             logOut.Click += (sender, e) => {
                 soundPlayer.PlaySound_ButtonClick(this);
-                SaveSharedPreference.SetUserName(this, null);
+                SaveSharedPreference.SetDataBaseName(this, null);
                 StartActivity(new Intent(this, typeof(PayrollLogin)));
             };
 

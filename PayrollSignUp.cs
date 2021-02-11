@@ -35,9 +35,13 @@ namespace PayrollParrots
 
             signUp.Click += (sender, e) => {
                 string Email = emailID.Text.ToString();
+                string Password = passwordID.Text.ToString();
+                string CompanyName = passwordID.Text.ToString();
                 string DatabaseName = Email.Replace("@", "").Replace(".", "") + ".db";
+
                 emailItem = PayrollAccountDetails.GetAccountList(this, DatabaseName).Where(x => x.Email.Equals(Email)).ToArray();
-                if (string.IsNullOrEmpty(companyName.Text) | string.IsNullOrEmpty(emailID.Text) | string.IsNullOrEmpty(passwordID.Text))
+
+                if (string.IsNullOrWhiteSpace(CompanyName) | string.IsNullOrWhiteSpace(Email) | string.IsNullOrWhiteSpace(Password))
                 {
                     Toast.MakeText(this, "Make sure all fields are not empty!", ToastLength.Long).Show();
                 }

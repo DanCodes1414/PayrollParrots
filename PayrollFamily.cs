@@ -126,7 +126,7 @@ namespace PayrollParrots
                     Toast toast = Toast.MakeText(this, "Check the error above", ToastLength.Short);
                     toast.Show();
                 }
-                else if (_employeeName == "" | _employeeAge <= 0)
+                else if (string.IsNullOrWhiteSpace(_employeeName) | NumberChecks.IsNegativeOrZero(_employeeAge))
                 {
                     Toast toast = Toast.MakeText(this, "Please input your name and age", ToastLength.Long);
                     toast.Show();
