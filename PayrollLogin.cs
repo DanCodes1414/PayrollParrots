@@ -19,7 +19,7 @@ namespace PayrollParrots
             if (SaveSharedPreference.GetDataBaseName(this).Length > 0)
             {
                 Intent intent = new Intent(this, typeof(MainActivity));
-                string DatabaseName = SaveSharedPreference.GetDataBaseName(this).Replace("@", "").Replace(".", "") + ".db";
+                string DatabaseName = SaveSharedPreference.GetDataBaseName(this);
                 intent.PutExtra("email", DatabaseName);
                 StartActivity(intent);
             }

@@ -16,7 +16,7 @@
     <activity android:label="PayrollPreviousRebates" android:name="crc642ab3dab37b1a36d6.PayrollPreviousRebates" />
     <activity android:label="PayrollRebates" android:name="crc642ab3dab37b1a36d6.PayrollRebates" />
     <activity android:label="PayrollReview" android:name="crc642ab3dab37b1a36d6.PayrollReview" />
-    <activity android:label="@string/app_name" android:name="crc642ab3dab37b1a36d6.MainActivity" />
+    <activity android:label="@string/app_name" android:theme="@style/MainTheme" android:name="crc642ab3dab37b1a36d6.MainActivity" />
     <activity android:label="PayrollLogin" android:name="crc642ab3dab37b1a36d6.PayrollLogin">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />

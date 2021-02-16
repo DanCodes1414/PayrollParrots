@@ -30,7 +30,7 @@ namespace PayrollParrots
         December = 0
     }
 
-    [Activity(Label = "@string/app_name")]
+    [Activity(Label = "@string/app_name", Theme = "@style/MainTheme")]
     public class MainActivity : AppCompatActivity
     {
         readonly SoundPlayer soundPlayer = new SoundPlayer();
