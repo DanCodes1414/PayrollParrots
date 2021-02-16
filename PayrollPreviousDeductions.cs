@@ -33,7 +33,7 @@ namespace PayrollParrots
             var PreviousBIKItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("PreviousBIK"));
             var PreviousVOLAItems = JsonConvert.DeserializeObject<Dictionary<string, double>>(Intent.GetStringExtra("PreviousVOLA"));
 
-            //previousLifeStyleRelief
+            //PreviousLifeStyleRelief
             double _lifeStyleRelief = DeductionItems["LifeStyleRelief"];
             EditText previousLifeStyleRelief_ = FindViewById<EditText>(Resource.Id.previousLifeStyleRelief);
             previousLifeStyleRelief_.AfterTextChanged += (sender, args) =>
@@ -41,7 +41,7 @@ namespace PayrollParrots
                 payrollItems.PreviousLifeStyleRelief = editTextToDouble.EditTextPreviousDeductions_AfterTextChanged(previousLifeStyleRelief_, _lifeStyleRelief, DeductionLimits.LifeStyleRelief);
             };
 
-            //previousSportsRelief
+            //PreviousSportsRelief
             double _sportsRelief = DeductionItems["SportsRelief"];
             EditText previousSportsRelief_ = FindViewById<EditText>(Resource.Id.previousSportsRelief);
             previousSportsRelief_.AfterTextChanged += (sender, args) =>
@@ -49,7 +49,7 @@ namespace PayrollParrots
                 payrollItems.PreviousSportsRelief = editTextToDouble.EditTextPreviousDeductions_AfterTextChanged(previousSportsRelief_, _sportsRelief, DeductionLimits.SportsRelief);
             };
 
-            //previousSOCSOContribution
+            //PreviousSOCSOContribution
             double _SOCSOContribution = Intent.GetDoubleExtra("SOCSOContribution", 0.00);
             EditText previousSOCSOContribution_ = FindViewById<EditText>(Resource.Id.previousSOCSOContribution);
             double _previousSOCSOContribution = 0.00;
@@ -58,7 +58,7 @@ namespace PayrollParrots
                 _previousSOCSOContribution = editTextToDouble.EditTextPreviousDeductions_AfterTextChanged(previousSOCSOContribution_, _SOCSOContribution, DeductionLimits.SOCSO);
             };
 
-            //previouslifeInsurance
+            //PreviousLifeInsurance
             double _lifeInsurance = DeductionItems["LifeInsurance"];
             EditText previousLifeInsurance_ = FindViewById<EditText>(Resource.Id.previouslifeInsurance);
             previousLifeInsurance_.AfterTextChanged += (sender, args) =>
@@ -66,7 +66,7 @@ namespace PayrollParrots
                 payrollItems.PreviousLifeInsurance = editTextToDouble.EditTextPreviousDeductions_AfterTextChanged(previousLifeInsurance_, _lifeInsurance, DeductionLimits.LifeInsurance);
             };
 
-            //previousBasicEquipment
+            //PreviousBasicEquipment
             double _basicEquipment = DeductionItems["SupportingEquipment"];
             EditText previousBasicEquipment_ = FindViewById<EditText>(Resource.Id.previousBasicEquipment);
             previousBasicEquipment_.AfterTextChanged += (sender, args) =>
@@ -74,7 +74,7 @@ namespace PayrollParrots
                 payrollItems.PreviousSupportingEquipment = editTextToDouble.EditTextPreviousDeductions_AfterTextChanged(previousBasicEquipment_, _basicEquipment, DeductionLimits.SupportingEquipment);
             };
 
-            //previousEducationYourSelf
+            //PreviousEducationYourSelf
             double _educationYourSelf = DeductionItems["EducationFeesForSelf"];
             EditText previousEducationYourSelf_ = FindViewById<EditText>(Resource.Id.previousEducationYourSelf);
             previousEducationYourSelf_.AfterTextChanged += (sender, args) =>
@@ -82,7 +82,7 @@ namespace PayrollParrots
                 payrollItems.PreviousEducationFeesForSelf = editTextToDouble.EditTextPreviousDeductions_AfterTextChanged(previousEducationYourSelf_, _educationYourSelf, DeductionLimits.EducationFeesForSelf);
             };
 
-            //previousMedicalExamination
+            //PreviousMedicalExamination
             double _medicalExamination = DeductionItems["MedicalExamination"];
             EditText previousMedicalExamination_ = FindViewById<EditText>(Resource.Id.previousMedicalExamination);
             previousMedicalExamination_.AfterTextChanged += (sender, args) =>
@@ -90,7 +90,7 @@ namespace PayrollParrots
                 payrollItems.PreviousMedicalExamination = editTextToDouble.EditTextPreviousDeductions_AfterTextChanged(previousMedicalExamination_, _medicalExamination, DeductionLimits.MedicalExamination);
             };
 
-            //previousMedicalVaccination
+            //PreviousMedicalVaccination
             double _medicalVaccination = DeductionItems["MedicalVaccination"];
             EditText previousMedicalVaccination_ = FindViewById<EditText>(Resource.Id.previousMedicalVaccination);
             previousMedicalVaccination_.AfterTextChanged += (sender, args) =>
@@ -98,7 +98,7 @@ namespace PayrollParrots
                 payrollItems.PreviousMedicalVaccination = editTextToDouble.EditTextPreviousDeductions_AfterTextChanged(previousMedicalVaccination_, _medicalVaccination, DeductionLimits.MedicalVaccination);
             };
 
-            //previousMedicalDisease
+            //PreviousMedicalDisease
             double _medicalDisease = DeductionItems["MedicalDisease"];
             EditText previousMedicalDisease_ = FindViewById<EditText>(Resource.Id.previousMedicalDisease);
             previousMedicalDisease_.AfterTextChanged += (sender, args) =>
@@ -118,7 +118,7 @@ namespace PayrollParrots
                 validatingDeductions.ValidateDeductionInputsLowerThanLimit(_medicalExamination + _medicalVaccination + _medicalDisease + payrollItems.PreviousMedicalDisease + payrollItems.PreviousMedicalVaccination + payrollItems.PreviousMedicalExamination, DeductionLimits.MedicalExaminationAndVaccinationAndDisease, previousMedicalDisease_);
             };
 
-            //previousSSPN
+            //PreviousSSPN
             double _SSPN = DeductionItems["SSPN"];
             EditText previousSSPN_ = FindViewById<EditText>(Resource.Id.previousSSPN);
             previousSSPN_.AfterTextChanged += (sender, args) =>
@@ -126,7 +126,7 @@ namespace PayrollParrots
                 payrollItems.PreviousSSPN = editTextToDouble.EditTextPreviousDeductions_AfterTextChanged(previousSSPN_, _SSPN, DeductionLimits.SSPN);
             };
 
-            //previousPRS
+            //PreviousPRS
             double _PRS = DeductionItems["PRS"];
             EditText previousPRS_ = FindViewById<EditText>(Resource.Id.previousPRS);
             previousPRS_.AfterTextChanged += (sender, args) =>
@@ -134,7 +134,7 @@ namespace PayrollParrots
                 payrollItems.PreviousPRS = editTextToDouble.EditTextPreviousDeductions_AfterTextChanged(previousPRS_, _PRS, DeductionLimits.PRS);
             };
 
-            //previousSmallKidEducation
+            //PreviousSmallKidEducation
             double _smallKidEducation = DeductionItems["KindergartenAndChildCareFees"];
             EditText previousSmallKidEducation_ = FindViewById<EditText>(Resource.Id.previousSmallKidEducation);
             previousSmallKidEducation_.AfterTextChanged += (sender, args) =>
@@ -142,7 +142,7 @@ namespace PayrollParrots
                 payrollItems.PreviousKindergartenAndChildCareFees = editTextToDouble.EditTextPreviousDeductions_AfterTextChanged(previousSmallKidEducation_, _smallKidEducation, DeductionLimits.KindergartenAndChildCareFees);
             };
 
-            //previousBreastFeedingEquipment
+            //PreviousBreastFeedingEquipment
             double _breastFeedingEquipment = DeductionItems["BreastFeedingEquipment"];
             EditText previousBreastFeedingEquipment_ = FindViewById<EditText>(Resource.Id.previousBreastFeedingEquipment);
             previousBreastFeedingEquipment_.AfterTextChanged += (sender, args) =>
@@ -150,7 +150,7 @@ namespace PayrollParrots
                 payrollItems.PreviousBreastFeedingEquipment = editTextToDouble.EditTextPreviousDeductions_AfterTextChanged(previousBreastFeedingEquipment_, _breastFeedingEquipment, DeductionLimits.BreastFeedingEquipment);
             };
 
-            //previousAlimonyFormerWife
+            //PreviousAlimonyFormerWife
             double _alimonyFormerWife = DeductionItems["AlimonyToFormerWife"];
             EditText previousAlimonyFormerWife_ = FindViewById<EditText>(Resource.Id.previousAlimonyFormerWife);
             previousAlimonyFormerWife_.AfterTextChanged += (sender, args) =>
@@ -158,7 +158,7 @@ namespace PayrollParrots
                 payrollItems.PreviousAlimonyToFormerWife = editTextToDouble.EditTextPreviousDeductions_AfterTextChanged(previousAlimonyFormerWife_, _alimonyFormerWife, DeductionLimits.AlimonyToFormerWife);
             };
 
-            //previousEMInsurance
+            //PreviousEMInsurance
             double _EMInsurance = DeductionItems["EducationAndMedicalInsurance"];
             EditText previousEMInsurance_ = FindViewById<EditText>(Resource.Id.previousEMInsurance);
             previousEMInsurance_.AfterTextChanged += (sender, args) =>
@@ -166,7 +166,7 @@ namespace PayrollParrots
                 payrollItems.PreviousEducationAndMedicalInsurance = editTextToDouble.EditTextPreviousDeductions_AfterTextChanged(previousEMInsurance_, _EMInsurance, DeductionLimits.EducationAndMedicalInsurance);
             };
 
-            //previousFatherRelief
+            //PreviousFatherRelief
             double _fatherRelief = DeductionItems["FatherRelief"];
             EditText previousFatherRelief_ = FindViewById<EditText>(Resource.Id.previousFatherRelief);
             previousFatherRelief_.AfterTextChanged += (sender, args) =>
@@ -174,7 +174,7 @@ namespace PayrollParrots
                 payrollItems.PreviousFatherRelief = editTextToDouble.EditTextPreviousDeductions_AfterTextChanged(previousFatherRelief_, _fatherRelief, DeductionLimits.FatherRelief);
             };
 
-            //previousMotherRelief
+            //PreviousMotherRelief
             double _motherRelief = DeductionItems["MotherRelief"];
             EditText previousMotherRelief_ = FindViewById<EditText>(Resource.Id.previousMotherRelief);
             previousMotherRelief_.AfterTextChanged += (sender, args) =>
@@ -182,7 +182,7 @@ namespace PayrollParrots
                 payrollItems.PreviousMotherRelief = editTextToDouble.EditTextPreviousDeductions_AfterTextChanged(previousMotherRelief_, _motherRelief, DeductionLimits.MotherRelief);
             };
 
-            //previousMapaRelief
+            //PreviousMapaRelief
             double _mapaRelief = DeductionItems["MedicalExpenseForParents"];
             EditText previousMapaRelief_ = FindViewById<EditText>(Resource.Id.previousMapaRelief);
             previousMapaRelief_.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
@@ -203,7 +203,7 @@ namespace PayrollParrots
                 validatingDeductions.ValidateBothParentsReliefAndParentsMedicalExpensesNotGreaterThanZero(payrollItems.PreviousMedicalExpenseForParents, payrollItems.PreviousFatherRelief + payrollItems.PreviousMotherRelief, previousMapaRelief_);
             };
 
-            //previousDomesticTourismExpenditure
+            //PreviousDomesticTourismExpenditure
             double _domesticTourismExpenditure = DeductionItems["DomesticTourismExpenditure"];
             EditText previousDomesticTourismExpenditure_ = FindViewById<EditText>(Resource.Id.previousDomesticTourismExpenditure);
             previousDomesticTourismExpenditure_.AfterTextChanged += (sender, args) =>

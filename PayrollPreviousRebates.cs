@@ -20,21 +20,21 @@ namespace PayrollParrots
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.payroll_previous_rebates);
 
-            //previousZakatByEmployee
+            //PreviousZakatByEmployee
             EditText previousZakatByEmployee_ = FindViewById<EditText>(Resource.Id.previousZakatByEmployee);
             previousZakatByEmployee_.AfterTextChanged += (sender, args) =>
             {
                 payrollItems.PreviousZakatByEmployee = editTextToDouble.EditText_AfterTextChanged(previousZakatByEmployee_);
             };
 
-            //previousZakatByPayroll
+            //PreviousZakatByPayroll
             EditText previousZakatByPayroll_ = FindViewById<EditText>(Resource.Id.previousZakatByPayroll);
             previousZakatByPayroll_.AfterTextChanged += (sender, args) =>
             {
                 payrollItems.PreviousZakatViaPayroll = editTextToDouble.EditText_AfterTextChanged(previousZakatByPayroll_);
             };
 
-            //previousDepartureLevy
+            //PreviousDepartureLevy
             EditText previousDepartureLevy_ = FindViewById<EditText>(Resource.Id.previousDepartureLevy);
             previousDepartureLevy_.AfterTextChanged += (sender, args) =>
             {

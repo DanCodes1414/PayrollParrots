@@ -35,7 +35,6 @@ cache-path;/Users/danyalqureshi/Projects/PayrollParrots/PayrollParrots/obj/Debug
 color;obj/Debug/res/values/colors.xml
 color;obj/Debug/res/values/ic_launcher_background.xml
 corners;obj/Debug/res/drawable/round_button.xml
-crc64720bb2db43a66fe9.FormsViewPager;/Users/danyalqureshi/Projects/PayrollParrots/PayrollParrots/obj/Debug/lp/41/jl/res/layout/rootlayout.xml
 declare-styleable;/Users/danyalqureshi/Projects/PayrollParrots/PayrollParrots/obj/Debug/lp/41/jl/res/values/attrs.xml
 dimen;obj/Debug/res/values/dimens.xml
 EditText;obj/Debug/res/layout/payroll_additional_current_month.xml

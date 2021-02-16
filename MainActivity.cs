@@ -86,6 +86,10 @@ namespace PayrollParrots
             };
         }
 
+        public override void OnBackPressed()
+        {
+        }
+
         //pop-up when item in list is clicked
         private void List_ItemClick(AdapterView.ItemClickEventArgs e, string email)
         {

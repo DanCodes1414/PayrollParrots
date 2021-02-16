@@ -526,3 +526,4 @@
 /Users/danyalqureshi/Projects/PayrollParrots/PayrollParrots/obj/Debug/stamp/_GeneratePackageManagerJava.stamp
 /Users/danyalqureshi/Projects/PayrollParrots/PayrollParrots/obj/Debug/stamp/_ResolveLibraryProjectImports.stamp
 /Users/danyalqureshi/Projects/PayrollParrots/PayrollParrots/obj/Debug/res/drawable/round_button.xml
+/Users/danyalqureshi/Projects/PayrollParrots/PayrollParrots/obj/Debug/PayrollParrots.csprojAssemblyReference.cache
