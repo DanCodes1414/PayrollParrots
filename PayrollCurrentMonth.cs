@@ -23,6 +23,7 @@ namespace PayrollParrots
         double _EPFRate = 0.11;
         double _EPFContribution;
         int _employeeAge;
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -74,6 +75,7 @@ namespace PayrollParrots
                 string _employeeName = Intent.GetStringExtra("employeeName");
                 int _employeeAge = Intent.GetIntExtra("employeeAge", 0);
                 int _monthsRemaining = Intent.GetIntExtra("monthsRemaining", 11);
+                string email = Intent.GetStringExtra("email");
 
                 Intent intent = new Intent(this, typeof(PayrollAdditionalCurrentMonth));
                 intent.PutExtra("EPFContribution", _EPFContribution);
@@ -86,6 +88,7 @@ namespace PayrollParrots
                 intent.PutExtra("employeeAge", _employeeAge);
                 intent.PutExtra("employeeName", _employeeName);
                 intent.PutExtra("monthsRemaining", _monthsRemaining);
+                intent.PutExtra("email", email);
                 StartActivity(intent);
             };
         }
@@ -117,7 +120,7 @@ namespace PayrollParrots
             switch (editText.Id)
             {
                 case Resource.Id.currentMonthRemuneration:
-                    if (editText.Length() == 0)
+                    if (NumberChecks.IsZero(editText.Length()))
                     {
                         editText.Text.Equals("");
                         payrollItems.CurrentMonthRemuneration = 0.00;

@@ -7,7 +7,7 @@ namespace PayrollParrots.PayrollTax
     public class EPFCalculations : IsApplicableToEPF
     {
         readonly IsApplicableToEPF isApplicableToEPF;
-        public EPFCalculations(PayrollItems payrollItems, Dictionary<string, double> AdditionalRemunerationItems) :base(payrollItems, AdditionalRemunerationItems)
+        public EPFCalculations(PayrollItems payrollItems, Dictionary<string, double> AdditionalRemunerationItems) : base(payrollItems, AdditionalRemunerationItems)
         {
             isApplicableToEPF = new IsApplicableToEPF(payrollItems, AdditionalRemunerationItems);
         }
@@ -39,14 +39,14 @@ namespace PayrollParrots.PayrollTax
                     }
                     else if (currentMonthRemuneration > 20 && currentMonthRemuneration <= 5000)
                     {
-                        double EPFWage1 = Math.Ceiling(currentMonthRemuneration * 0.05) * 20;
-                        _EPFContribution = Math.Ceiling(EPFWage1 * _EPFRate);
+                        double EPFWageToNearestTwenty = Math.Ceiling(currentMonthRemuneration * 0.05) * 20;
+                        _EPFContribution = Math.Ceiling(EPFWageToNearestTwenty * _EPFRate);
                         return _EPFContribution;
                     }
                     else if (currentMonthRemuneration > 5000 && currentMonthRemuneration <= 20000)
                     {
-                        double EPFWage2 = Math.Ceiling(currentMonthRemuneration * 0.01) * 100;
-                        _EPFContribution = Math.Ceiling(EPFWage2 * _EPFRate);
+                        double EPFWageToNearestHundred = Math.Ceiling(currentMonthRemuneration * 0.01) * 100;
+                        _EPFContribution = Math.Ceiling(EPFWageToNearestHundred * _EPFRate);
                         return _EPFContribution;
                     }
                     else
@@ -72,14 +72,14 @@ namespace PayrollParrots.PayrollTax
                     }
                     else if (currentMonthRemuneration > 20 && currentMonthRemuneration <= 5000)
                     {
-                        double EPFWage1 = Math.Ceiling(currentMonthRemuneration * 0.05) * 20;
-                        _EPFContribution = Math.Ceiling(EPFWage1 * _EPFRate);
+                        double EPFWageToNearestTwenty = Math.Ceiling(currentMonthRemuneration * 0.05) * 20;
+                        _EPFContribution = Math.Ceiling(EPFWageToNearestTwenty * _EPFRate);
                         return _EPFContribution;
                     }
                     else if (currentMonthRemuneration > 5000 && currentMonthRemuneration <= 20000)
                     {
-                        double EPFWage2 = Math.Ceiling(currentMonthRemuneration * 0.01) * 100;
-                        _EPFContribution = Math.Ceiling(EPFWage2 * _EPFRate);
+                        double EPFWageToNearestHundred = Math.Ceiling(currentMonthRemuneration * 0.01) * 100;
+                        _EPFContribution = Math.Ceiling(EPFWageToNearestHundred * _EPFRate);
                         return _EPFContribution;
                     }
                     else
@@ -102,7 +102,7 @@ namespace PayrollParrots.PayrollTax
             double _EPFAdditionalContribution = 0.00;
 
             double currentMonthNetRemuneration = isApplicableToEPF.WageEPF;
-            double _EPFContribution2;
+            double _NormalAndAdditionalEPFContribution;
 
             if (_employeeAge < EmployeeMaxAgeForEPFContribution)
             {
@@ -117,29 +117,29 @@ namespace PayrollParrots.PayrollTax
                         }
                         else if (currentMonthNetRemuneration > 10 && currentMonthNetRemuneration <= 20)
                         {
-                            _EPFContribution2 = 3.00;
-                            _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
+                            _NormalAndAdditionalEPFContribution = 3.00;
+                            _EPFAdditionalContribution = _NormalAndAdditionalEPFContribution - _EPFContribution;
                             return _EPFAdditionalContribution;
                         }
                     }
                     else if (currentMonthNetRemuneration > 20 && currentMonthNetRemuneration <= 5000)
                     {
-                        double EPFWage1 = Math.Ceiling(currentMonthNetRemuneration * 0.05) * 20;
-                        _EPFContribution2 = Math.Ceiling(EPFWage1 * _EPFRate);
-                        _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
+                        double EPFWageToNearestTwenty = Math.Ceiling(currentMonthNetRemuneration * 0.05) * 20;
+                        _NormalAndAdditionalEPFContribution = Math.Ceiling(EPFWageToNearestTwenty * _EPFRate);
+                        _EPFAdditionalContribution = _NormalAndAdditionalEPFContribution - _EPFContribution;
                         return _EPFAdditionalContribution;
                     }
                     else if (currentMonthNetRemuneration > 5000 && currentMonthNetRemuneration <= 20000)
                     {
-                        double EPFWage1 = Math.Ceiling(currentMonthNetRemuneration * 0.01) * 100;
-                        _EPFContribution2 = Math.Ceiling(EPFWage1 * _EPFRate);
-                        _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
+                        double EPFWageToNearestHundred = Math.Ceiling(currentMonthNetRemuneration * 0.01) * 100;
+                        _NormalAndAdditionalEPFContribution = Math.Ceiling(EPFWageToNearestHundred * _EPFRate);
+                        _EPFAdditionalContribution = _NormalAndAdditionalEPFContribution - _EPFContribution;
                         return _EPFAdditionalContribution;
                     }
                     else
                     {
-                        _EPFContribution2 = Math.Ceiling(currentMonthNetRemuneration * _EPFRate);
-                        _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
+                        _NormalAndAdditionalEPFContribution = Math.Ceiling(currentMonthNetRemuneration * _EPFRate);
+                        _EPFAdditionalContribution = _NormalAndAdditionalEPFContribution - _EPFContribution;
                         return _EPFAdditionalContribution;
                     }
                 }
@@ -154,29 +154,29 @@ namespace PayrollParrots.PayrollTax
                         }
                         else if (currentMonthNetRemuneration > 10 && currentMonthNetRemuneration <= 20)
                         {
-                            _EPFContribution2 = 2.00;
-                            _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
+                            _NormalAndAdditionalEPFContribution = 2.00;
+                            _EPFAdditionalContribution = _NormalAndAdditionalEPFContribution - _EPFContribution;
                             return _EPFAdditionalContribution;
                         }
                     }
                     else if (currentMonthNetRemuneration > 20 && currentMonthNetRemuneration <= 5000)
                     {
-                        double EPFWage1 = Math.Ceiling(currentMonthNetRemuneration * 0.05) * 20;
-                        _EPFContribution2 = Math.Ceiling(EPFWage1 * _EPFRate);
-                        _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
+                        double EPFWageToNearestTwenty = Math.Ceiling(currentMonthNetRemuneration * 0.05) * 20;
+                        _NormalAndAdditionalEPFContribution = Math.Ceiling(EPFWageToNearestTwenty * _EPFRate);
+                        _EPFAdditionalContribution = _NormalAndAdditionalEPFContribution - _EPFContribution;
                         return _EPFAdditionalContribution;
                     }
                     else if (currentMonthNetRemuneration > 5000 && currentMonthNetRemuneration <= 20000)
                     {
-                        double EPFWage1 = Math.Ceiling(currentMonthNetRemuneration * 0.01) * 100;
-                        _EPFContribution2 = Math.Ceiling(EPFWage1 * _EPFRate);
-                        _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
+                        double EPFWageToNearestHundred = Math.Ceiling(currentMonthNetRemuneration * 0.01) * 100;
+                        _NormalAndAdditionalEPFContribution = Math.Ceiling(EPFWageToNearestHundred * _EPFRate);
+                        _EPFAdditionalContribution = _NormalAndAdditionalEPFContribution - _EPFContribution;
                         return _EPFAdditionalContribution;
                     }
                     else
                     {
-                        _EPFContribution2 = Math.Ceiling(currentMonthNetRemuneration * _EPFRate);
-                        _EPFAdditionalContribution = _EPFContribution2 - _EPFContribution;
+                        _NormalAndAdditionalEPFContribution = Math.Ceiling(currentMonthNetRemuneration * _EPFRate);
+                        _EPFAdditionalContribution = _NormalAndAdditionalEPFContribution - _EPFContribution;
                         return _EPFAdditionalContribution;
                     }
                 }
@@ -214,19 +214,19 @@ namespace PayrollParrots.PayrollTax
                 }
                 else if (currentMonthNetRemuneration > 20 && currentMonthNetRemuneration <= 5000)
                 {
-                    double EPFWage1 = Math.Ceiling(currentMonthNetRemuneration * 0.05) * 20;
-                    employerEPF = Math.Ceiling(EPFWage1 * employerEPFRate);
+                    double EPFWageToNearestTwenty = Math.Ceiling(currentMonthNetRemuneration * 0.05) * 20;
+                    employerEPF = Math.Ceiling(EPFWageToNearestTwenty * employerEPFRate);
                 }
                 else if (remunerationWithoutBonus <= 5000 && currentMonthNetRemuneration > 5000)
                 {
-                    double EPFWage1 = Math.Ceiling(currentMonthNetRemuneration * 0.01) * 100;
-                    employerEPF = Math.Ceiling(EPFWage1 * employerEPFRate);
+                    double EPFWageToNearestHundred = Math.Ceiling(currentMonthNetRemuneration * 0.01) * 100;
+                    employerEPF = Math.Ceiling(EPFWageToNearestHundred * employerEPFRate);
                 }
                 else if (currentMonthNetRemuneration > 5000 && currentMonthNetRemuneration <= 20000)
                 {
                     employerEPFRate = 0.12;
-                    double EPFWage2 = Math.Ceiling(currentMonthNetRemuneration * 0.01) * 100;
-                    employerEPF = Math.Ceiling(EPFWage2 * employerEPFRate);
+                    double EPFWageToNearestHundred = Math.Ceiling(currentMonthNetRemuneration * 0.01) * 100;
+                    employerEPF = Math.Ceiling(EPFWageToNearestHundred * employerEPFRate);
                 }
                 else
                 {
@@ -250,18 +250,18 @@ namespace PayrollParrots.PayrollTax
                 }
                 else if (currentMonthNetRemuneration > 20 && currentMonthNetRemuneration <= 5000)
                 {
-                    double EPFWage1 = Math.Ceiling(currentMonthNetRemuneration * 0.05) * 20;
-                    employerEPF = Math.Ceiling(EPFWage1 * employerEPFRate);
+                    double EPFWageToNearestTwenty = Math.Ceiling(currentMonthNetRemuneration * 0.05) * 20;
+                    employerEPF = Math.Ceiling(EPFWageToNearestTwenty * employerEPFRate);
                 }
                 else if (remunerationWithoutBonus <= 5000 && additionalRemuneration > 5000)
                 {
-                    double EPFWage1 = Math.Ceiling(currentMonthNetRemuneration * 0.01) * 100;
-                    employerEPF = Math.Ceiling(EPFWage1 * employerEPFRate);
+                    double EPFWageToNearestHundred = Math.Ceiling(currentMonthNetRemuneration * 0.01) * 100;
+                    employerEPF = Math.Ceiling(EPFWageToNearestHundred * employerEPFRate);
                 }
                 else if (currentMonthNetRemuneration > 5000 && currentMonthNetRemuneration <= 20000)
                 {
-                    double EPFWage2 = Math.Ceiling(currentMonthNetRemuneration * 0.01) * 100;
-                    employerEPF = Math.Ceiling(EPFWage2 * employerEPFRate);
+                    double EPFWageToNearestHundred = Math.Ceiling(currentMonthNetRemuneration * 0.01) * 100;
+                    employerEPF = Math.Ceiling(EPFWageToNearestHundred * employerEPFRate);
                 }
                 else
                 {

@@ -126,7 +126,7 @@ namespace PayrollParrots
                     Toast toast = Toast.MakeText(this, "Check the error above", ToastLength.Short);
                     toast.Show();
                 }
-                else if (_employeeName == "" | _employeeAge <= 0)
+                else if (string.IsNullOrWhiteSpace(_employeeName) | NumberChecks.IsNegativeOrZero(_employeeAge))
                 {
                     Toast toast = Toast.MakeText(this, "Please input your name and age", ToastLength.Long);
                     toast.Show();
@@ -134,6 +134,7 @@ namespace PayrollParrots
                 else
                 {
                     payrollFamilyDeductions.TotalFamilyDeductions = (payrollFamilyDeductions.KidsUnder18 * 2000) + (payrollFamilyDeductions.Over18InHigherEducation * 8000) + (payrollFamilyDeductions.DisabledKids * 6000) + (payrollFamilyDeductions.DisabledKidsinHigherEducation * 14000) + (payrollFamilyDeductions.KidsUnder18Split * 1000) + (payrollFamilyDeductions.Over18InHigherEducationSplit * 4000) + (payrollFamilyDeductions.DisabledKidsSplit * 3000) + (payrollFamilyDeductions.DisabledKidsinHigherEducationSplit * 7000) + payrollFamilyDeductions.DisabledIndividual + payrollFamilyDeductions.DisabledSpouse + payrollFamilyDeductions.SpouseNotGettingIncome;
+                    string email = Intent.GetStringExtra("email");
 
                     soundPlayer.PlaySound_ButtonClick(this);
 
@@ -142,6 +143,7 @@ namespace PayrollParrots
                     intent.PutExtra("employeeAge", _employeeAge);
                     intent.PutExtra("employeeName", _employeeName);
                     intent.PutExtra("monthsRemaining", monthsRemaining);
+                    intent.PutExtra("email", email);
                     StartActivity(intent);
                 }
             };
@@ -281,7 +283,7 @@ namespace PayrollParrots
                         .SetTitle(ItIsNot)
                         .SetMessage(AlertMessage)
                         .SetIcon(Resource.Drawable.Warning_Sign)
-                        .SetPositiveButton("Yes", (c, ev) => {})
+                        .SetPositiveButton("Yes", (c, ev) => { })
                         .SetNegativeButton("No", (c, ev) =>
                         {
                             ((Spinner)sender).SetSelection(monthToday - 1);

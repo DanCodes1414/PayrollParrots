@@ -14,49 +14,56 @@
         android:id="@+id/name"
         android:textSize="50px"
         android:editable="false"
-        android:background="@null"/>
+        android:inputType="none"
+        android:background="@android:color/transparent"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/finalPCB"
         android:textSize="50px"
         android:editable="false"
-        android:background="@null"/>
+        android:inputType="none"
+        android:background="@android:color/transparent"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/finalEPF"
         android:textSize="50px"
         android:editable="false"
-        android:background="@null"/>
+        android:inputType="none"
+        android:background="@android:color/transparent"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/finalSOCSO"
         android:textSize="50px"
         android:editable="false"
-        android:background="@null"/>
+        android:inputType="none"
+        android:background="@android:color/transparent"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/finalEIS"
         android:textSize="50px"
         android:editable="false"
-        android:background="@null"/>
+        android:inputType="none"
+        android:background="@android:color/transparent"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/grossSalary"
         android:textSize="50px"
         android:editable="false"
-        android:background="@null"/>
+        android:inputType="none"
+        android:background="@android:color/transparent"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/netSalary"
         android:textSize="50px"
         android:editable="false"
-        android:background="@null"/>
+        android:inputType="none"
+        android:background="@android:color/transparent"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -68,21 +75,24 @@
         android:id="@+id/employerEPF"
         android:textSize="50px"
         android:editable="false"
-        android:background="@null"/>
+        android:inputType="none"
+        android:background="@android:color/transparent"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/employerSOCSO"
         android:textSize="50px"
         android:editable="false"
-        android:background="@null"/>
+        android:inputType="none"
+        android:background="@android:color/transparent"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/employerEIS"
         android:textSize="50px"
         android:editable="false"
-        android:background="@null"/>
+        android:inputType="none"
+        android:background="@android:color/transparent"/>
     <TextView  
         android:textColor="@android:color/holo_green_dark"
         android:layout_width="match_parent"  

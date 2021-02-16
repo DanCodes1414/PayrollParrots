@@ -10,7 +10,7 @@ namespace PayrollParrots.UsedManyTimes
         public double EditText_AfterTextChanged(EditText editText)
         {
             editText.SetFilters(new IInputFilter[] { new DecimalDigitsInputFilter(12, 2) });
-            double.TryParse(editText.Text, out  double editTextdouble);
+            double.TryParse(editText.Text, out double editTextdouble);
             return editTextdouble;
         }
 

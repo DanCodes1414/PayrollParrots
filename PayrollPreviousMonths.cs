@@ -86,6 +86,7 @@ namespace PayrollParrots
                     double _EPFAdditionalContribution = Intent.GetDoubleExtra("EPFAdditionalContribution", 0.00);
                     int _employeeAge = Intent.GetIntExtra("employeeAge", 0);
                     string _employeeName = Intent.GetStringExtra("employeeName");
+                    string email = Intent.GetStringExtra("email");
 
                     Intent intent = new Intent(this, typeof(PayrollPreviousDeductions));
                     intent.PutExtra("previousEPFContribution", _previousEPFContribution);
@@ -96,6 +97,7 @@ namespace PayrollParrots
                     intent.PutExtra("monthsRemaining", _monthsRemaining);
                     intent.PutExtra("employeeAge", _employeeAge);
                     intent.PutExtra("employeeName", _employeeName);
+                    intent.PutExtra("email", email);
 
                     intent.PutExtra("FamilyDeductionItems", JsonConvert.SerializeObject(FamilyDeductionItems));
                     intent.PutExtra("NormalRemuneration", JsonConvert.SerializeObject(NormalRemunerationItems));

@@ -6,7 +6,7 @@ using Android.OS;
 using Android.Views;
 using Android.Widget;
 using PayrollParrots.Model;
-using PayrollParrots.Helper;
+using PayrollParrots.DataBase;
 using NL.DionSegijn.Konfetti;
 using Newtonsoft.Json;
 using PayrollParrots.PayrollTax;
@@ -34,6 +34,7 @@ namespace PayrollParrots
             int _employeeAge = Intent.GetIntExtra("employeeAge", 0);
             string _employeeName = Intent.GetStringExtra("employeeName");
             int _monthsRemaining = Intent.GetIntExtra("monthsRemaining", 11);
+            string email = Intent.GetStringExtra("email");
 
             double _SOCSOContribution = Intent.GetDoubleExtra("SOCSOContribution", 0.00);
             double _previousSOCSOContribution = Intent.GetDoubleExtra("previousSOCSOContribution", 0.00);
@@ -158,10 +159,13 @@ namespace PayrollParrots
 
             _saveDetails.Click += (sender, e) => {
                 soundPlayer.PlaySound_ButtonClick(this);
+
                 //save to database
-                PayrollHelper.InsertPayrollData(this, payroll);
+                PayrollEmployeeDetails.InsertPayrollData(this, payroll, email);
+
                 var payrollData = new Intent(this, typeof(MainActivity));
                 payrollData.PutExtra("payroll", JsonConvert.SerializeObject(payroll));
+                payrollData.PutExtra("email", email);
                 StartActivity(payrollData);
             };
         }

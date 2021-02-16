@@ -36,128 +36,128 @@ namespace PayrollParrots
             EditText lifeStyleRelief_ = FindViewById<EditText>(Resource.Id.lifeStyleRelief);
             lifeStyleRelief_.AfterTextChanged += (sender, args) =>
             {
-                payrollItems.LifeStyleRelief = editTextToDouble.EditTextDeductions_AfterTextChanged(lifeStyleRelief_, 2500);
+                payrollItems.LifeStyleRelief = editTextToDouble.EditTextDeductions_AfterTextChanged(lifeStyleRelief_, DeductionLimits.LifeStyleRelief);
             };
 
             //sportsRelief
             EditText sportsRelief_ = FindViewById<EditText>(Resource.Id.sportsRelief);
             sportsRelief_.AfterTextChanged += (sender, args) =>
             {
-                payrollItems.SportsRelief = editTextToDouble.EditTextDeductions_AfterTextChanged(sportsRelief_, 500);
+                payrollItems.SportsRelief = editTextToDouble.EditTextDeductions_AfterTextChanged(sportsRelief_, DeductionLimits.SportsRelief);
             };
 
             //SOCSOContribution
             SOCSOAndEISCalculations = new SOCSOAndEISCalculations(NormalRemunerationItems, AdditionalRemunerationItems);
             double _SOCSOContribution = SOCSOAndEISCalculations.EmployeeSOCSOCalculation(_employeeAge);
-            
+
             //lifeInsurance
             EditText lifeInsurance_ = FindViewById<EditText>(Resource.Id.lifeInsurance);
             lifeInsurance_.AfterTextChanged += (sender, args) =>
             {
-                payrollItems.LifeInsurance = editTextToDouble.EditTextDeductions_AfterTextChanged(lifeInsurance_, 3000);
+                payrollItems.LifeInsurance = editTextToDouble.EditTextDeductions_AfterTextChanged(lifeInsurance_, DeductionLimits.LifeInsurance);
             };
 
             //basicEquipment
             EditText basicEquipment_ = FindViewById<EditText>(Resource.Id.basicEquipment);
             basicEquipment_.AfterTextChanged += (sender, args) =>
             {
-                payrollItems.SupportingEquipment = editTextToDouble.EditTextDeductions_AfterTextChanged(basicEquipment_, 6000);
+                payrollItems.SupportingEquipment = editTextToDouble.EditTextDeductions_AfterTextChanged(basicEquipment_, DeductionLimits.SupportingEquipment);
             };
 
             //educationYourSelf
             EditText educationYourSelf_ = FindViewById<EditText>(Resource.Id.educationYourSelf);
             educationYourSelf_.AfterTextChanged += (sender, args) =>
             {
-                payrollItems.EducationFeesForSelf = editTextToDouble.EditTextDeductions_AfterTextChanged(educationYourSelf_, 7000);
+                payrollItems.EducationFeesForSelf = editTextToDouble.EditTextDeductions_AfterTextChanged(educationYourSelf_, DeductionLimits.EducationFeesForSelf);
             };
 
             //medicalExamination
             EditText medicalExamination_ = FindViewById<EditText>(Resource.Id.medicalExamination);
             medicalExamination_.AfterTextChanged += (sender, args) =>
             {
-                payrollItems.MedicalExamination = editTextToDouble.EditTextDeductions_AfterTextChanged(medicalExamination_, 1000);
+                payrollItems.MedicalExamination = editTextToDouble.EditTextDeductions_AfterTextChanged(medicalExamination_, DeductionLimits.MedicalExamination);
             };
 
             //medicalVaccination
             EditText medicalVaccination_ = FindViewById<EditText>(Resource.Id.medicalVaccination);
             medicalVaccination_.AfterTextChanged += (sender, args) =>
             {
-                payrollItems.MedicalVaccination = editTextToDouble.EditTextDeductions_AfterTextChanged(medicalVaccination_, 1000);
+                payrollItems.MedicalVaccination = editTextToDouble.EditTextDeductions_AfterTextChanged(medicalVaccination_, DeductionLimits.MedicalVaccination);
             };
 
             //medicalDisease
             EditText medicalDisease_ = FindViewById<EditText>(Resource.Id.medicalDisease);
             medicalDisease_.AfterTextChanged += (sender, args) =>
             {
-                payrollItems.MedicalDisease = editTextToDouble.EditTextDeductions_AfterTextChanged(medicalDisease_, 8000); ;
+                payrollItems.MedicalDisease = editTextToDouble.EditTextDeductions_AfterTextChanged(medicalDisease_, DeductionLimits.MedicalDisease); ;
             };
             medicalExamination_.AfterTextChanged += (sender, args) =>
             {
-                validatingDeductions.ValidateDeductionInputsLowerThanLimit(payrollItems.MedicalExamination + payrollItems.MedicalVaccination + payrollItems.MedicalDisease, 8000, medicalDisease_);
+                validatingDeductions.ValidateDeductionInputsLowerThanLimit(payrollItems.MedicalExamination + payrollItems.MedicalVaccination + payrollItems.MedicalDisease, DeductionLimits.MedicalExaminationAndVaccinationAndDisease, medicalDisease_);
             };
             medicalVaccination_.AfterTextChanged += (sender, args) =>
             {
-                validatingDeductions.ValidateDeductionInputsLowerThanLimit(payrollItems.MedicalExamination + payrollItems.MedicalVaccination + payrollItems.MedicalDisease, 8000, medicalDisease_);
+                validatingDeductions.ValidateDeductionInputsLowerThanLimit(payrollItems.MedicalExamination + payrollItems.MedicalVaccination + payrollItems.MedicalDisease, DeductionLimits.MedicalExaminationAndVaccinationAndDisease, medicalDisease_);
             };
             medicalDisease_.AfterTextChanged += (sender, args) =>
             {
-                validatingDeductions.ValidateDeductionInputsLowerThanLimit(payrollItems.MedicalExamination + payrollItems.MedicalVaccination + payrollItems.MedicalDisease, 8000, medicalDisease_);
+                validatingDeductions.ValidateDeductionInputsLowerThanLimit(payrollItems.MedicalExamination + payrollItems.MedicalVaccination + payrollItems.MedicalDisease, DeductionLimits.MedicalExaminationAndVaccinationAndDisease, medicalDisease_);
             };
 
             //SSPN
             EditText SSPN_ = FindViewById<EditText>(Resource.Id.SSPN);
             SSPN_.AfterTextChanged += (sender, args) =>
             {
-                payrollItems.SSPN = editTextToDouble.EditTextDeductions_AfterTextChanged(SSPN_, 8000);
+                payrollItems.SSPN = editTextToDouble.EditTextDeductions_AfterTextChanged(SSPN_, DeductionLimits.SSPN);
             };
 
             //PRS
             EditText PRS_ = FindViewById<EditText>(Resource.Id.PRS);
             PRS_.AfterTextChanged += (sender, args) =>
             {
-                payrollItems.PRS = editTextToDouble.EditTextDeductions_AfterTextChanged(PRS_, 3000);
+                payrollItems.PRS = editTextToDouble.EditTextDeductions_AfterTextChanged(PRS_, DeductionLimits.PRS);
             };
 
             //smallKidEducation
             EditText smallKidEducation_ = FindViewById<EditText>(Resource.Id.smallKidEducation);
             smallKidEducation_.AfterTextChanged += (sender, args) =>
             {
-                payrollItems.KindergartenAndChildCareFees = editTextToDouble.EditTextDeductions_AfterTextChanged(smallKidEducation_, 3000);
+                payrollItems.KindergartenAndChildCareFees = editTextToDouble.EditTextDeductions_AfterTextChanged(smallKidEducation_, DeductionLimits.KindergartenAndChildCareFees);
             };
 
             //breastFeedingEquipment
             EditText breastFeedingEquipment_ = FindViewById<EditText>(Resource.Id.breastFeedingEquipment);
             breastFeedingEquipment_.AfterTextChanged += (sender, args) =>
             {
-                payrollItems.BreastFeedingEquipment = editTextToDouble.EditTextDeductions_AfterTextChanged(breastFeedingEquipment_, 1000);
+                payrollItems.BreastFeedingEquipment = editTextToDouble.EditTextDeductions_AfterTextChanged(breastFeedingEquipment_, DeductionLimits.BreastFeedingEquipment);
             };
 
             //alimonyFormerWife
             EditText alimonyFormerWife_ = FindViewById<EditText>(Resource.Id.alimonyFormerWife);
             alimonyFormerWife_.AfterTextChanged += (sender, args) =>
             {
-                payrollItems.AlimonyToFormerWife = editTextToDouble.EditTextDeductions_AfterTextChanged(alimonyFormerWife_, 4000);
+                payrollItems.AlimonyToFormerWife = editTextToDouble.EditTextDeductions_AfterTextChanged(alimonyFormerWife_, DeductionLimits.AlimonyToFormerWife);
             };
 
             //EMInsurance
             EditText EMInsurance_ = FindViewById<EditText>(Resource.Id.EMInsurance);
             EMInsurance_.AfterTextChanged += (sender, args) =>
             {
-                payrollItems.EducationAndMedicalInsurance = editTextToDouble.EditTextDeductions_AfterTextChanged(EMInsurance_, 3000);
+                payrollItems.EducationAndMedicalInsurance = editTextToDouble.EditTextDeductions_AfterTextChanged(EMInsurance_, DeductionLimits.EducationAndMedicalInsurance);
             };
 
             //fatherRelief
             EditText fatherRelief_ = FindViewById<EditText>(Resource.Id.fatherRelief);
             fatherRelief_.AfterTextChanged += (sender, args) =>
             {
-                payrollItems.FatherRelief = editTextToDouble.EditTextDeductions_AfterTextChanged(fatherRelief_, 1500);
+                payrollItems.FatherRelief = editTextToDouble.EditTextDeductions_AfterTextChanged(fatherRelief_, DeductionLimits.FatherRelief);
             };
 
             //motherRelief
             EditText motherRelief_ = FindViewById<EditText>(Resource.Id.motherRelief);
             motherRelief_.AfterTextChanged += (sender, args) =>
             {
-                payrollItems.MotherRelief = editTextToDouble.EditTextDeductions_AfterTextChanged(motherRelief_, 1500);
+                payrollItems.MotherRelief = editTextToDouble.EditTextDeductions_AfterTextChanged(motherRelief_, DeductionLimits.MotherRelief);
             };
 
             //mapaRelief
@@ -168,7 +168,7 @@ namespace PayrollParrots
             {
                 double.TryParse(mapaRelief_.Text, out _mapaRelief);
                 payrollItems.MedicalExpenseForParents = _mapaRelief;
-                validatingDeductions.ValidateDeductionInputsLowerThanLimit(payrollItems.MedicalExpenseForParents, 8000, mapaRelief_);
+                validatingDeductions.ValidateDeductionInputsLowerThanLimit(payrollItems.MedicalExpenseForParents, DeductionLimits.MedicalExpenseForParents, mapaRelief_);
                 validatingDeductions.ValidateBothParentsReliefAndParentsMedicalExpensesNotGreaterThanZero(payrollItems.MedicalExpenseForParents, payrollItems.FatherRelief + payrollItems.MotherRelief, mapaRelief_);
             };
             fatherRelief_.AfterTextChanged += (sender, args) =>
@@ -184,7 +184,7 @@ namespace PayrollParrots
             EditText domesticTourismExpenditure_ = FindViewById<EditText>(Resource.Id.domesticTourismExpenditure);
             domesticTourismExpenditure_.AfterTextChanged += (sender, args) =>
             {
-                payrollItems.DomesticTourismExpenditure = editTextToDouble.EditTextDeductions_AfterTextChanged(domesticTourismExpenditure_, 1000);
+                payrollItems.DomesticTourismExpenditure = editTextToDouble.EditTextDeductions_AfterTextChanged(domesticTourismExpenditure_, DeductionLimits.DomesticTourismExpenditure);
             };
 
             Button _fourthContinue = FindViewById<Button>(Resource.Id.continuePayroll4);
@@ -213,6 +213,7 @@ namespace PayrollParrots
                     double _EPFContribution = Intent.GetDoubleExtra("EPFContribution", 0.00);
                     double _EPFAdditionalContribution = Intent.GetDoubleExtra("EPFAdditionalContribution", 0.00);
                     string _employeeName = Intent.GetStringExtra("employeeName");
+                    string email = Intent.GetStringExtra("email");
 
                     Intent intent = new Intent(this, typeof(PayrollRebates));
                     intent.PutExtra("FamilyDeductionItems", JsonConvert.SerializeObject(FamilyDeductionItems));
@@ -228,6 +229,7 @@ namespace PayrollParrots
                     intent.PutExtra("EPFAdditionalContribution", _EPFAdditionalContribution);
                     intent.PutExtra("EPFContribution", _EPFContribution);
                     intent.PutExtra("SOCSOContribution", _SOCSOContribution);
+                    intent.PutExtra("email", email);
                     StartActivity(intent);
                 }
             };
